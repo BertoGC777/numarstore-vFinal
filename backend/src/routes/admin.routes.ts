@@ -73,16 +73,102 @@ router.get("/products/:id", adminMiddleware, async (req, res) => {
   }
 });
 
+// Create product
+router.post("/products", adminMiddleware, async (req, res) => {
+  try {
+    const { 
+      name, 
+      category, 
+      description, 
+      price_pix, 
+      price_card, 
+      colors, 
+      sizes, 
+      images, 
+      is_new, 
+      is_sale, 
+      discount 
+    } = req.body;
+
+    if (!name || !category || !price_pix || !price_card) {
+      return res.status(400).json({ error: "Nome, categoria, preço PIX e preço cartão são obrigatórios" });
+    }
+
+    await getDatabase();
+    
+    // Generate slug from name
+    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    const id = crypto.randomUUID();
+    const now = Date.now();
+
+    // Insert product
+    dbRun(
+      `INSERT INTO products (id, slug, name, description, category, price_pix, price_card, is_new, is_sale, discount, created_at) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [id, slug, name, description || "", category, price_pix, price_card, is_new ? 1 : 0, is_sale ? 1 : 0, discount || 0, now]
+    );
+
+    // Insert colors
+    if (colors && Array.isArray(colors)) {
+      colors.forEach((color: { name: string; hex: string }) => {
+        dbRun("INSERT INTO product_colors (product_id, name, hex) VALUES (?, ?, ?)", [id, color.name, color.hex]);
+      });
+    }
+
+    // Insert sizes
+    if (sizes && Array.isArray(sizes)) {
+      sizes.forEach((size: string) => {
+        dbRun("INSERT INTO product_sizes (product_id, size) VALUES (?, ?)", [id, size]);
+      });
+    }
+
+    // Insert images
+    if (images && Array.isArray(images)) {
+      images.forEach((img: { url: string; color?: string; colorHex?: string }, index: number) => {
+        dbRun(
+          "INSERT INTO product_images (product_id, url, color, color_hex, sort_order) VALUES (?, ?, ?, ?, ?)",
+          [id, img.url, img.color || null, img.colorHex || null, index]
+        );
+      });
+    }
+
+    const product = dbGet("SELECT * FROM products WHERE id = ?", [id]);
+    res.json(product);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao criar produto" });
+  }
+});
+
 // Update product
 router.put("/products/:id", adminMiddleware, async (req, res) => {
   try {
-    const { name, description, price_pix, price_card, is_new, is_sale, discount } = req.body;
-    
+    const { 
+      name, 
+      category, 
+      description, 
+      price_pix, 
+      price_card, 
+      colors, 
+      sizes, 
+      images, 
+      is_new, 
+      is_sale, 
+      discount 
+    } = req.body;
+
     await getDatabase();
     const fields: string[] = [];
     const values: any[] = [];
     
-    if (name !== undefined) { fields.push("name = ?"); values.push(name); }
+    if (name !== undefined) { 
+      fields.push("name = ?"); 
+      values.push(name);
+      // Update slug if name changes
+      const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+      fields.push("slug = ?");
+      values.push(slug);
+    }
+    if (category !== undefined) { fields.push("category = ?"); values.push(category); }
     if (description !== undefined) { fields.push("description = ?"); values.push(description); }
     if (price_pix !== undefined) { fields.push("price_pix = ?"); values.push(price_pix); }
     if (price_card !== undefined) { fields.push("price_card = ?"); values.push(price_card); }
@@ -93,11 +179,63 @@ router.put("/products/:id", adminMiddleware, async (req, res) => {
     if (fields.length === 0) return res.status(400).json({ error: "Nenhum campo para atualizar" });
     
     dbRun(`UPDATE products SET ${fields.join(", ")} WHERE id = ?`, [...values, req.params.id]);
+
+    // Update colors if provided
+    if (colors !== undefined) {
+      dbRun("DELETE FROM product_colors WHERE product_id = ?", [req.params.id]);
+      if (Array.isArray(colors)) {
+        colors.forEach((color: { name: string; hex: string }) => {
+          dbRun("INSERT INTO product_colors (product_id, name, hex) VALUES (?, ?, ?)", [req.params.id, color.name, color.hex]);
+        });
+      }
+    }
+
+    // Update sizes if provided
+    if (sizes !== undefined) {
+      dbRun("DELETE FROM product_sizes WHERE product_id = ?", [req.params.id]);
+      if (Array.isArray(sizes)) {
+        sizes.forEach((size: string) => {
+          dbRun("INSERT INTO product_sizes (product_id, size) VALUES (?, ?)", [req.params.id, size]);
+        });
+      }
+    }
+
+    // Update images if provided
+    if (images !== undefined) {
+      dbRun("DELETE FROM product_images WHERE product_id = ?", [req.params.id]);
+      if (Array.isArray(images)) {
+        images.forEach((img: { url: string; color?: string; colorHex?: string }, index: number) => {
+          dbRun(
+            "INSERT INTO product_images (product_id, url, color, color_hex, sort_order) VALUES (?, ?, ?, ?, ?)",
+            [req.params.id, img.url, img.color || null, img.colorHex || null, index]
+          );
+        });
+      }
+    }
     
     const updated = dbGet("SELECT * FROM products WHERE id = ?", [req.params.id]);
     res.json(updated);
   } catch (err: any) {
     res.status(500).json({ error: err.message || "Erro ao atualizar produto" });
+  }
+});
+
+// Delete product
+router.delete("/products/:id", adminMiddleware, async (req, res) => {
+  try {
+    await getDatabase();
+    
+    // Delete related data first
+    dbRun("DELETE FROM product_images WHERE product_id = ?", [req.params.id]);
+    dbRun("DELETE FROM product_colors WHERE product_id = ?", [req.params.id]);
+    dbRun("DELETE FROM product_sizes WHERE product_id = ?", [req.params.id]);
+    
+    // Delete product
+    dbRun("DELETE FROM products WHERE id = ?", [req.params.id]);
+    
+    res.json({ message: "Produto excluído com sucesso" });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao excluir produto" });
   }
 });
 

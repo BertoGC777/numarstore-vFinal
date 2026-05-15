@@ -176,6 +176,11 @@ export default function Admin() {
           </div>
         ) : (
           <div className="space-y-4">
+            <div className="flex justify-end">
+              <Button onClick={() => navigate("/admin/produtos")} className="gap-2">
+                <Package className="h-4 w-4" /> Gerenciar Produtos
+              </Button>
+            </div>
             {products.length === 0 ? (
               <div className="border border-border rounded-lg p-8 text-center">
                 <Package className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
