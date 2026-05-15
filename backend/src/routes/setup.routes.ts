@@ -1,5 +1,6 @@
 import { Router } from "express"
 import bcrypt from "bcryptjs"
+import { pool } from "../db/postgres"
 
 const router = Router()
 
@@ -9,15 +10,13 @@ router.post("/create-admin", async (req, res) => {
     return res.status(403).json({ error: "Não autorizado" })
   }
   try {
-    const { dbRun, dbGet } = await import("../db")
     const hash = await bcrypt.hash("admin123", 10)
-    const id = crypto.randomUUID()
-    dbRun(`
-      INSERT INTO users (id, name, email, password_hash, role, created_at)
-      VALUES ($1, 'Admin', 'admin@numarstore.com.br', $2, 'admin', NOW())
-      ON CONFLICT (email) DO UPDATE SET password_hash = $2, role = 'admin'
-    `, [id, hash, hash])
-    res.json({ success: true, message: "Admin criado" })
+    await pool.query(`
+      INSERT INTO users (id, name, email, password, role, created_at)
+      VALUES (gen_random_uuid(), 'Admin', 'admin@numarstore.com.br', $1, 'admin', NOW())
+      ON CONFLICT (email) DO UPDATE SET password = $1, role = 'admin'
+    `, [hash])
+    res.json({ success: true })
   } catch (e: any) {
     res.status(500).json({ error: e.message })
   }
