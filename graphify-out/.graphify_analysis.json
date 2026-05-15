@@ -1,0 +1,595 @@
+{
+  "communities": {
+    "0": [
+      "components_cartdrawer_cartdrawer",
+      "components_footer_footer",
+      "components_header_header",
+      "components_header_menu",
+      "components_layout_layout",
+      "components_logo_logo",
+      "components_topbar_messages",
+      "components_topbar_topbar",
+      "context_cartcontext_cartitem",
+      "context_cartcontext_cartprovider",
+      "context_cartcontext_itemkey",
+      "context_cartcontext_usecart",
+      "data_products_color",
+      "data_products_formatbrl",
+      "data_products_getproductbyslug",
+      "data_products_getproductsbycategory",
+      "data_products_getrelated",
+      "data_products_productcategory",
+      "data_products_productcolor",
+      "pages_account_account",
+      "pages_account_loaduser",
+      "pages_account_saveuser",
+      "pages_account_section",
+      "pages_account_tab",
+      "pages_account_user",
+      "pages_checkout_checkout",
+      "pages_checkout_paymethod",
+      "pages_faq_faq",
+      "pages_faq_faqs",
+      "pages_notfound_notfound",
+      "pages_rastreio_rastreio",
+      "pages_search_search",
+      "pages_termos_termos",
+      "pages_trocas_trocas",
+      "src_app_app",
+      "src_app_queryclient",
+      "src_app_tsx",
+      "src_components_cartdrawer_tsx",
+      "src_components_footer_tsx",
+      "src_components_header_tsx",
+      "src_components_layout_tsx",
+      "src_components_logo_tsx",
+      "src_components_productcard_tsx",
+      "src_components_topbar_tsx",
+      "src_components_ui_accordion_tsx",
+      "src_components_ui_button_tsx",
+      "src_components_ui_input_tsx",
+      "src_components_whatsappbutton_tsx",
+      "src_context_cartcontext_tsx",
+      "src_data_products_ts",
+      "src_main_tsx",
+      "src_pages_account_tsx",
+      "src_pages_checkout_tsx",
+      "src_pages_faq_tsx",
+      "src_pages_notfound_tsx",
+      "src_pages_privacidade_tsx",
+      "src_pages_productpage_tsx",
+      "src_pages_quemsomos_tsx",
+      "src_pages_rastreio_tsx",
+      "src_pages_search_tsx",
+      "src_pages_termos_tsx",
+      "src_pages_trocas_tsx",
+      "ui_accordion_accordioncontent",
+      "ui_accordion_accordionitem",
+      "ui_accordion_accordiontrigger",
+      "ui_button_button",
+      "ui_input_input",
+      "ui_sheet_sheetcontent"
+    ],
+    "1": [
+      "hooks_use_mobile_useismobile",
+      "src_components_ui_separator_tsx",
+      "src_components_ui_sidebar_tsx",
+      "src_components_ui_tooltip_tsx",
+      "src_hooks_use_mobile_tsx",
+      "ui_separator_separator",
+      "ui_sidebar_sidebar",
+      "ui_sidebar_sidebarcontext",
+      "ui_sidebar_sidebarfooter",
+      "ui_sidebar_sidebargroup",
+      "ui_sidebar_sidebargroupaction",
+      "ui_sidebar_sidebargroupcontent",
+      "ui_sidebar_sidebargrouplabel",
+      "ui_sidebar_sidebarheader",
+      "ui_sidebar_sidebarinput",
+      "ui_sidebar_sidebarinset",
+      "ui_sidebar_sidebarmenu",
+      "ui_sidebar_sidebarmenuaction",
+      "ui_sidebar_sidebarmenubadge",
+      "ui_sidebar_sidebarmenubutton",
+      "ui_sidebar_sidebarmenubuttonvariants",
+      "ui_sidebar_sidebarmenuitem",
+      "ui_sidebar_sidebarmenuskeleton",
+      "ui_sidebar_sidebarmenusub",
+      "ui_sidebar_sidebarmenusubbutton",
+      "ui_sidebar_sidebarmenusubitem",
+      "ui_sidebar_sidebarprovider",
+      "ui_sidebar_sidebarrail",
+      "ui_sidebar_sidebarseparator",
+      "ui_sidebar_sidebartrigger",
+      "ui_sidebar_usesidebar",
+      "ui_tooltip_tooltipcontent"
+    ],
+    "2": [
+      "hooks_use_toast_action",
+      "hooks_use_toast_actiontype",
+      "hooks_use_toast_addtoremovequeue",
+      "hooks_use_toast_dispatch",
+      "hooks_use_toast_genid",
+      "hooks_use_toast_listeners",
+      "hooks_use_toast_memorystate",
+      "hooks_use_toast_reducer",
+      "hooks_use_toast_state",
+      "hooks_use_toast_toastertoast",
+      "hooks_use_toast_toasttimeouts",
+      "src_components_ui_sonner_tsx",
+      "src_components_ui_toast_tsx",
+      "src_components_ui_toaster_tsx",
+      "src_hooks_use_toast_ts",
+      "ui_sonner_toaster",
+      "ui_sonner_toasterprops",
+      "ui_toast_toast",
+      "ui_toast_toastaction",
+      "ui_toast_toastactionelement",
+      "ui_toast_toastclose",
+      "ui_toast_toastdescription",
+      "ui_toast_toastprops",
+      "ui_toast_toasttitle",
+      "ui_toast_toastvariants",
+      "ui_toast_toastviewport"
+    ],
+    "3": [
+      "src_components_ui_hover_card_tsx",
+      "src_components_ui_progress_tsx",
+      "src_components_ui_radio_group_tsx",
+      "src_components_ui_scroll_area_tsx",
+      "src_components_ui_switch_tsx",
+      "src_components_ui_toggle_tsx",
+      "src_lib_utils_ts",
+      "ui_checkbox_checkbox",
+      "ui_hover_card_hovercardcontent",
+      "ui_progress_progress",
+      "ui_radio_group_radiogroup",
+      "ui_scroll_area_scrollarea",
+      "ui_scroll_area_scrollbar",
+      "ui_skeleton_skeleton",
+      "ui_switch_switch",
+      "ui_toggle_group_togglegroup",
+      "ui_toggle_toggle",
+      "ui_toggle_togglevariants"
+    ],
+    "4": [
+      "components_benefitsbar_benefitsbar",
+      "components_benefitsbar_items",
+      "components_categoryshortcuts_cats",
+      "components_collectionsgrid_collectionsgrid",
+      "components_collectionsgrid_cols",
+      "components_herocarousel_slides",
+      "components_instagramsection_photos",
+      "components_salebanner_salebanner",
+      "data_products_getfeatured",
+      "pages_index_index",
+      "src_components_benefitsbar_tsx",
+      "src_components_categoryshortcuts_tsx",
+      "src_components_collectionsgrid_tsx",
+      "src_components_herocarousel_tsx",
+      "src_components_instagramsection_tsx",
+      "src_components_salebanner_tsx",
+      "src_pages_index_tsx"
+    ],
+    "5": [
+      "src_components_ui_dialog_tsx",
+      "ui_command_command",
+      "ui_command_commanddialog",
+      "ui_command_commandempty",
+      "ui_command_commandgroup",
+      "ui_command_commandinput",
+      "ui_command_commanditem",
+      "ui_command_commandlist",
+      "ui_command_commandseparator",
+      "ui_command_commandshortcut",
+      "ui_dialog_dialogcontent",
+      "ui_dialog_dialogdescription",
+      "ui_dialog_dialogfooter",
+      "ui_dialog_dialogheader",
+      "ui_dialog_dialogoverlay",
+      "ui_dialog_dialogtitle"
+    ],
+    "6": [
+      "pages_catalog_allcolors",
+      "pages_catalog_allsizes",
+      "pages_catalog_catalog",
+      "pages_catalog_categorylabels",
+      "src_components_ui_sheet_tsx",
+      "src_components_ui_slider_tsx",
+      "src_pages_catalog_tsx",
+      "ui_sheet_sheetcontentprops",
+      "ui_sheet_sheetdescription",
+      "ui_sheet_sheetfooter",
+      "ui_sheet_sheetheader",
+      "ui_sheet_sheetoverlay",
+      "ui_sheet_sheettitle",
+      "ui_sheet_sheetvariants",
+      "ui_slider_slider"
+    ],
+    "7": [
+      "src_components_ui_form_tsx",
+      "src_components_ui_label_tsx",
+      "ui_form_formcontrol",
+      "ui_form_formdescription",
+      "ui_form_formfield",
+      "ui_form_formfieldcontext",
+      "ui_form_formfieldcontextvalue",
+      "ui_form_formitem",
+      "ui_form_formitemcontext",
+      "ui_form_formlabel",
+      "ui_form_formmessage",
+      "ui_form_useformfield",
+      "ui_label_label",
+      "ui_label_labelvariants"
+    ],
+    "8": [
+      "ui_carousel_carousel",
+      "ui_carousel_carouselcontent",
+      "ui_carousel_carouselcontext",
+      "ui_carousel_carouselcontextprops",
+      "ui_carousel_carouselitem",
+      "ui_carousel_carouselnext",
+      "ui_carousel_carouseloptions",
+      "ui_carousel_carouselplugin",
+      "ui_carousel_carouselprevious",
+      "ui_carousel_carouselprops",
+      "ui_carousel_usecarousel",
+      "ui_carousel_usecarouselparameters"
+    ],
+    "9": [
+      "src_components_ui_menubar_tsx",
+      "ui_menubar_menubar",
+      "ui_menubar_menubarcheckboxitem",
+      "ui_menubar_menubarcontent",
+      "ui_menubar_menubaritem",
+      "ui_menubar_menubarlabel",
+      "ui_menubar_menubarradioitem",
+      "ui_menubar_menubarseparator",
+      "ui_menubar_menubarshortcut",
+      "ui_menubar_menubarsubcontent",
+      "ui_menubar_menubarsubtrigger",
+      "ui_menubar_menubartrigger"
+    ],
+    "10": [
+      "lib_utils_cn",
+      "src_components_ui_breadcrumb_tsx",
+      "src_components_ui_popover_tsx",
+      "src_components_ui_resizable_tsx",
+      "ui_breadcrumb_breadcrumb",
+      "ui_breadcrumb_breadcrumbellipsis",
+      "ui_breadcrumb_breadcrumbitem",
+      "ui_breadcrumb_breadcrumbpage",
+      "ui_breadcrumb_breadcrumbseparator",
+      "ui_popover_popovercontent",
+      "ui_resizable_resizablehandle",
+      "ui_resizable_resizablepanelgroup"
+    ],
+    "11": [
+      "src_components_ui_chart_tsx",
+      "ui_chart_chartconfig",
+      "ui_chart_chartcontainer",
+      "ui_chart_chartcontext",
+      "ui_chart_chartcontextprops",
+      "ui_chart_chartlegendcontent",
+      "ui_chart_chartstyle",
+      "ui_chart_charttooltipcontent",
+      "ui_chart_getpayloadconfigfrompayload",
+      "ui_chart_themes",
+      "ui_chart_usechart"
+    ],
+    "12": [
+      "src_components_ui_calendar_tsx",
+      "ui_button_buttonprops",
+      "ui_button_buttonvariants",
+      "ui_calendar_calendar",
+      "ui_calendar_calendarprops",
+      "ui_pagination_pagination",
+      "ui_pagination_paginationcontent",
+      "ui_pagination_paginationellipsis",
+      "ui_pagination_paginationitem",
+      "ui_pagination_paginationlinkprops",
+      "ui_pagination_paginationprevious"
+    ],
+    "13": [
+      "src_components_ui_context_menu_tsx",
+      "ui_context_menu_contextmenucheckboxitem",
+      "ui_context_menu_contextmenucontent",
+      "ui_context_menu_contextmenuitem",
+      "ui_context_menu_contextmenulabel",
+      "ui_context_menu_contextmenuradioitem",
+      "ui_context_menu_contextmenuseparator",
+      "ui_context_menu_contextmenushortcut",
+      "ui_context_menu_contextmenusubcontent",
+      "ui_context_menu_contextmenusubtrigger"
+    ],
+    "14": [
+      "src_components_ui_dropdown_menu_tsx",
+      "ui_dropdown_menu_dropdownmenucheckboxitem",
+      "ui_dropdown_menu_dropdownmenucontent",
+      "ui_dropdown_menu_dropdownmenuitem",
+      "ui_dropdown_menu_dropdownmenulabel",
+      "ui_dropdown_menu_dropdownmenuradioitem",
+      "ui_dropdown_menu_dropdownmenuseparator",
+      "ui_dropdown_menu_dropdownmenushortcut",
+      "ui_dropdown_menu_dropdownmenusubcontent",
+      "ui_dropdown_menu_dropdownmenusubtrigger"
+    ],
+    "15": [
+      "src_components_ui_alert_dialog_tsx",
+      "ui_alert_dialog_alertdialogaction",
+      "ui_alert_dialog_alertdialogcancel",
+      "ui_alert_dialog_alertdialogcontent",
+      "ui_alert_dialog_alertdialogdescription",
+      "ui_alert_dialog_alertdialogfooter",
+      "ui_alert_dialog_alertdialogheader",
+      "ui_alert_dialog_alertdialogoverlay",
+      "ui_alert_dialog_alertdialogtitle"
+    ],
+    "16": [
+      "src_components_ui_select_tsx",
+      "ui_select_selectcontent",
+      "ui_select_selectitem",
+      "ui_select_selectlabel",
+      "ui_select_selectscrolldownbutton",
+      "ui_select_selectscrollupbutton",
+      "ui_select_selectseparator",
+      "ui_select_selecttrigger"
+    ],
+    "17": [
+      "src_components_ui_drawer_tsx",
+      "ui_drawer_drawer",
+      "ui_drawer_drawercontent",
+      "ui_drawer_drawerdescription",
+      "ui_drawer_drawerfooter",
+      "ui_drawer_drawerheader",
+      "ui_drawer_draweroverlay",
+      "ui_drawer_drawertitle"
+    ],
+    "18": [
+      "src_components_ui_table_tsx",
+      "ui_table_table",
+      "ui_table_tablebody",
+      "ui_table_tablecaption",
+      "ui_table_tablecell",
+      "ui_table_tablefooter",
+      "ui_table_tablehead",
+      "ui_table_tablerow"
+    ],
+    "19": [
+      "src_components_ui_card_tsx",
+      "ui_card_card",
+      "ui_card_cardcontent",
+      "ui_card_carddescription",
+      "ui_card_cardfooter",
+      "ui_card_cardheader",
+      "ui_card_cardtitle"
+    ],
+    "20": [
+      "src_components_ui_alert_tsx",
+      "ui_alert_alert",
+      "ui_alert_alertdescription",
+      "ui_alert_alerttitle",
+      "ui_alert_alertvariants"
+    ],
+    "21": [
+      "src_components_ui_input_otp_tsx",
+      "ui_input_otp_inputotp",
+      "ui_input_otp_inputotpgroup",
+      "ui_input_otp_inputotpseparator",
+      "ui_input_otp_inputotpslot"
+    ],
+    "22": [
+      "ui_navigation_menu_navigationmenu",
+      "ui_navigation_menu_navigationmenucontent",
+      "ui_navigation_menu_navigationmenuindicator",
+      "ui_navigation_menu_navigationmenuviewport"
+    ],
+    "23": [
+      "src_components_ui_tabs_tsx",
+      "ui_tabs_tabscontent",
+      "ui_tabs_tabslist",
+      "ui_tabs_tabstrigger"
+    ],
+    "24": [
+      "src_components_ui_avatar_tsx",
+      "ui_avatar_avatar",
+      "ui_avatar_avatarfallback",
+      "ui_avatar_avatarimage"
+    ],
+    "25": [
+      "src_components_ui_badge_tsx",
+      "ui_badge_badge",
+      "ui_badge_badgeprops",
+      "ui_badge_badgevariants"
+    ],
+    "26": [
+      "components_navlink_navlink",
+      "components_navlink_navlinkcompatprops",
+      "src_components_navlink_tsx"
+    ],
+    "27": [
+      "src_components_ui_textarea_tsx",
+      "ui_textarea_textarea",
+      "ui_textarea_textareaprops"
+    ],
+    "28": [
+      "postcss_config_js"
+    ],
+    "29": [
+      "tailwind_config_ts"
+    ],
+    "30": [
+      "vite_config_ts"
+    ],
+    "31": [
+      "vitest_config_ts"
+    ],
+    "32": [
+      "src_vite_env_d_ts"
+    ],
+    "33": [
+      "src_components_ui_aspect_ratio_tsx"
+    ],
+    "34": [
+      "src_components_ui_collapsible_tsx"
+    ],
+    "35": [
+      "src_test_example_test_ts"
+    ],
+    "36": [
+      "src_test_setup_ts"
+    ]
+  },
+  "cohesion": {
+    "0": 0.06,
+    "1": 0.07,
+    "2": 0.12,
+    "3": 0.12,
+    "4": 0.12,
+    "5": 0.13,
+    "6": 0.16,
+    "7": 0.15,
+    "8": 0.17,
+    "9": 0.17,
+    "10": 0.23,
+    "11": 0.18,
+    "12": 0.2,
+    "13": 0.2,
+    "14": 0.2,
+    "15": 0.22,
+    "16": 0.25,
+    "17": 0.25,
+    "18": 0.25,
+    "19": 0.29,
+    "20": 0.4,
+    "21": 0.4,
+    "22": 0.5,
+    "23": 0.5,
+    "24": 0.5,
+    "25": 0.67,
+    "26": 0.67,
+    "27": 0.67,
+    "28": 1.0,
+    "29": 1.0,
+    "30": 1.0,
+    "31": 1.0,
+    "32": 1.0,
+    "33": 1.0,
+    "34": 1.0,
+    "35": 1.0,
+    "36": 1.0
+  },
+  "gods": [
+    {
+      "id": "lib_utils_cn",
+      "label": "cn()",
+      "degree": 66
+    },
+    {
+      "id": "ui_carousel_carousel",
+      "label": "Carousel",
+      "degree": 15
+    },
+    {
+      "id": "ui_button_button",
+      "label": "Button",
+      "degree": 12
+    },
+    {
+      "id": "ui_command_command",
+      "label": "Command",
+      "degree": 12
+    },
+    {
+      "id": "ui_pagination_pagination",
+      "label": "Pagination()",
+      "degree": 10
+    },
+    {
+      "id": "context_cartcontext_usecart",
+      "label": "useCart()",
+      "degree": 9
+    },
+    {
+      "id": "ui_input_input",
+      "label": "Input",
+      "degree": 7
+    },
+    {
+      "id": "data_products_formatbrl",
+      "label": "formatBRL()",
+      "degree": 7
+    },
+    {
+      "id": "ui_button_buttonvariants",
+      "label": "buttonVariants",
+      "degree": 5
+    },
+    {
+      "id": "ui_navigation_menu_navigationmenu",
+      "label": "NavigationMenu",
+      "degree": 5
+    }
+  ],
+  "surprises": [
+    {
+      "source": "AlertDialogHeader()",
+      "target": "cn()",
+      "source_files": [
+        "src/components/ui/alert-dialog.tsx",
+        "src/lib/utils.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities; peripheral node `AlertDialogHeader()` unexpectedly reaches hub `cn()`"
+    },
+    {
+      "source": "AlertDialogFooter()",
+      "target": "cn()",
+      "source_files": [
+        "src/components/ui/alert-dialog.tsx",
+        "src/lib/utils.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities; peripheral node `AlertDialogFooter()` unexpectedly reaches hub `cn()`"
+    },
+    {
+      "source": "CommandShortcut()",
+      "target": "cn()",
+      "source_files": [
+        "src/components/ui/command.tsx",
+        "src/lib/utils.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities; peripheral node `CommandShortcut()` unexpectedly reaches hub `cn()`"
+    },
+    {
+      "source": "ContextMenuShortcut()",
+      "target": "cn()",
+      "source_files": [
+        "src/components/ui/context-menu.tsx",
+        "src/lib/utils.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities; peripheral node `ContextMenuShortcut()` unexpectedly reaches hub `cn()`"
+    },
+    {
+      "source": "DialogHeader()",
+      "target": "cn()",
+      "source_files": [
+        "src/components/ui/dialog.tsx",
+        "src/lib/utils.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities; peripheral node `DialogHeader()` unexpectedly reaches hub `cn()`"
+    }
+  ],
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
+}

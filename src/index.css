@@ -1,0 +1,172 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Google Fonts - display=swap for performance */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+/* ================================================
+   NUMAR STORE — Design System
+   Paleta: Bege #F5EFE6, Dourado #C9973A, Marrom #2A2017
+   ================================================ */
+
+@layer base {
+  :root {
+    --background: 36 38% 93%;
+    --foreground: 28 25% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 28 25% 14%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 28 25% 14%;
+    --primary: 38 56% 51%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 38 65% 62%;
+    --primary-dark: 34 52% 38%;
+    --secondary: 30 25% 88%;
+    --secondary-foreground: 28 25% 14%;
+    --muted: 32 22% 90%;
+    --muted-foreground: 28 12% 42%;
+    --accent: 30 30% 82%;
+    --accent-foreground: 28 25% 14%;
+    --destructive: 0 70% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 140 50% 38%;
+    --border: 32 18% 82%;
+    --input: 32 18% 82%;
+    --ring: 38 56% 51%;
+    --radius: 0.2rem;
+    --topbar: 34 52% 38%;
+    --topbar-foreground: 0 0% 100%;
+    --footer: 28 25% 10%;
+    --footer-foreground: 36 38% 88%;
+    --sale: 0 70% 45%;
+    --sale-foreground: 0 0% 100%;
+    --shadow-elegant: 0 10px 40px -12px hsl(28 25% 14% / 0.18);
+    --shadow-soft: 0 4px 16px -4px hsl(28 25% 14% / 0.08);
+    --sidebar-background: 36 38% 93%;
+    --sidebar-foreground: 28 25% 14%;
+    --sidebar-primary: 38 56% 51%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 30 25% 88%;
+    --sidebar-accent-foreground: 28 25% 14%;
+    --sidebar-border: 32 18% 82%;
+    --sidebar-ring: 38 56% 51%;
+  }
+
+  .dark {
+    --background: 28 25% 10%;
+    --foreground: 36 38% 93%;
+    --card: 28 25% 12%;
+    --card-foreground: 36 38% 93%;
+    --popover: 28 25% 12%;
+    --popover-foreground: 36 38% 93%;
+    --primary: 38 56% 55%;
+    --primary-foreground: 28 25% 10%;
+    --secondary: 28 20% 18%;
+    --secondary-foreground: 36 38% 93%;
+    --muted: 28 20% 18%;
+    --muted-foreground: 32 12% 62%;
+    --accent: 28 20% 18%;
+    --accent-foreground: 36 38% 93%;
+    --destructive: 0 60% 40%;
+    --destructive-foreground: 36 38% 93%;
+    --border: 28 20% 20%;
+    --input: 28 20% 20%;
+    --ring: 38 56% 55%;
+    --footer: 28 25% 7%;
+    --footer-foreground: 36 38% 88%;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+
+  html {
+    scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Montserrat', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  img {
+    image-rendering: -webkit-optimize-contrast;
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Focus visible only for keyboard navigation */
+  *:focus:not(:focus-visible) { outline: none; }
+  *:focus-visible { outline: 2px solid hsl(var(--primary)); outline-offset: 2px; }
+
+  /* Selection color */
+  ::selection { background: hsl(var(--primary) / 0.2); color: hsl(var(--foreground)); }
+}
+
+@layer utilities {
+  .container-numar {
+    @apply mx-auto px-4 sm:px-6 lg:px-8;
+    max-width: 1440px;
+  }
+
+  /* Animations */
+  .fade-in {
+    animation: fadeIn 0.4s ease-out both;
+  }
+
+  .fade-up {
+    animation: fadeUp 0.5s ease-out both;
+  }
+
+  .animate-pulse-soft {
+    animation: pulseSoft 2.5s ease-in-out infinite;
+  }
+
+  /* Skeleton loading */
+  .skeleton {
+    @apply animate-pulse bg-muted rounded;
+  }
+
+  /* Product image zoom */
+  .img-zoom {
+    @apply overflow-hidden;
+  }
+  .img-zoom img {
+    @apply transition-transform duration-700 ease-in-out;
+  }
+  .img-zoom:hover img {
+    @apply scale-105;
+  }
+
+  /* Text clamp */
+  .line-clamp-1 { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; }
+  .line-clamp-2 { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .line-clamp-3 { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+
+  /* Scrollbar custom */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: hsl(var(--muted)); }
+  ::-webkit-scrollbar-thumb { background: hsl(var(--primary) / 0.5); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: hsl(var(--primary)); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseSoft {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(140 50% 38% / 0.4); }
+  50% { box-shadow: 0 0 0 10px hsl(140 50% 38% / 0); }
+}

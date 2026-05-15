@@ -1,0 +1,1246 @@
+{
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\postcss.config.js": {
+    "mtime": 1778247371.0,
+    "hash": "c735540bb63936a123bc867d950c9f69"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\tailwind.config.ts": {
+    "mtime": 1778247371.0,
+    "hash": "9a63fd71bc3137d0d520341bd53f1c06"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\vite.config.ts": {
+    "mtime": 1778303991.0,
+    "hash": "c07ad18e9def1d2a3e0a7780c6815fb8"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\vitest.config.ts": {
+    "mtime": 1778247371.0,
+    "hash": "9285ab80c07d5cd1a71aa20c1687352a"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\App.tsx": {
+    "mtime": 1778458485.0,
+    "hash": "a22e952f793089c111ec0d7acb37a42c"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\main.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "092c6937f28c1dff19a7d561f5f98360"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\vite-env.d.ts": {
+    "mtime": 1778247371.0,
+    "hash": "0352474ba2918efe13895edbc3780d94"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\BenefitsBar.tsx": {
+    "mtime": 1778303897.0,
+    "hash": "159f6b4b8777876935578638e7a642ed"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\CartDrawer.tsx": {
+    "mtime": 1778303897.0,
+    "hash": "3414d7c90eea720e356763c5584ac12d"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\CategoryShortcuts.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "ff2fdc4709499bcda999d4b6bcecf1e6"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\CollectionsGrid.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "25c16b7cd5b00cd1ca95f6e427cf780d"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\Footer.tsx": {
+    "mtime": 1778303897.0,
+    "hash": "830a67054368a93cb978b773d4a1b482"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\Header.tsx": {
+    "mtime": 1778303897.0,
+    "hash": "bdb76bb661750943558939ba3157dfb7"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\HeroCarousel.tsx": {
+    "mtime": 1778458404.0,
+    "hash": "b68f4c03acb468c09fee1b92d9a13ea1"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\InstagramSection.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "6432c8c1cdc29b2cc8307a09da56fd35"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\Layout.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "16ea90fc8667ac730b8c6cbb52934c35"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\Logo.tsx": {
+    "mtime": 1778458417.0,
+    "hash": "f265fe2558e42aaa75fea429e75b86f6"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\NavLink.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "8f7c178b4776787e58e1011855ca28f6"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ProductCard.tsx": {
+    "mtime": 1778303896.0,
+    "hash": "60c48b9eb277786fb539b0ea6573720e"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\SaleBanner.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "4bc695137b619c7eeae4adddad41d0a3"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\TopBar.tsx": {
+    "mtime": 1778458417.0,
+    "hash": "6c63786aca70c4115b9aa3ce2d698760"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\WhatsAppButton.tsx": {
+    "mtime": 1778458440.0,
+    "hash": "51d1b407e6f80bf0b80adf5c2c68f52c"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\accordion.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "f9ebb6ee913b44e5f3e06fe1d9679784"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\alert-dialog.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "2ee6c5e5e070315114319bc060d17a52"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\alert.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "354d0206f924d48bcebbb023c3940a6b"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\aspect-ratio.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "c5c364545e1b25a94e9e752cd67ad048"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\avatar.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "53921dca0903c74cd72fada89388d9f8"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\badge.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "8db4e6d330f88f4041f81e7cde43782b"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\breadcrumb.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "c200fc41e9b214ebb6ccd19a300c42c5"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\button.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "b59f5a3c54b63cf3ea4eb2523151f617"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\calendar.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "1da7a387f28cdb11722da319c0295a6c"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\card.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "202402023747c80d975f48b906e6eb1b"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\carousel.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "63a7442a3088b58113c8a8cfc1defe26"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\chart.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "29cfd7470f3197deccd58b2b4f00fbae"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\checkbox.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "cb12d2f3410761f7a678add95c90ac5d"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\collapsible.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "934b00582dae08af749fb55469081de6"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\command.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "e911f182b4136a63c601c3fc48b2e9c7"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\context-menu.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "9b8e8efdf0456cd542e32d341b071cac"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\dialog.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "fc3a9626ba52435552c93ac3a74374ec"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\drawer.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "05e2b536fe11649e9b4c6e73678e32a6"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\dropdown-menu.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "f308eb98a2e21bf8bd1e30dbcb741dc0"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\form.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "4bb820d59aad3ee5bc78097596298ace"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\hover-card.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "f77f80ed64ff8f3549e5d7e9d837e08e"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\input-otp.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "3fb5994635434d5168bee869689fc2aa"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\input.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "b8279d768c2a1ce78a05a369a0502877"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\label.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "cd2b2255bbe519cb0865dfeaa6615797"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\menubar.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "163c3fa58a2b4ea2caa00166f4d862c7"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\navigation-menu.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "77e94b0c299d10c3763d2755bf556916"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\pagination.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "a3ced9f9b19826b467d788b1bf01746f"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\popover.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "c056d22288a642b756b77c7691ad4532"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\progress.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "9a8b05beca19e008a562a10e489f5968"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\radio-group.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "3773798b5b2f334a5db0dc9c8d06f1b8"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\resizable.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "ec681e92cbe705b5571ded11b5227a2a"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\scroll-area.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "cfbc224001af0e6daba676de225a2a47"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\select.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "25de64d0126624cbd8efa50cfb64bd21"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\separator.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "ed1101f185e9dc801712593e3330a75d"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\sheet.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "3660be09e2e40467a22fd46b354c1b50"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\sidebar.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "9eab1256b1ffe3f1336eebfd07b319c9"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\skeleton.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "c55f76f4faa1d6e888dbc51d41eaa586"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\slider.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "e3bf7b6116ddbdbe8c7b3597d07daee0"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\sonner.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "88644703cc00886c56e0e3b7df0e21d8"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\switch.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "eccd8c41c46e782eaaa1f8be0111e089"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\table.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "d0ff87c4734c23839337811378ad07df"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\tabs.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "26b15e1ffce0f831be4da95b8f8a43df"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\textarea.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "29ab470ee59e9da5070d4fba251bce81"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\toast.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "7c08b5cb6026058514672a4ebc53847e"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\toaster.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "1903846ab268620de6356ef667e3fa21"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\toggle-group.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "e82bf234e3877ad708ea3d1dba614def"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\toggle.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "ff7a7deebff23c3488e79ad72ee47e4b"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\tooltip.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "d7e923341b9e91d77db45ba5f2fa0cf9"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\components\\ui\\use-toast.ts": {
+    "mtime": 1778247371.0,
+    "hash": "4f094014a1315ca1081cbdc7f78d55cc"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\context\\CartContext.tsx": {
+    "mtime": 1778303897.0,
+    "hash": "963b5c45544c9f1cf081f1a7e54c540d"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\data\\products.ts": {
+    "mtime": 1778303891.0,
+    "hash": "d74898865a1df032f29483226cf08ac4"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\hooks\\use-mobile.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "c0a0bdd4638c391a1dd06ac82074e60b"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\hooks\\use-toast.ts": {
+    "mtime": 1778247371.0,
+    "hash": "e706bc004c87e17db559a113637eddea"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\lib\\utils.ts": {
+    "mtime": 1778247371.0,
+    "hash": "d9837f38cc05303254571985e3164050"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\pages\\Account.tsx": {
+    "mtime": 1778303977.0,
+    "hash": "3d6e6fe5d5c8282de0ec38ed2b1430d9"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\pages\\Catalog.tsx": {
+    "mtime": 1778303897.0,
+    "hash": "d41b9857844c53f2bb4f3ff51fb08a32"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\pages\\Checkout.tsx": {
+    "mtime": 1778303937.0,
+    "hash": "5700fbda784fe2bfa26fde493a968a2d"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\pages\\FAQ.tsx": {
+    "mtime": 1778303897.0,
+    "hash": "e4c42c8619ee42cc70a46dbc28ee3081"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\pages\\Index.tsx": {
+    "mtime": 1778247371.0,
+    "hash": "60e83144338d78d898c6c68d2cffd56f"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\pages\\NotFound.tsx": {
+    "mtime": 1778458468.0,
+    "hash": "fc95ac81609ac2b9b32945155666ee7c"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\pages\\Privacidade.tsx": {
+    "mtime": 1778303897.0,
+    "hash": "2212148b2d38cdf6057f9e2d92fedce6"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\pages\\ProductPage.tsx": {
+    "mtime": 1778303899.0,
+    "hash": "2f177b3fdefb6b6ab3a0b19562e44461"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\pages\\QuemSomos.tsx": {
+    "mtime": 1778458468.0,
+    "hash": "d15aa80000250b833e01d8089e9687e5"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\pages\\Rastreio.tsx": {
+    "mtime": 1778458468.0,
+    "hash": "fcce6ee3c178bb31f4ef6be365b8ab37"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\pages\\Search.tsx": {
+    "mtime": 1778303897.0,
+    "hash": "ecf138d60b4ebfd4cc45860e17ccc12d"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\pages\\Termos.tsx": {
+    "mtime": 1778303897.0,
+    "hash": "0de0829abc3292d9feceb97e7baaec43"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\pages\\Trocas.tsx": {
+    "mtime": 1778303897.0,
+    "hash": "b79f4875345f97f6f602803a4878c2d4"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\test\\example.test.ts": {
+    "mtime": 1778247371.0,
+    "hash": "f7aec10728902324d57cf05ee8a8e57e"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\test\\setup.ts": {
+    "mtime": 1778247371.0,
+    "hash": "3ed816a7adf0e76610ce76bd32744ea0"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\AGENTS.md": {
+    "mtime": 1778543317.3032312,
+    "hash": "747e73a5e1af4b72c0d65c9169c23199"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\index.html": {
+    "mtime": 1778458373.0,
+    "hash": "079358a76e805bf2c01a4cc1492d4c8c"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\README.md": {
+    "mtime": 1778303991.0,
+    "hash": "5df3d939e8c4a859b64f81f45e58f309"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\public\\robots.txt": {
+    "mtime": 1778458502.0,
+    "hash": "8df267cacacf9330140d2a42679c60df"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\BIQUINI-AMARELHO-R$45.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "c0c4c6621ad901f194b2fd80f2eb4c60"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\BIQUINI-AZUL-R$45.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "5357df063381e684d4045f8d20a60c7f"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\BIQUINI-CIANO-R$45.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "bfa180bc1040ca9ef82c75e852b3fce8"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\BIQUINI-ROSA BEBE -R$45.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "e03f4688969d48f07a2d331a1933b629"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\Blusa- night- marrom-R$45,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "bbcd1380c6589c15735782f124c887ce"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\Blusa- night- preta-R$45,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "2fa03e8e75fc6300afae699a7ec70ef8"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\BLUSA-BELLA VIBE- PRETO-R$50.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "456a0b5173d94b615aa443b0ccce35a2"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\BLUSA-BELLA VIBE-BRANCA-R$50.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "f3b7f4d1f20fc694b1e4c669fd70cdba"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\Blusa-Bella vibe-vermelha-R$50,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "63357f1260c39c1266b1a1db7762eeb8"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\Conjunto divine-amarelo-R$110,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "c205e9ae43cb4b3910b39b9dfb82655c"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\conjunto luau-amarelo-R$110,00-foto 2.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "011eccf39f6d109b4afab37ba07a8d21"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\conjunto luau-Amarelo-R$110,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "814c5ce74e9c068bf416d8d083d9bc39"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\conjunto-night-vermelho-branco-verde-R$110,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "f122934ae4c1ef2c47dd7f3a9ad82cd8"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\conjunto-night-vermelho-R$110,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "44626ebeef9c61591554b8a4e53d7102"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\conjunto-preto-marrom-branco-R$110,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "55da443f76888b8e96f86eb752f9dc40"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\conjunto-style-amarelo-R$100,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "c7890f2b0bd1ddc97d5cc513629529a4"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\conjunto-style-preto-R$100,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "41e27c7cce21e23067bffb1ac5bdde68"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\conjunto-style-rosa-R$100,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "a599d495dcabe4adf579151223387bf4"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\conjunto-vibe-branco-vermelho-R$110,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "138e2863bc245a88c832f13602d6575d"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\conjunto-vibe-preto-branco-marrom-R$100,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "ad425161364339f7c52e8cd60e3ae9f9"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\conjunto-vibe-vermelho-verde-R$110,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "0450f64ab27b5471b22aeb3504b29055"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\Cropped ver#U00e3o- branco-R$45,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "c28e2c1d6dbfb71b719a6a25557ff811"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\cropped ver#U00e3o-amarelo-R$45,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "e1a41027c47eef22c035c2cb7bc445a9"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\Cropped ver#U00e3o-Preto-R$45,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "00d9df34471925eab42686cea4907dfb"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\cropped-divine look-amarelo-R$45,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "868dace08c4c006cbc740463bcdbfa13"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\cropped-divine look-azul-R$45,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "0b8354b24a2c3329e88cbabfdfb7adff"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\cropped-divine look-preto-R$45,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "113600d26508b6ae817989e86da49cae"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\saia longa-branca-R$80,00-foto2.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "250005b1a6af9495c8cf7b5f4170faa3"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\saia longa-branca-R%$80,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "abd6896f187ecdf42903730a6c0084be"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\saia longa-preta-R$80,00-foto2.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "23f1ddc59792031d2f0510ba8c3c9d14"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\saia longa-preta-R$80,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "add24699269983294e7b9bf4cfdaeb57"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\saia-charme-branco-preto-marrom-R$65,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "62e10ae44f0f4fa207839577041b7465"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\saia-charme-branco-vermelho-verde-R$65,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "5efb78b842cf4195a669fc8592e1ae4a"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\Short saia -Preta- R$65,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "18bc3f8b0bbfa9f9c7e05558ffc46e11"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\Short saia- branca-R$65,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "2b2d9c28794ada045ad671ec811c65fd"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\Short saia- Marrom-R$65,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "74f6c87be58546a60ec2cb46433fd616"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\vestido- sereia-rosa-preto-branco-R$110,00-foto2.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "561487914db9969717506944733beefc"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\vestido-alma-branco-R$90,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "1c650c1bd402a23ca45cadc4dc269bdc"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\vestido-alma-branco-vermelho-verde-R$90,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "6805e876a6166dd5e269b228cde514dd"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\vestido-alma-preto-R$90,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "3a95301964adfb102a4fd7746737589b"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\vestido-brisa-amarelo-R$110,00-foto2.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "6acac4ae81a25df05b56ee738064b09b"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\vestido-brisa-amarelo-R$110,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "7a7eaa8573432f2f8cc443c8eb789aab"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\vestido-brisa-azul-preto-branco-R$110,00-foto2.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "e12078078305c27b6f4d33c6a217f91f"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\vestido-brisa-azul-preto-branco-R$110,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "ff49a704bfa585bc3e2192933e67b037"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\vestido-brisa-rosa-R$110,00-foto2.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "4f1ae3a438c156ad896875d071fa09b6"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\vestido-brisa-rosa-R$110,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "2d4feff86dfbd75dbe5acf0f36558853"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\vestido-costa nua-verde-R$110,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "02f3bf2eda7011acd90fcd081c4d3d65"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\vestido-costas nua-marrom-R$110,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "42fb49775440df9354ec360b8a7d4384"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\vestido-elegance-preto-branco-marrom-R$110,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "ab836208f787631f9a3d650f2545150f"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\vestido-elegance-preto-R$110,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "0694251ec05d7108292d875d1f0300e7"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\vestido-sereia-amarelo-R$110,00-foto2.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "22482c9cd4158b09dbd0155312c824fd"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\vestido-sereia-amarelo-R$110,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "1b230cdb2530461ee4a4fa60292407b9"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\vestido-sereia-azul-R$110,00-foto2.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "406745b01105a5c81c6867cef5542013"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\vestido-sereia-azul-R$110,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "f3920c98939aeb0567d4a1a012d5ebfa"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\vestido-sereia-rosa-preto-branco-R$110,00.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "53f254e3cc4ef2bf5745c63537116de4"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\public\\apple-touch-icon.png": {
+    "mtime": 1778303810.0,
+    "hash": "2dc34ccc91a21efcae06604ee06ec84f"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\public\\placeholder.svg": {
+    "mtime": 1778247371.0,
+    "hash": "b501d7dff3280ac829c321fe854d99d0"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\logo.jpg": {
+    "mtime": 1778286774.0,
+    "hash": "f216a01cc30a35e6c44dc60dd548e49c"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\logo.png": {
+    "mtime": 1778303810.0,
+    "hash": "b9108a571d9ae12fe3d4475d493c8c4d"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\hero\\hero-1.jpg": {
+    "mtime": 1778458311.0,
+    "hash": "e16ea9da3d8ec1f9f7ba5787031f32e9"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\hero\\hero-2.jpg": {
+    "mtime": 1778458312.0,
+    "hash": "31705c25c80c273951c830d2ab18c43d"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\hero\\hero-3.jpg": {
+    "mtime": 1778458312.0,
+    "hash": "71c04ba59b2ff8fc75927f10cd46f1bc"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\hero\\sale-banner.jpg": {
+    "mtime": 1778458312.0,
+    "hash": "e53c29cbbec47ee895d82108a4ff4a94"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\bella-vibe-branco.jpg": {
+    "mtime": 1778458320.0,
+    "hash": "f98500f5aada6fe2372e9f3f5e12c428"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\bella-vibe-preto.jpg": {
+    "mtime": 1778458319.0,
+    "hash": "c950e6a895dae7c54e2f0cf0fa889406"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\bella-vibe-vermelho.jpg": {
+    "mtime": 1778458324.0,
+    "hash": "811068645e3b858646c4838309409f1b"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\biquini-amarelo-2.jpg": {
+    "mtime": 1778458322.0,
+    "hash": "b6480f260764a8f8734c21df4f6d81d0"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\biquini-amarelo.jpeg": {
+    "mtime": 1778458321.0,
+    "hash": "b6480f260764a8f8734c21df4f6d81d0"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\biquini-azul-2.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "5357df063381e684d4045f8d20a60c7f"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\biquini-azul.jpeg": {
+    "mtime": 1778286743.0,
+    "hash": "5357df063381e684d4045f8d20a60c7f"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\biquini-ciano-2.jpg": {
+    "mtime": 1778458320.0,
+    "hash": "6fa868aa7167ccadd7e0b388c451c7a4"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\biquini-ciano.jpeg": {
+    "mtime": 1778458320.0,
+    "hash": "6fa868aa7167ccadd7e0b388c451c7a4"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\biquini-rosa-2.jpg": {
+    "mtime": 1778458321.0,
+    "hash": "ce61f29721d669a9b7e0096574a48006"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\biquini-rosa.jpeg": {
+    "mtime": 1778458322.0,
+    "hash": "ce61f29721d669a9b7e0096574a48006"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\blusa-night-marrom.jpg": {
+    "mtime": 1778458320.0,
+    "hash": "4975905aa6b1a192be509c231ff93826"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\blusa-night-preta.jpg": {
+    "mtime": 1778458322.0,
+    "hash": "00b21319cc1f86a608b82b74a54937f9"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\blusinha1-branca.jpeg": {
+    "mtime": 1778458320.0,
+    "hash": "f98500f5aada6fe2372e9f3f5e12c428"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\blusinha1-preta.jpeg": {
+    "mtime": 1778458323.0,
+    "hash": "c950e6a895dae7c54e2f0cf0fa889406"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\blusinha1-vermelha.jpeg": {
+    "mtime": 1778458323.0,
+    "hash": "811068645e3b858646c4838309409f1b"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\blusinha2-marrom.jpeg": {
+    "mtime": 1778458319.0,
+    "hash": "4975905aa6b1a192be509c231ff93826"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\blusinha2-preta.jpeg": {
+    "mtime": 1778458321.0,
+    "hash": "00b21319cc1f86a608b82b74a54937f9"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\conjunto-cropped-saia-1.jpeg": {
+    "mtime": 1778247371.0,
+    "hash": "011eccf39f6d109b4afab37ba07a8d21"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\conjunto-cropped-saia-2.jpeg": {
+    "mtime": 1778247371.0,
+    "hash": "3b12e6fcb446f1b3d0e7677924d8a58b"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\conjunto-cropped-saia-3.jpeg": {
+    "mtime": 1778247371.0,
+    "hash": "c205e9ae43cb4b3910b39b9dfb82655c"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\conjunto-cropped-saia-4.jpeg": {
+    "mtime": 1778247371.0,
+    "hash": "814c5ce74e9c068bf416d8d083d9bc39"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\conjunto-divine-amarelo.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "c205e9ae43cb4b3910b39b9dfb82655c"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\conjunto-divine.jpg": {
+    "mtime": 1778303778.0,
+    "hash": "82448295db866a1dad22cda42f792382"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\conjunto-luau-1.jpg": {
+    "mtime": 1778303778.0,
+    "hash": "2acc69bc449db0ca53ca04c311f3f10b"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\conjunto-luau-2.jpg": {
+    "mtime": 1778303778.0,
+    "hash": "9fbd5ff625aa474b2522242fa47f72f4"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\conjunto-luau-amarelo-2.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "011eccf39f6d109b4afab37ba07a8d21"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\conjunto-luau-amarelo.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "814c5ce74e9c068bf416d8d083d9bc39"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\conjunto-night-branco.jpg": {
+    "mtime": 1778303778.0,
+    "hash": "81e53e85fa46a24805de7a411142f150"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\conjunto-night-cores.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "f122934ae4c1ef2c47dd7f3a9ad82cd8"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\conjunto-night-curto-preto.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "55da443f76888b8e96f86eb752f9dc40"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\conjunto-night-curto.jpg": {
+    "mtime": 1778303778.0,
+    "hash": "da960aafc86c8f01006adc6600a0cb9f"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\conjunto-night-vermelho.jpg": {
+    "mtime": 1778303778.0,
+    "hash": "9b57c9e1bf3237bf417ef5b4907f7203"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\conjunto-style-amarelo.jpg": {
+    "mtime": 1778303778.0,
+    "hash": "8c1db6b0dcc00d2b5f4af31abee10896"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\conjunto-style-preto.jpg": {
+    "mtime": 1778303778.0,
+    "hash": "16923c4f115b0dd9a298b375f97a1d1e"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\conjunto-style-rosa.jpg": {
+    "mtime": 1778303778.0,
+    "hash": "a36adaf15078c55cfe61ce38fb622d15"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\conjunto-vibe-branco.jpg": {
+    "mtime": 1778303778.0,
+    "hash": "b3403f08d47c7f82c3817bb62712e19c"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\conjunto-vibe-preto.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "ad425161364339f7c52e8cd60e3ae9f9"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\conjunto-vibe-verde.jpg": {
+    "mtime": 1778303778.0,
+    "hash": "a7e89108d90696efc55bce3572c497dd"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\conjunto-vibe-vermelho.jpg": {
+    "mtime": 1778303778.0,
+    "hash": "1b3c4f9742723899a5a31eb380fd1154"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cropped-divine-amarelo.jpg": {
+    "mtime": 1778303778.0,
+    "hash": "37de1934c24f7ed3888d2567e36c8af8"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cropped-divine-azul.jpg": {
+    "mtime": 1778458322.0,
+    "hash": "51277eb49806066179ea98c0235e39e6"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cropped-divine-preto.jpg": {
+    "mtime": 1778303778.0,
+    "hash": "39c699bea66ad8eaa5f3625dffbb9aaa"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cropped-verao-amarelo.jpg": {
+    "mtime": 1778303788.0,
+    "hash": "9f65cb058ddd136fcdf42618aa3f11a4"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cropped-verao-branco.jpg": {
+    "mtime": 1778458322.0,
+    "hash": "2777688be5744afbe633cb142f8089c6"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cropped-verao-preto.jpg": {
+    "mtime": 1778303788.0,
+    "hash": "eeb05b17cdfc6682b8576eca634d06a1"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cropped1-branco.jpeg": {
+    "mtime": 1778458323.0,
+    "hash": "127fa93b6017357ed3ee74af63e18e5a"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cropped1-preto.jpeg": {
+    "mtime": 1778286754.0,
+    "hash": "00d9df34471925eab42686cea4907dfb"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cropped2-amarelo.jpeg": {
+    "mtime": 1778286754.0,
+    "hash": "e1a41027c47eef22c035c2cb7bc445a9"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-biquini-azul-bebe.jpg": {
+    "mtime": 1778458323.0,
+    "hash": "f2523f1df128b651568e78c0ff05e149"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-biquini-azul-escuro.jpg": {
+    "mtime": 1778458322.0,
+    "hash": "fb674df80de5b44595f93cb4bcea04cf"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-biquini-preto.jpg": {
+    "mtime": 1778458323.0,
+    "hash": "e715279e332f4b917b75880e1ec53413"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-biquini-vermelho.jpg": {
+    "mtime": 1778458321.0,
+    "hash": "1e67b23881a0ccff45297e855ed8c96b"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-blusa-costas-nua.jpg": {
+    "mtime": 1778458323.0,
+    "hash": "64d2535fc311c38c5902a95514eeb5cb"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-blusa-meia-lua.jpg": {
+    "mtime": 1778458323.0,
+    "hash": "77b5b2f65b8506d12b4f3aca6a3b007b"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-blusa-sol.jpg": {
+    "mtime": 1778458322.0,
+    "hash": "6621638bca716d3dc252d734fb70ae8c"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-conjunto-divine.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "c205e9ae43cb4b3910b39b9dfb82655c"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-conjunto-luau-2.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "011eccf39f6d109b4afab37ba07a8d21"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-conjunto-luau.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "814c5ce74e9c068bf416d8d083d9bc39"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-conjunto-night-curto-preto.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "55da443f76888b8e96f86eb752f9dc40"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-conjunto-night-curto.jpg": {
+    "mtime": 1778458321.0,
+    "hash": "f334c22fdb8302f4f93aa53ef4ddc5ea"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-conjunto-night-longo-branco.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "44626ebeef9c61591554b8a4e53d7102"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-conjunto-night-longo-vermelho.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "f122934ae4c1ef2c47dd7f3a9ad82cd8"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-conjunto-night-longo.jpg": {
+    "mtime": 1778458320.0,
+    "hash": "bcb459096e79f5cc772cd26a3e2af22a"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-conjunto-style-amarelo.jpg": {
+    "mtime": 1778286760.0,
+    "hash": "ba478828b80ff9bfb3d0f562b5d56a55"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-conjunto-style-preto.jpg": {
+    "mtime": 1778286759.0,
+    "hash": "97bb31ed30a88a809caa03807cb8e6f1"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-conjunto-style-rosa.jpg": {
+    "mtime": 1778286761.0,
+    "hash": "db83159f6339ab39f3c7e8e10e9309ae"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-conjunto-style.jpg": {
+    "mtime": 1778458323.0,
+    "hash": "79a1775b99acb7d0720ce0b734a6a255"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-conjunto-vibe-branco.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "ad425161364339f7c52e8cd60e3ae9f9"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-conjunto-vibe-verde.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "0450f64ab27b5471b22aeb3504b29055"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-conjunto-vibe-vermelho.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "138e2863bc245a88c832f13602d6575d"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-conjunto-vibe.jpg": {
+    "mtime": 1778458322.0,
+    "hash": "0fa09f0744f41caa742dd5e038767965"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-cropped-bella-vibe.jpg": {
+    "mtime": 1778458319.0,
+    "hash": "5e1870ad5caac3534aeea6cbeb607350"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-cropped-divine-amarelo.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "868dace08c4c006cbc740463bcdbfa13"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-cropped-divine-azul.jpg": {
+    "mtime": 1778458320.0,
+    "hash": "5cf5c790c1b120ee4c2d57664cb8a1ed"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-cropped-divine-preto.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "113600d26508b6ae817989e86da49cae"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-cropped-night.jpg": {
+    "mtime": 1778458324.0,
+    "hash": "089840f2d5347e0444ccee9c0219e25d"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-cropped-verao.jpg": {
+    "mtime": 1778458319.0,
+    "hash": "17c30cbdc202714a4c61a3474edb3421"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-divine-look-top.jpg": {
+    "mtime": 1778458319.0,
+    "hash": "036cd68f280b1b0d1873d330b52d35fa"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-regata-outono.jpg": {
+    "mtime": 1778458322.0,
+    "hash": "c9fb735bb6be1d90dfb3247c851b7539"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-saia-charme-branco.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "62e10ae44f0f4fa207839577041b7465"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-saia-charme-vermelho.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "5efb78b842cf4195a669fc8592e1ae4a"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-alma-branco.jpg": {
+    "mtime": 1778286758.0,
+    "hash": "e29414b32a4b96ea7095a12e9857e2ce"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-alma-preto.jpg": {
+    "mtime": 1778286760.0,
+    "hash": "30c05113fe56bc4f096370e2632ba391"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-alma-vermelho.jpg": {
+    "mtime": 1778286759.0,
+    "hash": "5fb6d5a916fdc6d6bbf3a7b32f82665a"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-alma.jpg": {
+    "mtime": 1778458321.0,
+    "hash": "a3524c39bd0e292db154fa29e9ad0220"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-brisa-amarelo-2.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "6acac4ae81a25df05b56ee738064b09b"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-brisa-amarelo.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "7a7eaa8573432f2f8cc443c8eb789aab"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-brisa-azul-2.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "e12078078305c27b6f4d33c6a217f91f"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-brisa-azul.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "ff49a704bfa585bc3e2192933e67b037"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-brisa-rosa-2.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "4f1ae3a438c156ad896875d071fa09b6"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-brisa-rosa.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "2d4feff86dfbd75dbe5acf0f36558853"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-brisa.jpg": {
+    "mtime": 1778458323.0,
+    "hash": "dcde1d6ef5b05e67c367ec12870849ce"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-charme.jpg": {
+    "mtime": 1778458322.0,
+    "hash": "fe4a21f377dc014201ff231df6e6042a"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-costas-nua-marrom.jpg": {
+    "mtime": 1778286760.0,
+    "hash": "74b453e205b3bb3acfe8019ef0167585"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-costas-nua-verde.jpg": {
+    "mtime": 1778286760.0,
+    "hash": "b79b3eec489574035ca85e72e4e95ec9"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-costas-nua.jpg": {
+    "mtime": 1778458323.0,
+    "hash": "6a36a235093ddf5e6e9e3855fb0c90c4"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-elegance-branco.jpg": {
+    "mtime": 1778286759.0,
+    "hash": "b44cd441db288a49ba73eddbcdcf0e68"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-elegance-preto.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "0694251ec05d7108292d875d1f0300e7"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-elegance.jpg": {
+    "mtime": 1778458323.0,
+    "hash": "e8c6874e92cb1593de9f4bf9399dccfe"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-sereia-amarelo-2.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "22482c9cd4158b09dbd0155312c824fd"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-sereia-amarelo.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "1b230cdb2530461ee4a4fa60292407b9"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-sereia-azul-2.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "406745b01105a5c81c6867cef5542013"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-sereia-azul.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "f3920c98939aeb0567d4a1a012d5ebfa"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-sereia-rosa-2.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "561487914db9969717506944733beefc"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-sereia-rosa.jpg": {
+    "mtime": 1778286744.0,
+    "hash": "53f254e3cc4ef2bf5745c63537116de4"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\cv-vestido-sereia.jpg": {
+    "mtime": 1778458321.0,
+    "hash": "4538c9b5822cd13867359d63c1f1e63a"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\divine-look-cropped-amarelo.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "868dace08c4c006cbc740463bcdbfa13"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\divine-look-cropped-azul.jpg": {
+    "mtime": 1778458321.0,
+    "hash": "5cf5c790c1b120ee4c2d57664cb8a1ed"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\divine-look-cropped-preto.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "113600d26508b6ae817989e86da49cae"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\saia-charme-branco.jpg": {
+    "mtime": 1778303778.0,
+    "hash": "c2389cb478f271e1feaa44ad95823323"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\saia-charme-vermelho.jpg": {
+    "mtime": 1778303778.0,
+    "hash": "10454f9d44241c805640fff6319e0495"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\saia-longa-branca-1.jpeg": {
+    "mtime": 1778286744.0,
+    "hash": "abd6896f187ecdf42903730a6c0084be"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\saia-longa-branca-2.jpeg": {
+    "mtime": 1778286744.0,
+    "hash": "250005b1a6af9495c8cf7b5f4170faa3"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\saia-longa-branca-3.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "abd6896f187ecdf42903730a6c0084be"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\saia-longa-branca-4.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "250005b1a6af9495c8cf7b5f4170faa3"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\saia-longa-preta-1.jpeg": {
+    "mtime": 1778286744.0,
+    "hash": "add24699269983294e7b9bf4cfdaeb57"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\saia-longa-preta-2.jpeg": {
+    "mtime": 1778286761.0,
+    "hash": "b409cb15d2ad16498b6a1b21cd2afa16"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\saia-longa-preta-3.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "add24699269983294e7b9bf4cfdaeb57"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\saia-longa-preta-4.jpg": {
+    "mtime": 1778286758.0,
+    "hash": "b409cb15d2ad16498b6a1b21cd2afa16"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\short-saia-branca-2.jpg": {
+    "mtime": 1778458324.0,
+    "hash": "7c97796b04b5520bc48d23c474125e26"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\short-saia-branco.jpeg": {
+    "mtime": 1778458319.0,
+    "hash": "7c97796b04b5520bc48d23c474125e26"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\short-saia-marrom-2.jpg": {
+    "mtime": 1778458321.0,
+    "hash": "7398d40551a4692e45c6829386a817fb"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\short-saia-marrom.jpeg": {
+    "mtime": 1778458321.0,
+    "hash": "7398d40551a4692e45c6829386a817fb"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\short-saia-preta-2.jpg": {
+    "mtime": 1778458322.0,
+    "hash": "8039d0477d538f512ed45e2fc6020a5c"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\short-saia-preto.jpeg": {
+    "mtime": 1778458319.0,
+    "hash": "8039d0477d538f512ed45e2fc6020a5c"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-alma-branco.jpg": {
+    "mtime": 1778303776.0,
+    "hash": "b6c8370b31adb521c68d96dc78aeade7"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-alma-cores.jpg": {
+    "mtime": 1778286758.0,
+    "hash": "5fb6d5a916fdc6d6bbf3a7b32f82665a"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-alma-preto.jpg": {
+    "mtime": 1778303777.0,
+    "hash": "133b18805f234924d1ca01ed89aa6d02"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-alma-vermelho.jpg": {
+    "mtime": 1778303777.0,
+    "hash": "8a322e9d2f72cc63e0004078455fec37"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-brisa-amarelo-1.jpg": {
+    "mtime": 1778303775.0,
+    "hash": "89d102af8d753be585bf7505502e7047"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-brisa-amarelo-2.jpg": {
+    "mtime": 1778303776.0,
+    "hash": "5d61bba2a0f6b1d434ab841039cc01a7"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-brisa-amarelo.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "7a7eaa8573432f2f8cc443c8eb789aab"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-brisa-azul-1.jpg": {
+    "mtime": 1778303776.0,
+    "hash": "b09e44f25af52f6f2b4f41ef335ea7a9"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-brisa-azul-2.jpg": {
+    "mtime": 1778303776.0,
+    "hash": "5ab83df0e2d001c81cf7dba6ede58ad5"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-brisa-azul.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "ff49a704bfa585bc3e2192933e67b037"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-brisa-rosa-1.jpg": {
+    "mtime": 1778303776.0,
+    "hash": "69ee763a0df889944b1b770eb5acc0e4"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-brisa-rosa-2.jpg": {
+    "mtime": 1778303776.0,
+    "hash": "6c1196006fd40ca1456077483fba53c0"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-brisa-rosa.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "2d4feff86dfbd75dbe5acf0f36558853"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-costas-nua-marrom.jpg": {
+    "mtime": 1778303777.0,
+    "hash": "f27f71c12926e50b5132987b9478a159"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-costas-nua-verde.jpg": {
+    "mtime": 1778303777.0,
+    "hash": "a2f06c09a71d8caa2ce1af57bbff2aee"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-elegance-branco.jpg": {
+    "mtime": 1778303778.0,
+    "hash": "9e9807987df2bb699b5f5acf19d29fab"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-elegance-cores.jpg": {
+    "mtime": 1778286757.0,
+    "hash": "b44cd441db288a49ba73eddbcdcf0e68"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-elegance-preto.jpg": {
+    "mtime": 1778303777.0,
+    "hash": "ea19355ac913bde4810daeefd4d39903"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-sereia-amarelo-1.jpg": {
+    "mtime": 1778303775.0,
+    "hash": "a18cc544994b63154f04eef158fe44ac"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-sereia-amarelo-2.jpg": {
+    "mtime": 1778303775.0,
+    "hash": "b288cb2052298feab906ca0760f4fe3a"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-sereia-amarelo.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "1b230cdb2530461ee4a4fa60292407b9"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-sereia-azul-1.jpg": {
+    "mtime": 1778303775.0,
+    "hash": "2cc62138f5f3acbaf7e490d5e6ce1b4c"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-sereia-azul-2.jpg": {
+    "mtime": 1778303775.0,
+    "hash": "8e4477557530ff5c237eb82f84f4cd61"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-sereia-azul.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "f3920c98939aeb0567d4a1a012d5ebfa"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-sereia-rosa-1.jpg": {
+    "mtime": 1778303775.0,
+    "hash": "58763ad6fa282cbb1fb48b1e17501e90"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-sereia-rosa-2.jpg": {
+    "mtime": 1778303775.0,
+    "hash": "6f9716c261ca223b95aa2672c16606d9"
+  },
+  "C:\\Users\\Administrator\\Documents\\sim\\numarstore-v6-profissional\\numarstore-final\\src\\assets\\products\\vestido-sereia-rosa.jpg": {
+    "mtime": 1778247371.0,
+    "hash": "53f254e3cc4ef2bf5745c63537116de4"
+  }
+}
