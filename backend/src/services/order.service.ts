@@ -13,7 +13,7 @@ export async function createOrder(userId: string | null, data: OrderData) {
   await getDatabase();
   const orderId = crypto.randomUUID();
 
-  dbRun(`INSERT INTO orders (id, user_id, status, subtotal, shipping, discount, total,
+  await dbRun(`INSERT INTO orders (id, user_id, status, subtotal, shipping, discount, total,
     payment_method, name, email, cpf, phone, cep, logradouro, bairro, localidade, uf,
     whatsapp_msg, stripe_payment_intent_id, stripe_status, created_at)
     VALUES (?, ?, 'pending', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -24,7 +24,7 @@ export async function createOrder(userId: string | null, data: OrderData) {
      data.stripePaymentIntentId || null, data.stripeStatus || null, Date.now()]);
 
   for (const item of data.items) {
-    dbRun("INSERT INTO order_items (order_id, product_id, name, image, color, size, quantity, price_pix) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+    await dbRun("INSERT INTO order_items (order_id, product_id, name, image, color, size, quantity, price_pix) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
       [orderId, item.product_id, item.name, item.image, item.color, item.size, item.quantity, item.price_pix]);
   }
 
@@ -36,17 +36,17 @@ export async function createOrder(userId: string | null, data: OrderData) {
 
 export async function getUserOrders(userId: string) {
   await getDatabase();
-  return dbAll("SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC", [userId]);
+  return await dbAll("SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC", [userId]);
 }
 
 export async function getOrderById(id: string) {
   await getDatabase();
-  const order = dbGet("SELECT * FROM orders WHERE id = ?", [id]);
+  const order = await dbGet("SELECT * FROM orders WHERE id = ?", [id]);
   if (!order) return null;
-  order.items = dbAll("SELECT * FROM order_items WHERE order_id = ?", [id]);
+  order.items = await dbAll("SELECT * FROM order_items WHERE order_id = ?", [id]);
   return order;
 }
 
 async function clearCart(userId: string) {
-  dbRun("DELETE FROM cart_items WHERE user_id = ?", [userId]);
+  await dbRun("DELETE FROM cart_items WHERE user_id = ?", [userId]);
 }

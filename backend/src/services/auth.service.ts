@@ -7,12 +7,12 @@ export { generateToken, generateRefreshToken };
 
 export async function registerUser(name: string, email: string, phone: string | null, password: string) {
   await getDatabase();
-  const existing = dbGet("SELECT id FROM users WHERE email = ?", [email]);
+  const existing = await dbGet("SELECT id FROM users WHERE email = ?", [email]);
   if (existing) throw new Error("EMAIL_EXISTS");
 
   const passwordHash = await bcrypt.hash(password, 10);
   const id = crypto.randomUUID();
-  dbRun("INSERT INTO users (id, name, email, phone, password_hash, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+  await dbRun("INSERT INTO users (id, name, email, phone, password_hash, created_at) VALUES (?, ?, ?, ?, ?, ?)",
     [id, name, email, phone, passwordHash, Date.now()]);
 
   return { token: generateToken({ id, email, name, role: "user" }), refreshToken: generateRefreshToken({ id }) };
@@ -20,7 +20,7 @@ export async function registerUser(name: string, email: string, phone: string | 
 
 export async function loginUser(email: string, password: string) {
   await getDatabase();
-  const user = dbGet<{ id: string; name: string; email: string; password_hash: string; role: string }>("SELECT * FROM users WHERE email = ?", [email]);
+  const user = await dbGet<{ id: string; name: string; email: string; password_hash: string; role: string }>("SELECT * FROM users WHERE email = ?", [email]);
   if (!user) throw new Error("INVALID_CREDENTIALS");
 
   const valid = await bcrypt.compare(password, user.password_hash);
@@ -31,7 +31,7 @@ export async function loginUser(email: string, password: string) {
 
 export async function getUserById(id: string) {
   await getDatabase();
-  const r = dbGet<{ id: string; name: string; email: string; phone: string | null; role: string }>("SELECT id, name, email, phone, role FROM users WHERE id = ?", [id]);
+  const r = await dbGet<{ id: string; name: string; email: string; phone: string | null; role: string }>("SELECT id, name, email, phone, role FROM users WHERE id = ?", [id]);
   if (!r) throw new Error("USER_NOT_FOUND");
   return r;
 }
@@ -43,20 +43,20 @@ export async function updateUser(id: string, data: { name?: string; phone?: stri
   if (data.name !== undefined) { fields.push("name = ?"); values.push(data.name); }
   if (data.phone !== undefined) { fields.push("phone = ?"); values.push(data.phone); }
   if (!fields.length) return getUserById(id);
-  dbRun(`UPDATE users SET ${fields.join(", ")} WHERE id = ?`, [...values, id]);
+  await dbRun(`UPDATE users SET ${fields.join(", ")} WHERE id = ?`, [...values, id]);
   return getUserById(id);
 }
 
 export async function createPasswordResetToken(email: string) {
   await getDatabase();
-  const user = dbGet<{ id: string; email: string }>("SELECT id, email FROM users WHERE email = ?", [email]);
+  const user = await dbGet<{ id: string; email: string }>("SELECT id, email FROM users WHERE email = ?", [email]);
   if (!user) throw new Error("USER_NOT_FOUND");
 
   const token = crypto.randomUUID();
   const expiresAt = Date.now() + (60 * 60 * 1000); // 1 hour
   const id = crypto.randomUUID();
 
-  dbRun("INSERT INTO password_reset_tokens (id, user_id, token, expires_at, created_at) VALUES (?, ?, ?, ?, ?)",
+  await dbRun("INSERT INTO password_reset_tokens (id, user_id, token, expires_at, created_at) VALUES (?, ?, ?, ?, ?)",
     [id, user.id, token, expiresAt, Date.now()]);
 
   return { token, userId: user.id };
@@ -64,7 +64,7 @@ export async function createPasswordResetToken(email: string) {
 
 export async function validateResetToken(token: string) {
   await getDatabase();
-  const resetToken = dbGet<{ user_id: string; expires_at: number }>(
+  const resetToken = await dbGet<{ user_id: string; expires_at: number }>(
     "SELECT user_id, expires_at FROM password_reset_tokens WHERE token = ?",
     [token]
   );
@@ -80,9 +80,9 @@ export async function resetPassword(token: string, newPassword: string) {
   const userId = await validateResetToken(token);
 
   const passwordHash = await bcrypt.hash(newPassword, 10);
-  dbRun("UPDATE users SET password_hash = ? WHERE id = ?", [passwordHash, userId]);
+  await dbRun("UPDATE users SET password_hash = ? WHERE id = ?", [passwordHash, userId]);
 
-  dbRun("DELETE FROM password_reset_tokens WHERE token = ?", [token]);
+  await dbRun("DELETE FROM password_reset_tokens WHERE token = ?", [token]);
 
   return { success: true };
 }

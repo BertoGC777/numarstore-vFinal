@@ -63,7 +63,7 @@ router.post("/create-checkout-session", authMiddleware, async (req: any, res) =>
 
 router.post("/", authMiddleware, async (req, res) => {
   try {
-    const paymentId = createPayment(req.body);
+    const paymentId = await createPayment(req.body);
     res.json({ paymentId, status: "pending" });
   } catch {
     res.status(500).json({ error: "Erro ao criar pagamento" });
@@ -73,7 +73,7 @@ router.post("/", authMiddleware, async (req, res) => {
 router.get("/:id/status", authMiddleware, async (req, res) => {
    try {
      const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
-     const payment = getPaymentById(id);
+     const payment = await getPaymentById(id);
     if (!payment) return res.status(404).json({ error: "Pagamento não encontrado" });
     res.json({ status: payment.status });
   } catch {
@@ -84,7 +84,7 @@ router.get("/:id/status", authMiddleware, async (req, res) => {
 router.post("/:id/confirm", authMiddleware, async (req, res) => {
    try {
      const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
-     updatePaymentStatus(id, "paid");
+     await updatePaymentStatus(id, "paid");
     res.json({ status: "paid" });
   } catch {
     res.status(500).json({ error: "Erro ao confirmar pagamento" });
