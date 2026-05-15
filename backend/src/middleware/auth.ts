@@ -46,7 +46,7 @@ export function verifyRefreshToken(token: string): RefreshPayload {
 }
 
 export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
-  const authHeader = req.headers.authorization;
+  const authHeader = (req as Request).headers?.authorization;
   if (!authHeader?.startsWith("Bearer ")) return res.status(401).json({ error: "Token não fornecido" });
   try {
     const token = authHeader.split(" ")[1];
@@ -58,7 +58,7 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
 };
 
 export const adminMiddleware = async (req: AuthRequest, res: Response, next: NextFunction) => {
-  const authHeader = req.headers.authorization;
+  const authHeader = (req as Request).headers?.authorization;
   if (!authHeader?.startsWith("Bearer ")) return res.status(401).json({ error: "Token não fornecido" });
   try {
     const token = authHeader.split(" ")[1];
