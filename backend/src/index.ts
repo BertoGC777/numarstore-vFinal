@@ -20,6 +20,7 @@ import setupRoutes from "./routes/setup.routes";
 import { seedAll } from "./db/seed";
 
 const app = express();
+app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3001;
 
 Sentry;

@@ -11,14 +11,18 @@ router.post("/create-admin", async (req, res) => {
   }
   try {
     const hash = await bcrypt.hash("admin123", 10)
-    await pool.query(`
+    console.log("Tentando criar admin...")
+    const result = await pool.query(`
       INSERT INTO users (id, name, email, password, role, created_at)
       VALUES (gen_random_uuid(), 'Admin', 'admin@numarstore.com.br', $1, 'admin', NOW())
       ON CONFLICT (email) DO UPDATE SET password = $1, role = 'admin'
+      RETURNING id, email
     `, [hash])
-    res.json({ success: true })
+    console.log("Admin criado:", result.rows[0])
+    res.json({ success: true, user: result.rows[0] })
   } catch (e: any) {
-    res.status(500).json({ error: e.message })
+    console.error("Erro detalhado:", e.message, e.stack)
+    res.status(500).json({ error: e.message, detail: e.detail })
   }
 })
 
