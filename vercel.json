@@ -1,3 +1,5 @@
 {
-  "rewrites": [{ "source": "/api/(.*)", "destination": "http://SEU-BACKEND-URL/api/$1" }]
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "https://numarstore-backend.onrender.com/api/$1" }
+  ]
 }
