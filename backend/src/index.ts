@@ -16,6 +16,7 @@ import cepRoutes from "./routes/cep.routes";
 import paymentRoutes from "./routes/payment.routes";
 import stripeRoutes from "./routes/stripe.routes";
 import adminRoutes from "./routes/admin.routes";
+import setupRoutes from "./routes/setup.routes";
 import { seedAll } from "./db/seed";
 
 const app = express();
@@ -45,6 +46,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/payments", authMiddleware, paymentRoutes);
 app.use("/api/stripe", stripeRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/setup", setupRoutes);
 
 app.get("/api/health", (_req: Request, res: Response) => res.json({ status: "ok" }));
 
