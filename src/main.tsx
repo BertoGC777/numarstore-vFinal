@@ -1,7 +1,6 @@
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import "./index.css";
-import "./sentry";
 import App from "./App";
 import { StripeProvider } from "@/context/StripeContext";
 
