@@ -5,7 +5,7 @@
       "destination": "https://numarstore-backend.onrender.com/api/$1"
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!assets|icons|images|favicon|manifest|icon).*)",
       "destination": "/index.html"
     }
   ]
