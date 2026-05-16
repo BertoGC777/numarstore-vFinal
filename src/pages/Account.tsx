@@ -39,6 +39,7 @@ export default function Account() {
 
   // Check for existing session token on mount
   useEffect(() => {
+    if (typeof window === "undefined") return;
     const token = localStorage.getItem("numar.token");
     const storedUser = localStorage.getItem("numar.user");
     if (token && storedUser) {
