@@ -16,7 +16,7 @@ export async function createOrder(userId: string | null, data: OrderData) {
   await dbRun(`INSERT INTO orders (id, user_id, status, subtotal, shipping, discount, total,
     payment_method, name, email, cpf, phone, cep, logradouro, bairro, localidade, uf,
     whatsapp_msg, stripe_payment_intent_id, stripe_status, created_at)
-    VALUES (?, ?, 'pending', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    VALUES ($1, $2, 'pending', $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)`,
     [orderId, userId, data.subtotal, data.shipping, data.discount, data.total,
      data.paymentMethod, data.name, data.email, data.cpf || null, data.phone,
      data.cep || null, data.logradouro || null, data.bairro || null,
@@ -24,7 +24,7 @@ export async function createOrder(userId: string | null, data: OrderData) {
      data.stripePaymentIntentId || null, data.stripeStatus || null, Date.now()]);
 
   for (const item of data.items) {
-    await dbRun("INSERT INTO order_items (order_id, product_id, name, image, color, size, quantity, price_pix) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+    await dbRun("INSERT INTO order_items (order_id, product_id, name, image, color, size, quantity, price_pix) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
       [orderId, item.product_id, item.name, item.image, item.color, item.size, item.quantity, item.price_pix]);
   }
 
@@ -36,17 +36,17 @@ export async function createOrder(userId: string | null, data: OrderData) {
 
 export async function getUserOrders(userId: string) {
   await getDatabase();
-  return await dbAll("SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC", [userId]);
+  return await dbAll("SELECT * FROM orders WHERE user_id = $1 ORDER BY created_at DESC", [userId]);
 }
 
 export async function getOrderById(id: string) {
   await getDatabase();
-  const order = await dbGet("SELECT * FROM orders WHERE id = ?", [id]);
+  const order = await dbGet("SELECT * FROM orders WHERE id = $1", [id]);
   if (!order) return null;
-  order.items = await dbAll("SELECT * FROM order_items WHERE order_id = ?", [id]);
+  order.items = await dbAll("SELECT * FROM order_items WHERE order_id = $1", [id]);
   return order;
 }
 
 async function clearCart(userId: string) {
-  await dbRun("DELETE FROM cart_items WHERE user_id = ?", [userId]);
+  await dbRun("DELETE FROM cart_items WHERE user_id = $1", [userId]);
 }
