@@ -62,14 +62,12 @@ export default function Account() {
         setError("Email ou senha incorretos");
         return;
       }
-      const { token, refreshToken } = result;
-      localStorage.setItem("numar.token", token);
-      localStorage.setItem("numar.refreshToken", refreshToken);
-      const profile = await api.auth.profile();
-      setUser(profile);
-      localStorage.setItem("numar.user", JSON.stringify(profile));
+      localStorage.setItem("numar.token", result.token);
+      localStorage.setItem("numar.refreshToken", result.refreshToken || "");
+      localStorage.setItem("numar.user", JSON.stringify(result.user || {}));
+      const role = result.user?.role || result.role || "";
       toast({ title: "✅ Login realizado", description: "Bem-vindo de volta!" });
-      if (profile.role === "admin") {
+      if (role === "admin") {
         navigate("/admin");
       } else {
         navigate("/");
