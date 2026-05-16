@@ -1,3 +1,0 @@
-{
-  "rewrites": [{ "source": "/((?!_next|assets|favicon|manifest|icon|images).*)", "destination": "/index.html" }]
-}
