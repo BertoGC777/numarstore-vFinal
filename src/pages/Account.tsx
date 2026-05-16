@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ type Tab = "login" | "register";
 type Section = "profile" | "orders";
 
 export default function Account() {
+  const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [tab, setTab] = useState<Tab>("login");
   const [section, setSection] = useState<Section>("profile");
@@ -68,6 +69,11 @@ export default function Account() {
       setUser(profile);
       localStorage.setItem("numar.user", JSON.stringify(profile));
       toast({ title: "✅ Login realizado", description: "Bem-vindo de volta!" });
+      if (profile.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
     } catch (e: any) {
       setError(e.message || "Erro ao fazer login");
     } finally {
