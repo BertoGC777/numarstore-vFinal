@@ -9,8 +9,10 @@
     "create-admin": "npx tsx src/scripts/create-admin.ts"
   },
   "dependencies": {
+    "@types/compression": "^1.8.1",
     "@types/pg": "^8.20.0",
     "bcryptjs": "^2.4.3",
+    "compression": "^1.8.1",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^4.21.2",

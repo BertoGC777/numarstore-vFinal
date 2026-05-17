@@ -6,6 +6,7 @@ import "dotenv/config";
 import express, { Request, Response } from "express";
 import cors from "cors";
 import helmet from "helmet";
+import compression from "compression";
 import rateLimit from "express-rate-limit";
 import { authMiddleware } from "./middleware/auth";
 import authRoutes from "./routes/auth.routes";
@@ -25,6 +26,7 @@ const PORT = process.env.PORT || 3001;
 
 Sentry;
 
+app.use(compression());
 app.use(helmet({ crossOriginEmbedderPolicy: false }));
 app.use(cors({ origin: ["http://localhost:8080", "http://localhost:5173", "http://localhost:3000", "https://numarstore-v-final.vercel.app"], credentials: true }));
 

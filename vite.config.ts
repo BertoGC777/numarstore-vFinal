@@ -20,6 +20,16 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: "dist",
       assetsDir: "assets",
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['react', 'react-dom'],
+            router: ['react-router-dom'],
+            ui: ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-accordion']
+          }
+        }
+      },
+      chunkSizeWarningLimit: 1000
     },
     define: {
       __APP_VERSION__: JSON.stringify(env.npm_package_version || "0.0.0"),
