@@ -8,8 +8,15 @@
       "destination": "https://numarstore-backend.onrender.com/api/:path*"
     },
     {
-      "source": "/:path*",
-      "destination": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept",
+          "value": "text/html"
+        }
+      ]
     }
   ],
   "headers": [
