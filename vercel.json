@@ -1,17 +1,18 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "https://numarstore-backend.onrender.com/api/$1"
+      "source": "/api/:path*",
+      "destination": "https://numarstore-backend.onrender.com/api/:path*"
     },
     {
-      "handle": "filesystem"
+      "source": "/assets/:path*",
+      "destination": "/assets/:path*"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
