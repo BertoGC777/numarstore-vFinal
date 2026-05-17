@@ -19,8 +19,24 @@ export default function Admin() {
 
   useEffect(() => {
     const token = localStorage.getItem("numar.token");
+    const storedUser = localStorage.getItem("numar.user");
+    
     if (!token) {
       navigate("/conta");
+      return;
+    }
+
+    // Verificar se o usuário é admin antes de tentar acessar rotas de admin
+    let userRole = "user";
+    if (storedUser) {
+      try {
+        const user = JSON.parse(storedUser);
+        userRole = user.role || "user";
+      } catch {}
+    }
+
+    if (userRole !== "admin") {
+      navigate("/");
       return;
     }
 

@@ -57,8 +57,39 @@ const productData: SeedProduct[] = [
 
 export async function seedAll() {
   await getDatabase();
+  
+  // Admin seed - sempre executa para garantir que o admin exista
+  const bcrypt = require("bcryptjs");
+  try {
+    const existingAdmin = await dbGet<{ id: string }>("SELECT id FROM users WHERE email = $1", ["admin@numarstore.com"]);
+    const adminId = existingAdmin?.id || crypto.randomUUID();
+    const passwordHash = bcrypt.hashSync("admin123", 10);
+    
+    if (existingAdmin) {
+      // Atualiza se já existir
+      await dbRun(
+        "UPDATE users SET password_hash = $1, role = 'admin' WHERE email = $2",
+        [passwordHash, "admin@numarstore.com"]
+      );
+      console.log("✅ Admin atualizado: admin@numarstore.com / admin123");
+    } else {
+      // Cria se não existir
+      await dbRun(
+        "INSERT INTO users (id, name, email, phone, password_hash, role, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+        [adminId, "Admin Numar", "admin@numarstore.com", "(21) 97967-4510", passwordHash, "admin", Date.now()]
+      );
+      console.log("✅ Admin criado: admin@numarstore.com / admin123");
+    }
+  } catch (e: any) {
+    console.error("❌ Erro ao criar/atualizar admin:", e.message);
+  }
+
+  // Products seed - só executa se não houver produtos
   const count = await dbGet<{ cnt: number }>("SELECT COUNT(*) as cnt FROM products");
-  if (count && count.cnt > 0) return;
+  if (count && count.cnt > 0) {
+    console.log("✅ Produtos já existem, pulando seed de produtos");
+    return;
+  }
 
   for (const p of productData) {
     const id = crypto.randomUUID();
@@ -76,16 +107,5 @@ export async function seedAll() {
       await dbRun("INSERT INTO product_sizes (product_id, size) VALUES ($1, $2)", [id, s]);
     }
   }
-
-  // Admin seed
-  const bcrypt = require("bcryptjs");
-  const adminId = crypto.randomUUID();
-  try {
-    await dbRun(
-      "INSERT INTO users (id, name, email, phone, password_hash, role, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7)",
-      [adminId, "Admin Numar", "admin@numarstore.com", "(21) 97967-4510", bcrypt.hashSync("admin123", 10), "admin", Date.now()]
-    );
-    console.log("✅ Admin seedado: admin@numarstore.com / admin123");
-  } catch {}
   console.log(`✅ ${productData.length} produtos seedados no PostgreSQL`);
 }
