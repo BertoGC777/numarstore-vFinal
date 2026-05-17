@@ -1,0 +1,15 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://numarstore-backend.onrender.com/api/:path*"
+    },
+    {
+      "source": "/((?!api|assets|favicon|manifest).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
