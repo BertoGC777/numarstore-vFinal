@@ -2,82 +2,17 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/:path*",
-      "destination": "https://numarstore-backend.onrender.com/api/:path*"
+      "src": "/api/(.*)",
+      "dest": "https://numarstore-backend.onrender.com/api/$1"
     },
     {
-      "source": "/",
-      "destination": "/index.html"
+      "handle": "filesystem"
     },
     {
-      "source": "/catalogo",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/produto/:path*",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/checkout",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/conta",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/admin",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/admin/produtos",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/admin/pedidos",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/rastreio",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/quem-somos",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/privacidade",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/termos",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/trocas",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/faq",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/esqueci-senha",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/resetar-senha",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/checkout/sucesso",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/checkout/cancelado",
-      "destination": "/index.html"
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
