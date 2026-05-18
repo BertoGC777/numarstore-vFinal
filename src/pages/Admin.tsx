@@ -26,16 +26,8 @@ export default function Admin() {
       return;
     }
 
-    // Verificar se o usuário é admin antes de tentar acessar rotas de admin
-    let userRole = "user";
-    if (storedUser) {
-      try {
-        const user = JSON.parse(storedUser);
-        userRole = user.role || "user";
-      } catch {}
-    }
-
-    if (userRole !== "admin") {
+    const user = JSON.parse(storedUser || "{}");
+    if (user.role !== "admin") {
       navigate("/conta");
       return;
     }

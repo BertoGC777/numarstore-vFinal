@@ -20,13 +20,17 @@ export async function registerUser(name: string, email: string, phone: string | 
 
 export async function loginUser(email: string, password: string) {
   await getDatabase();
-  const user = await dbGet<{ id: string; name: string; email: string; password_hash: string; role: string }>("SELECT * FROM users WHERE email = $1", [email]);
+  const user = await dbGet<{ id: string; name: string; email: string; password_hash: string; role: string; phone: string | null }>("SELECT * FROM users WHERE email = $1", [email]);
   if (!user) throw new Error("INVALID_CREDENTIALS");
 
   const valid = await bcrypt.compare(password, user.password_hash);
   if (!valid) throw new Error("INVALID_CREDENTIALS");
 
-  return { token: generateToken({ id: user.id, email: user.email, name: user.name, role: user.role || "user" }), refreshToken: generateRefreshToken({ id: user.id }) };
+  return { 
+    token: generateToken({ id: user.id, email: user.email, name: user.name, role: user.role || "user" }), 
+    refreshToken: generateRefreshToken({ id: user.id }),
+    user: { id: user.id, name: user.name, email: user.email, role: user.role || "user", phone: user.phone }
+  };
 }
 
 export async function getUserById(id: string) {
