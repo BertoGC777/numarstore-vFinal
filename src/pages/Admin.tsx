@@ -36,7 +36,7 @@ export default function Admin() {
     }
 
     if (userRole !== "admin") {
-      navigate("/");
+      navigate("/conta");
       return;
     }
 
