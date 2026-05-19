@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
-import { Package, ShoppingBag, LogOut, CheckCircle, XCircle, Clock, Truck } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Package, ShoppingBag, LogOut, CheckCircle, XCircle, Clock, Truck, Plus, Edit, Trash2 } from "lucide-react";
 import { api } from "@/api/client";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -17,59 +18,58 @@ export default function Admin() {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [editingProduct, setEditingProduct] = useState<any | null>(null);
+  const [showProductForm, setShowProductForm] = useState(false);
+  const [productForm, setProductForm] = useState({
+    name: "",
+    category: "",
+    description: "",
+    price_pix: "",
+    price_card: "",
+    is_new: false,
+    is_sale: false,
+    discount: ""
+  });
 
   useEffect(() => {
-    const checkAuthAndFetch = async () => {
-      try {
-        const token = localStorage.getItem("numar.token");
-        const storedUser = localStorage.getItem("numar.user");
-        
-        if (!token) {
-          navigate("/conta");
-          return;
-        }
-
-        const user = JSON.parse(storedUser || "{}");
-        console.log("Admin page - User from localStorage:", user);
-        
-        if (user.role !== "admin") {
-          console.log("Admin page - User is not admin, redirecting to /conta");
-          navigate("/conta");
-          return;
-        }
-
-        await fetchData();
-      } catch (e) {
-        console.error("Admin page - Error in useEffect:", e);
-        setError("Erro ao verificar permissões");
-      }
-    };
-
     checkAuthAndFetch();
   }, [tab]);
+
+  const checkAuthAndFetch = async () => {
+    try {
+      const token = localStorage.getItem("numar.token");
+      const storedUser = localStorage.getItem("numar.user");
+      
+      if (!token) {
+        navigate("/conta");
+        return;
+      }
+
+      const user = JSON.parse(storedUser || "{}");
+      if (user.role !== "admin") {
+        navigate("/conta");
+        return;
+      }
+
+      await fetchData();
+    } catch (e) {
+      setError("Erro ao verificar permissões");
+    }
+  };
 
   const fetchData = async () => {
     setLoading(true);
     setError(null);
     try {
-      console.log("Admin page - Fetching data for tab:", tab);
       if (tab === "orders") {
         const data = await api.get("/admin/orders");
-        const ordersArray = Array.isArray(data) ? data : [];
-        setOrders(ordersArray);
+        setOrders(Array.isArray(data) ? data : []);
       } else {
         const data = await api.get("/admin/products");
-        const productsArray = Array.isArray(data) ? data : [];
-        setProducts(productsArray);
+        setProducts(Array.isArray(data) ? data : []);
       }
     } catch (err: any) {
-      console.error("Admin page - Error fetching data:", err);
-      const errorMessage = err.message || "Erro ao carregar dados";
-      setError(errorMessage);
-      toast({ title: "Erro", description: errorMessage });
-      if (err.message?.includes("401") || err.message?.includes("403")) {
-        navigate("/conta");
-      }
+      setError(err.message || "Erro ao carregar dados");
     } finally {
       setLoading(false);
     }
@@ -88,8 +88,74 @@ export default function Admin() {
       toast({ title: "Sucesso", description: "Status atualizado" });
       fetchData();
     } catch (err: any) {
-      toast({ title: "Erro", description: err.response?.data?.error || "Erro ao atualizar status" });
+      toast({ title: "Erro", description: err.message || "Erro ao atualizar status" });
     }
+  };
+
+  const handleSaveProduct = async () => {
+    try {
+      const payload = {
+        name: productForm.name,
+        category: productForm.category,
+        description: productForm.description,
+        price_pix: parseFloat(productForm.price_pix),
+        price_card: parseFloat(productForm.price_card),
+        is_new: productForm.is_new,
+        is_sale: productForm.is_sale,
+        discount: productForm.is_sale ? parseFloat(productForm.discount) : 0
+      };
+
+      if (editingProduct) {
+        await api.put(`/admin/products/${editingProduct.id}`, payload);
+        toast({ title: "Sucesso", description: "Produto atualizado" });
+      } else {
+        await api.post("/admin/products", payload);
+        toast({ title: "Sucesso", description: "Produto criado" });
+      }
+
+      setShowProductForm(false);
+      setEditingProduct(null);
+      setProductForm({
+        name: "",
+        category: "",
+        description: "",
+        price_pix: "",
+        price_card: "",
+        is_new: false,
+        is_sale: false,
+        discount: ""
+      });
+      fetchData();
+    } catch (err: any) {
+      toast({ title: "Erro", description: err.message || "Erro ao salvar produto" });
+    }
+  };
+
+  const handleDeleteProduct = async (productId: string) => {
+    if (!confirm("Tem certeza que deseja excluir este produto?")) return;
+    
+    try {
+      await api.delete(`/admin/products/${productId}`);
+      toast({ title: "Sucesso", description: "Produto excluído" });
+      fetchData();
+    } catch (err: any) {
+      toast({ title: "Erro", description: err.message || "Erro ao excluir produto" });
+    }
+  };
+
+  const handleEditProduct = (product: any) => {
+    setEditingProduct(product);
+    setProductForm({
+      name: product.name,
+      category: product.category,
+      description: product.description || "",
+      price_pix: product.price_pix.toString(),
+      price_card: product.price_card.toString(),
+      is_new: product.is_new === 1,
+      is_sale: product.is_sale === 1,
+      discount: product.discount?.toString() || ""
+    });
+    setShowProductForm(true);
   };
 
   const getStatusIcon = (status: string) => {
@@ -146,6 +212,7 @@ export default function Admin() {
             </Button>
           </div>
         )}
+
         {loading ? (
           <p className="text-center py-8 text-muted-foreground">Carregando...</p>
         ) : tab === "orders" ? (
@@ -153,8 +220,8 @@ export default function Admin() {
             {!Array.isArray(orders) || orders.length === 0 ? (
               <div className="border border-border rounded-lg p-8 text-center">
                 <ShoppingBag className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                <h2 className="font-serif text-xl mb-2">Nenhum pedido</h2>
-                <p className="text-sm text-muted-foreground">Não há pedidos no momento.</p>
+                <h2 className="font-serif text-xl mb-2">Nenhum pedido ainda</h2>
+                <p className="text-sm text-muted-foreground">Os pedidos aparecerão aqui quando forem feitos.</p>
               </div>
             ) : (
               orders.map((order: any) => (
@@ -212,23 +279,72 @@ export default function Admin() {
           </div>
         ) : (
           <div className="space-y-4">
-            <div className="flex justify-end">
-              <Button onClick={() => navigate("/admin/produtos")} className="gap-2">
-                <Package className="h-4 w-4" /> Gerenciar Produtos
+            <div className="flex justify-between items-center">
+              <Button onClick={() => { setShowProductForm(true); setEditingProduct(null); setProductForm({ name: "", category: "", description: "", price_pix: "", price_card: "", is_new: false, is_sale: false, discount: "" }); }} className="gap-2">
+                <Plus className="h-4 w-4" /> Adicionar Produto
               </Button>
             </div>
+
+            {showProductForm && (
+              <div className="border border-border rounded-lg p-6 space-y-4">
+                <h2 className="font-serif text-lg">{editingProduct ? "Editar Produto" : "Novo Produto"}</h2>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 block">Nome</label>
+                    <Input value={productForm.name} onChange={(e) => setProductForm({...productForm, name: e.target.value})} />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 block">Categoria</label>
+                    <Input value={productForm.category} onChange={(e) => setProductForm({...productForm, category: e.target.value})} />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 block">Preço PIX</label>
+                    <Input type="number" value={productForm.price_pix} onChange={(e) => setProductForm({...productForm, price_pix: e.target.value})} />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 block">Preço Cartão</label>
+                    <Input type="number" value={productForm.price_card} onChange={(e) => setProductForm({...productForm, price_card: e.target.value})} />
+                  </div>
+                </div>
+                <div>
+                  <label className="text-xs text-muted-foreground mb-1 block">Descrição</label>
+                  <Input value={productForm.description} onChange={(e) => setProductForm({...productForm, description: e.target.value})} />
+                </div>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2">
+                    <input type="checkbox" checked={productForm.is_new} onChange={(e) => setProductForm({...productForm, is_new: e.target.checked})} />
+                    <span className="text-sm">Destaque</span>
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input type="checkbox" checked={productForm.is_sale} onChange={(e) => setProductForm({...productForm, is_sale: e.target.checked})} />
+                    <span className="text-sm">Em promoção</span>
+                  </label>
+                  {productForm.is_sale && (
+                    <div className="flex items-center gap-2">
+                      <label className="text-sm">Desconto %:</label>
+                      <Input type="number" className="w-20" value={productForm.discount} onChange={(e) => setProductForm({...productForm, discount: e.target.value})} />
+                    </div>
+                  )}
+                </div>
+                <div className="flex gap-2">
+                  <Button onClick={handleSaveProduct}>{editingProduct ? "Atualizar" : "Criar"}</Button>
+                  <Button variant="outline" onClick={() => { setShowProductForm(false); setEditingProduct(null); }}>Cancelar</Button>
+                </div>
+              </div>
+            )}
+
             {!Array.isArray(products) || products.length === 0 ? (
               <div className="border border-border rounded-lg p-8 text-center">
                 <Package className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
                 <h2 className="font-serif text-xl mb-2">Nenhum produto</h2>
-                <p className="text-sm text-muted-foreground">Não há produtos no momento.</p>
+                <p className="text-sm text-muted-foreground">Adicione produtos para começar.</p>
               </div>
             ) : (
               products.map((product: any) => (
                 <div key={product.id} className="border border-border rounded-lg p-4 flex justify-between items-center">
                   <div>
                     <p className="font-medium">{product.name}</p>
-                    <p className="text-sm text-muted-foreground">{product.category} {product.subcategory && `• ${product.subcategory}`}</p>
+                    <p className="text-sm text-muted-foreground">{product.category}</p>
                     <div className="flex gap-4 mt-1 text-sm">
                       <span>Pix: {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(product.price_pix)}</span>
                       <span>Cartão: {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(product.price_card)}</span>
@@ -237,6 +353,12 @@ export default function Admin() {
                   <div className="flex gap-2">
                     {product.is_new && <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">Novo</span>}
                     {product.is_sale && <span className="text-xs bg-red-10 text-red-600 px-2 py-1 rounded">Promo</span>}
+                    <Button size="sm" variant="outline" onClick={() => handleEditProduct(product)} className="gap-1">
+                      <Edit className="h-3 w-3" /> Editar
+                    </Button>
+                    <Button size="sm" variant="destructive" onClick={() => handleDeleteProduct(product.id)} className="gap-1">
+                      <Trash2 className="h-3 w-3" /> Excluir
+                    </Button>
                   </div>
                 </div>
               ))
