@@ -55,17 +55,19 @@ export default function Admin() {
       console.log("Admin page - Fetching data for tab:", tab);
       if (tab === "orders") {
         const data = await api.get("/admin/orders");
-        setOrders(data);
+        const ordersArray = Array.isArray(data) ? data : [];
+        setOrders(ordersArray);
       } else {
         const data = await api.get("/admin/products");
-        setProducts(data);
+        const productsArray = Array.isArray(data) ? data : [];
+        setProducts(productsArray);
       }
     } catch (err: any) {
       console.error("Admin page - Error fetching data:", err);
-      const errorMessage = err.response?.data?.error || err.message || "Erro ao carregar dados";
+      const errorMessage = err.message || "Erro ao carregar dados";
       setError(errorMessage);
       toast({ title: "Erro", description: errorMessage });
-      if (err.response?.status === 403) {
+      if (err.message?.includes("401") || err.message?.includes("403")) {
         navigate("/conta");
       }
     } finally {
@@ -148,7 +150,7 @@ export default function Admin() {
           <p className="text-center py-8 text-muted-foreground">Carregando...</p>
         ) : tab === "orders" ? (
           <div className="space-y-4">
-            {orders.length === 0 ? (
+            {!Array.isArray(orders) || orders.length === 0 ? (
               <div className="border border-border rounded-lg p-8 text-center">
                 <ShoppingBag className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
                 <h2 className="font-serif text-xl mb-2">Nenhum pedido</h2>
@@ -215,7 +217,7 @@ export default function Admin() {
                 <Package className="h-4 w-4" /> Gerenciar Produtos
               </Button>
             </div>
-            {products.length === 0 ? (
+            {!Array.isArray(products) || products.length === 0 ? (
               <div className="border border-border rounded-lg p-8 text-center">
                 <Package className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
                 <h2 className="font-serif text-xl mb-2">Nenhum produto</h2>
