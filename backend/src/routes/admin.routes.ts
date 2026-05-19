@@ -1,241 +1,153 @@
 import { Router } from "express";
 import { adminMiddleware } from "../middleware/auth";
-import { dbAll, dbGet, dbRun, getDatabase } from "../db";
+import * as adminService from "../services/admin.service";
 
 const router = Router();
 
-// Get all orders
+// Dashboard
+router.get("/dashboard", adminMiddleware, async (req, res) => {
+  try {
+    const data = await adminService.getDashboard();
+    res.json(data);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao buscar dashboard" });
+  }
+});
+
+// Analytics
+router.get("/analytics", adminMiddleware, async (req, res) => {
+  try {
+    const period = (req.query.period as string) || "7d";
+    const data = await adminService.getAnalytics(period);
+    res.json(data);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao buscar analytics" });
+  }
+});
+
+// Orders - Get all with filters and pagination
 router.get("/orders", adminMiddleware, async (req, res) => {
   try {
-    await getDatabase();
-    const orders = dbAll(`
-      SELECT o.*, 
-             (SELECT COUNT(*) FROM order_items WHERE order_id = o.id) as item_count
-      FROM orders o 
-      ORDER BY o.created_at DESC
-    `);
-    res.json(orders);
+    const status = req.query.status as string;
+    const search = req.query.search as string;
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    
+    const data = await adminService.getOrders({ status, search, page, limit });
+    res.json(data);
   } catch (err: any) {
     res.status(500).json({ error: err.message || "Erro ao buscar pedidos" });
   }
 });
 
-// Get order by ID with items
+// Orders - Get by ID
 router.get("/orders/:id", adminMiddleware, async (req, res) => {
   try {
-    await getDatabase();
-    const order = dbGet("SELECT * FROM orders WHERE id = ?", [req.params.id]);
-    if (!order) return res.status(404).json({ error: "Pedido não encontrado" });
-    
-    const items = dbAll("SELECT * FROM order_items WHERE order_id = ?", [req.params.id]);
-    res.json({ ...order, items });
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const order = await adminService.getOrderById(id);
+    res.json(order);
   } catch (err: any) {
     res.status(500).json({ error: err.message || "Erro ao buscar pedido" });
   }
 });
 
-// Update order status
+// Orders - Update status
 router.put("/orders/:id/status", adminMiddleware, async (req, res) => {
   try {
     const { status } = req.body;
     if (!status) return res.status(400).json({ error: "Status é obrigatório" });
     
-    await getDatabase();
-    dbRun("UPDATE orders SET status = ? WHERE id = ?", [status, req.params.id]);
-    
-    const updated = dbGet("SELECT * FROM orders WHERE id = ?", [req.params.id]);
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const updated = await adminService.updateOrderStatus(id, status);
     res.json(updated);
   } catch (err: any) {
     res.status(500).json({ error: err.message || "Erro ao atualizar status" });
   }
 });
 
-// Get all products
+// Products - Get all with filters and pagination
 router.get("/products", adminMiddleware, async (req, res) => {
   try {
-    await getDatabase();
-    const products = dbAll("SELECT * FROM products ORDER BY created_at DESC");
-    res.json(products);
+    const category = req.query.category as string;
+    const search = req.query.search as string;
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 12;
+    
+    const data = await adminService.getProducts({ category, search, page, limit });
+    res.json(data);
   } catch (err: any) {
     res.status(500).json({ error: err.message || "Erro ao buscar produtos" });
   }
 });
 
-// Get product by ID
+// Products - Get by ID
 router.get("/products/:id", adminMiddleware, async (req, res) => {
   try {
-    await getDatabase();
-    const product = dbGet("SELECT * FROM products WHERE id = ?", [req.params.id]);
-    if (!product) return res.status(404).json({ error: "Produto não encontrado" });
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const product = await adminService.getProductById(id);
     res.json(product);
   } catch (err: any) {
     res.status(500).json({ error: err.message || "Erro ao buscar produto" });
   }
 });
 
-// Create product
+// Products - Create
 router.post("/products", adminMiddleware, async (req, res) => {
   try {
-    const { 
-      name, 
-      category, 
-      description, 
-      price_pix, 
-      price_card, 
-      colors, 
-      sizes, 
-      images, 
-      is_new, 
-      is_sale, 
-      discount 
-    } = req.body;
-
-    if (!name || !category || !price_pix || !price_card) {
-      return res.status(400).json({ error: "Nome, categoria, preço PIX e preço cartão são obrigatórios" });
-    }
-
-    await getDatabase();
-    
-    // Generate slug from name
-    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-    const id = crypto.randomUUID();
-    const now = Date.now();
-
-    // Insert product
-    dbRun(
-      `INSERT INTO products (id, slug, name, description, category, price_pix, price_card, is_new, is_sale, discount, created_at) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [id, slug, name, description || "", category, price_pix, price_card, is_new ? 1 : 0, is_sale ? 1 : 0, discount || 0, now]
-    );
-
-    // Insert colors
-    if (colors && Array.isArray(colors)) {
-      colors.forEach((color: { name: string; hex: string }) => {
-        dbRun("INSERT INTO product_colors (product_id, name, hex) VALUES (?, ?, ?)", [id, color.name, color.hex]);
-      });
-    }
-
-    // Insert sizes
-    if (sizes && Array.isArray(sizes)) {
-      sizes.forEach((size: string) => {
-        dbRun("INSERT INTO product_sizes (product_id, size) VALUES (?, ?)", [id, size]);
-      });
-    }
-
-    // Insert images
-    if (images && Array.isArray(images)) {
-      images.forEach((img: { url: string; color?: string; colorHex?: string }, index: number) => {
-        dbRun(
-          "INSERT INTO product_images (product_id, url, color, color_hex, sort_order) VALUES (?, ?, ?, ?, ?)",
-          [id, img.url, img.color || null, img.colorHex || null, index]
-        );
-      });
-    }
-
-    const product = dbGet("SELECT * FROM products WHERE id = ?", [id]);
+    const product = await adminService.createProduct(req.body);
     res.json(product);
   } catch (err: any) {
     res.status(500).json({ error: err.message || "Erro ao criar produto" });
   }
 });
 
-// Update product
+// Products - Update
 router.put("/products/:id", adminMiddleware, async (req, res) => {
   try {
-    const { 
-      name, 
-      category, 
-      description, 
-      price_pix, 
-      price_card, 
-      colors, 
-      sizes, 
-      images, 
-      is_new, 
-      is_sale, 
-      discount 
-    } = req.body;
-
-    await getDatabase();
-    const fields: string[] = [];
-    const values: any[] = [];
-    
-    if (name !== undefined) { 
-      fields.push("name = ?"); 
-      values.push(name);
-      // Update slug if name changes
-      const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-      fields.push("slug = ?");
-      values.push(slug);
-    }
-    if (category !== undefined) { fields.push("category = ?"); values.push(category); }
-    if (description !== undefined) { fields.push("description = ?"); values.push(description); }
-    if (price_pix !== undefined) { fields.push("price_pix = ?"); values.push(price_pix); }
-    if (price_card !== undefined) { fields.push("price_card = ?"); values.push(price_card); }
-    if (is_new !== undefined) { fields.push("is_new = ?"); values.push(is_new ? 1 : 0); }
-    if (is_sale !== undefined) { fields.push("is_sale = ?"); values.push(is_sale ? 1 : 0); }
-    if (discount !== undefined) { fields.push("discount = ?"); values.push(discount); }
-    
-    if (fields.length === 0) return res.status(400).json({ error: "Nenhum campo para atualizar" });
-    
-    dbRun(`UPDATE products SET ${fields.join(", ")} WHERE id = ?`, [...values, req.params.id]);
-
-    // Update colors if provided
-    if (colors !== undefined) {
-      dbRun("DELETE FROM product_colors WHERE product_id = ?", [req.params.id]);
-      if (Array.isArray(colors)) {
-        colors.forEach((color: { name: string; hex: string }) => {
-          dbRun("INSERT INTO product_colors (product_id, name, hex) VALUES (?, ?, ?)", [req.params.id, color.name, color.hex]);
-        });
-      }
-    }
-
-    // Update sizes if provided
-    if (sizes !== undefined) {
-      dbRun("DELETE FROM product_sizes WHERE product_id = ?", [req.params.id]);
-      if (Array.isArray(sizes)) {
-        sizes.forEach((size: string) => {
-          dbRun("INSERT INTO product_sizes (product_id, size) VALUES (?, ?)", [req.params.id, size]);
-        });
-      }
-    }
-
-    // Update images if provided
-    if (images !== undefined) {
-      dbRun("DELETE FROM product_images WHERE product_id = ?", [req.params.id]);
-      if (Array.isArray(images)) {
-        images.forEach((img: { url: string; color?: string; colorHex?: string }, index: number) => {
-          dbRun(
-            "INSERT INTO product_images (product_id, url, color, color_hex, sort_order) VALUES (?, ?, ?, ?, ?)",
-            [req.params.id, img.url, img.color || null, img.colorHex || null, index]
-          );
-        });
-      }
-    }
-    
-    const updated = dbGet("SELECT * FROM products WHERE id = ?", [req.params.id]);
-    res.json(updated);
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const product = await adminService.updateProduct(id, req.body);
+    res.json(product);
   } catch (err: any) {
     res.status(500).json({ error: err.message || "Erro ao atualizar produto" });
   }
 });
 
-// Delete product
+// Products - Delete
 router.delete("/products/:id", adminMiddleware, async (req, res) => {
   try {
-    await getDatabase();
-    
-    // Delete related data first
-    dbRun("DELETE FROM product_images WHERE product_id = ?", [req.params.id]);
-    dbRun("DELETE FROM product_colors WHERE product_id = ?", [req.params.id]);
-    dbRun("DELETE FROM product_sizes WHERE product_id = ?", [req.params.id]);
-    
-    // Delete product
-    dbRun("DELETE FROM products WHERE id = ?", [req.params.id]);
-    
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    await adminService.deleteProduct(id);
     res.json({ message: "Produto excluído com sucesso" });
   } catch (err: any) {
     res.status(500).json({ error: err.message || "Erro ao excluir produto" });
+  }
+});
+
+// Products - Add images
+router.post("/products/:id/images", adminMiddleware, async (req, res) => {
+  try {
+    const { images } = req.body;
+    if (!images || !Array.isArray(images)) {
+      return res.status(400).json({ error: "Imagens são obrigatórias" });
+    }
+    
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    await adminService.addProductImages(id, images);
+    res.json({ message: "Imagens adicionadas com sucesso" });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao adicionar imagens" });
+  }
+});
+
+// Products - Remove image
+router.delete("/products/:id/images/:imageId", adminMiddleware, async (req, res) => {
+  try {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const imageId = Array.isArray(req.params.imageId) ? req.params.imageId[0] : req.params.imageId;
+    await adminService.removeProductImage(id, imageId);
+    res.json({ message: "Imagem removida com sucesso" });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao remover imagem" });
   }
 });
 

@@ -27,8 +27,11 @@ const CheckoutSuccess = lazy(() => import("./pages/CheckoutSuccess"));
 const CheckoutCancel = lazy(() => import("./pages/CheckoutCancel"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
-const Admin = lazy(() => import("./pages/Admin"));
+const Admin = lazy(() => import("./pages/admin/Admin"));
+const Dashboard = lazy(() => import("./pages/admin/Dashboard"));
+const AdminPedidos = lazy(() => import("./pages/admin/AdminPedidos"));
 const AdminProdutos = lazy(() => import("./pages/admin/AdminProdutos"));
+const AdminAnalytics = lazy(() => import("./pages/admin/AdminAnalytics"));
 const Privacidade = lazy(() => import("./pages/Privacidade"));
 const Termos = lazy(() => import("./pages/Termos"));
 const Trocas = lazy(() => import("./pages/Trocas"));
@@ -79,8 +82,12 @@ const App = () => (
                     <Route path="/checkout/cancel" element={<CheckoutCancel />} />
                     <Route path="/forgot-password" element={<ForgotPassword />} />
                     <Route path="/reset-password" element={<ResetPassword />} />
-                    <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
-                    <Route path="/admin/produtos" element={<AdminRoute><AdminProdutos /></AdminRoute>} />
+                    <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>}>
+                      <Route index element={<Dashboard />} />
+                      <Route path="pedidos" element={<AdminPedidos />} />
+                      <Route path="produtos" element={<AdminProdutos />} />
+                      <Route path="analytics" element={<AdminAnalytics />} />
+                    </Route>
                     <Route path="/rastreio" element={<Rastreio />} />
                     <Route path="/quem-somos" element={<QuemSomos />} />
                     <Route path="/privacidade" element={<Privacidade />} />
