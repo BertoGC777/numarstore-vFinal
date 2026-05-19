@@ -18,6 +18,7 @@ export default function Admin() {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [authChecked, setAuthChecked] = useState(false);
   const [editingProduct, setEditingProduct] = useState<any | null>(null);
   const [showProductForm, setShowProductForm] = useState(false);
   const [productForm, setProductForm] = useState({
@@ -51,9 +52,11 @@ export default function Admin() {
         return;
       }
 
+      setAuthChecked(true);
       await fetchData();
     } catch (e) {
       setError("Erro ao verificar permissões");
+      setAuthChecked(true);
     }
   };
 
@@ -204,7 +207,9 @@ export default function Admin() {
           </button>
         </div>
 
-        {error && (
+        {!authChecked ? (
+          <p className="text-center py-8 text-muted-foreground">Verificando permissões...</p>
+        ) : error && (
           <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 mb-6">
             <p className="text-destructive text-sm">{error}</p>
             <Button variant="outline" size="sm" onClick={fetchData} className="mt-2">
@@ -212,8 +217,7 @@ export default function Admin() {
             </Button>
           </div>
         )}
-
-        {loading ? (
+        {!authChecked ? null : loading ? (
           <p className="text-center py-8 text-muted-foreground">Carregando...</p>
         ) : tab === "orders" ? (
           <div className="space-y-4">
