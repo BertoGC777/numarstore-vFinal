@@ -16,28 +16,43 @@ export default function Admin() {
   const [orders, setOrders] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("numar.token");
-    const storedUser = localStorage.getItem("numar.user");
-    
-    if (!token) {
-      navigate("/conta");
-      return;
-    }
+    const checkAuthAndFetch = async () => {
+      try {
+        const token = localStorage.getItem("numar.token");
+        const storedUser = localStorage.getItem("numar.user");
+        
+        if (!token) {
+          navigate("/conta");
+          return;
+        }
 
-    const user = JSON.parse(storedUser || "{}");
-    if (user.role !== "admin") {
-      navigate("/conta");
-      return;
-    }
+        const user = JSON.parse(storedUser || "{}");
+        console.log("Admin page - User from localStorage:", user);
+        
+        if (user.role !== "admin") {
+          console.log("Admin page - User is not admin, redirecting to /conta");
+          navigate("/conta");
+          return;
+        }
 
-    fetchData();
+        await fetchData();
+      } catch (e) {
+        console.error("Admin page - Error in useEffect:", e);
+        setError("Erro ao verificar permissões");
+      }
+    };
+
+    checkAuthAndFetch();
   }, [tab]);
 
   const fetchData = async () => {
     setLoading(true);
+    setError(null);
     try {
+      console.log("Admin page - Fetching data for tab:", tab);
       if (tab === "orders") {
         const data = await api.get("/admin/orders");
         setOrders(data);
@@ -46,7 +61,10 @@ export default function Admin() {
         setProducts(data);
       }
     } catch (err: any) {
-      toast({ title: "Erro", description: err.response?.data?.error || "Erro ao carregar dados" });
+      console.error("Admin page - Error fetching data:", err);
+      const errorMessage = err.response?.data?.error || err.message || "Erro ao carregar dados";
+      setError(errorMessage);
+      toast({ title: "Erro", description: errorMessage });
       if (err.response?.status === 403) {
         navigate("/conta");
       }
@@ -118,6 +136,14 @@ export default function Admin() {
           </button>
         </div>
 
+        {error && (
+          <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 mb-6">
+            <p className="text-destructive text-sm">{error}</p>
+            <Button variant="outline" size="sm" onClick={fetchData} className="mt-2">
+              Tentar novamente
+            </Button>
+          </div>
+        )}
         {loading ? (
           <p className="text-center py-8 text-muted-foreground">Carregando...</p>
         ) : tab === "orders" ? (
