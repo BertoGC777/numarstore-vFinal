@@ -55,7 +55,6 @@ export default function AdminProdutos() {
   const { toast } = useToast();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
-  const [authChecked, setAuthChecked] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -77,21 +76,6 @@ export default function AdminProdutos() {
   });
 
   useEffect(() => {
-    const token = localStorage.getItem("numar.token");
-    const storedUser = localStorage.getItem("numar.user");
-    
-    if (!token) {
-      navigate("/conta");
-      return;
-    }
-
-    const user = storedUser ? JSON.parse(storedUser) : null;
-    if (!user || user.role !== "admin") {
-      navigate("/conta");
-      return;
-    }
-
-    setAuthChecked(true);
     fetchProducts();
   }, []);
 
@@ -271,9 +255,7 @@ export default function AdminProdutos() {
           </Button>
         </div>
 
-        {!authChecked ? (
-          <p className="text-center py-8 text-muted-foreground">Verificando permissões...</p>
-        ) : loading ? (
+        {loading ? (
           <p className="text-center py-8 text-muted-foreground">Carregando...</p>
         ) : products.length === 0 ? (
           <div className="border border-border rounded-lg p-8 text-center">

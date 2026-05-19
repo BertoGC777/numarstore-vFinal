@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation, Navigate } from "react-router-dom";
 import { Suspense, lazy, useEffect } from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -37,6 +37,13 @@ const Rastreio = lazy(() => import("./pages/Rastreio"));
 const QuemSomos = lazy(() => import("./pages/QuemSomos"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
+const AdminRoute = ({ children }: { children: React.ReactNode }) => {
+  const token = localStorage.getItem("numar.token");
+  const user = JSON.parse(localStorage.getItem("numar.user") || "{}");
+  if (!token || user.role !== "admin") return <Navigate to="/conta" />;
+  return <>{children}</>;
+};
+
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 300000, retry: 1 } },
 });
@@ -72,8 +79,8 @@ const App = () => (
                     <Route path="/checkout/cancel" element={<CheckoutCancel />} />
                     <Route path="/forgot-password" element={<ForgotPassword />} />
                     <Route path="/reset-password" element={<ResetPassword />} />
-                    <Route path="/admin" element={<Admin />} />
-                    <Route path="/admin/produtos" element={<AdminProdutos />} />
+                    <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
+                    <Route path="/admin/produtos" element={<AdminRoute><AdminProdutos /></AdminRoute>} />
                     <Route path="/rastreio" element={<Rastreio />} />
                     <Route path="/quem-somos" element={<QuemSomos />} />
                     <Route path="/privacidade" element={<Privacidade />} />
