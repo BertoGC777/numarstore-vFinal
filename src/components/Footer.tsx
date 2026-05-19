@@ -8,7 +8,7 @@ export default function Footer() {
         <div>
           <h4 className="font-serif text-lg mb-4 text-primary">Ajuda</h4>
           <ul className="space-y-2 opacity-90" role="list">
-            <li><Link to="/trocas" className="hover:text-primary">Trocas e Devoluções</Link></li>
+            <li><Link to="/trocas-e-devolucoes" className="hover:text-primary">Trocas e Devoluções</Link></li>
             <li><Link to="/rastreio" className="hover:text-primary">Rastreie seu Pedido</Link></li>
             <li><Link to="/faq" className="hover:text-primary">Perguntas Frequentes</Link></li>
           </ul>
@@ -41,7 +41,7 @@ export default function Footer() {
             <span className="font-serif text-3xl text-primary tracking-[0.18em]">NUMAR</span>
             <span className="block text-[0.65rem] tracking-[0.4em] opacity-70">STORE</span>
           </div>
-          <p className="text-xs opacity-70 text-center">© 2025 Numar Store — Todos os direitos reservados</p>
+          <p className="text-xs opacity-70 text-center">© 2026 Numar Store — Todos os direitos reservados</p>
         </div>
       </div>
     </footer>

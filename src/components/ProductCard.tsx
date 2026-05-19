@@ -89,7 +89,7 @@ const ProductCard = React.memo(function ProductCard({ product }: { product: Prod
         <Button
           variant="outline"
           size="sm"
-          className="w-full opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-wider text-xs border-foreground hover:bg-foreground hover:text-background"
+          className="w-full mt-2 uppercase tracking-wider text-xs border-foreground hover:bg-foreground hover:text-background md:opacity-0 md:group-hover:opacity-100 transition-opacity"
           onClick={() => addItem(product, product.colors[colorIdx].name, product.sizes[0], 1)}
         >
           Adicionar

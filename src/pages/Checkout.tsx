@@ -37,6 +37,8 @@ export default function Checkout() {
   const [bairro, setBairro] = useState("");
   const [localidade, setLocalidade] = useState("");
   const [uf, setUf] = useState("");
+  const [numero, setNumero] = useState("");
+  const [complemento, setComplemento] = useState("");
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
@@ -59,6 +61,8 @@ export default function Checkout() {
       case "bairro": setBairro(v); break;
       case "localidade": setLocalidade(v); break;
       case "uf": setUf(v); break;
+      case "numero": setNumero(v); break;
+      case "complemento": setComplemento(v); break;
     }
     if (fieldErrors[k]) setFieldErrors((prev) => { const { [k]: _, ...rest } = prev; return rest; });
   };
@@ -143,7 +147,7 @@ export default function Checkout() {
         const order = await api.orders.create({
           paymentMethod: method,
           name: nome, email, cpf, phone: telefone,
-          cep, logradouro, bairro, localidade, uf,
+          cep, logradouro, numero, complemento, bairro, localidade, uf,
           subtotal, shipping, discount, total,
           whatsappMsg: sanitizedMsg,
           items: items.map(i => ({
@@ -289,8 +293,8 @@ export default function Checkout() {
                 <Input placeholder="Rua / Avenida" value={logradouro} onChange={(e) => setField("logradouro", e.target.value)} className={fieldErrors.logradouro ? "border-destructive" : ""} />
                 {fieldErrors.logradouro && <p className="text-xs text-destructive mt-1">{fieldErrors.logradouro}</p>}
                 <div className="grid grid-cols-[120px_1fr] gap-3">
-                  <Input placeholder="Número" />
-                  <Input placeholder="Complemento" />
+                  <Input placeholder="Número" value={numero} onChange={e => setNumero(e.target.value)} />
+                  <Input placeholder="Complemento" value={complemento} onChange={e => setComplemento(e.target.value)} />
                 </div>
                 <Input placeholder="Bairro" value={bairro} onChange={(e) => setField("bairro", e.target.value)} />
                 <div className="grid grid-cols-2 gap-3">
