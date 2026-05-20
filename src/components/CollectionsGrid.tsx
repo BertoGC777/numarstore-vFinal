@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import verao from "@/assets/products/biquini-ciano.jpeg";
 import lancamentos from "@/assets/products/saia-longa-preta-2.jpeg";
 import promocao from "@/assets/products/blusinha1-preta.jpeg";
+import Image from "@/components/Image";
 
 const cols = [
   { title: "Coleção Verão", img: verao, href: "/catalogo/biquinis" },
@@ -15,7 +16,16 @@ export default function CollectionsGrid() {
       <div className="flex md:grid md:grid-cols-3 gap-4 overflow-x-auto snap-x snap-mandatory pb-2">
         {cols.map((c) => (
           <Link key={c.title} to={c.href} className="group relative block aspect-[4/5] overflow-hidden bg-muted shrink-0 w-[75vw] md:w-auto snap-center">
-            <img src={c.img} alt={c.title} width={400} height={533} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" decoding="async" />
+            <Image
+              src={c.img}
+              alt={c.title}
+              width={400}
+              height={533}
+              aspectRatio="portrait"
+              objectFit="contain"
+              loading="lazy"
+              className="w-full h-full group-hover:scale-105 transition-transform duration-700"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
             <div className="absolute inset-x-0 bottom-0 p-6 text-white text-center">
               <h3 className="font-serif text-3xl md:text-4xl mb-3">{c.title}</h3>

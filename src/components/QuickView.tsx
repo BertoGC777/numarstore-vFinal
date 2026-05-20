@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { formatBRL, Product } from '@/data/products';
 import Price from '@/components/Price';
+import Image from '@/components/Image';
 import { X, Plus, Minus } from 'lucide-react';
 
 interface QuickViewProps {
@@ -41,10 +42,14 @@ export default function QuickView({ product, open, onClose }: QuickViewProps) {
         <div className="grid md:grid-cols-2 gap-0">
           {/* Image */}
           <div className="relative aspect-square md:aspect-auto bg-muted">
-            <img
+            <Image
               src={currentImage}
               alt={product.name}
-              className="w-full h-full object-cover"
+              aspectRatio="portrait"
+              objectFit="contain"
+              loading="eager"
+              fetchPriority="high"
+              className="w-full h-full"
             />
           </div>
 

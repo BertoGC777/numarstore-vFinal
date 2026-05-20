@@ -2,14 +2,14 @@ import { useState, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
+import Image from "@/components/Image";
 import { products, getRelated, formatBRL, Product } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 import Price from "@/components/Price";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useCart } from "@/context/CartContext";
-import { Minus, Plus, MessageCircle, ChevronRight, CreditCard, Banknote, QrCode, Shield, Truck, RotateCcw, X } from "lucide-react";
+import { Minus, Plus, MessageCircle, ChevronRight, CreditCard, Banknote, QrCode, Shield, Truck, RotateCcw } from "lucide-react";
 import ProductReviews from "@/components/ProductReviews";
 
 export default function ProductPage() {
@@ -17,7 +17,6 @@ export default function ProductPage() {
   const { addItem } = useCart();
   const [colorIdx, setColorIdx] = useState(0);
   const [qty, setQty] = useState(1);
-  const [zoomOpen, setZoomOpen] = useState(false);
 
   // Find product directly from local data
   const product = products.find(p => p.slug === slug);
@@ -88,40 +87,47 @@ export default function ProductPage() {
         <div className="grid md:grid-cols-2 gap-8 lg:gap-14">
           {/* Gallery */}
           <div className="flex gap-3">
-            {/* Thumbnails */}
+            {/* Thumbnails - Desktop */}
             <div className="hidden md:flex flex-col gap-2 w-20 shrink-0 max-h-[600px] overflow-y-auto">
               {galleryImages.map((img, i) => (
                 <button
                   key={i}
                   onClick={() => {
-                    // if thumbnail is a color image (i < numColors), change color too
                     if (i < numColors) handleColorChange(i);
                   }}
-                  className={`aspect-[3/4] overflow-hidden border-2 transition shrink-0 ${
+                  className={`shrink-0 border-2 transition ${
                     currentMainImg === img ? "border-primary" : "border-transparent hover:border-muted-foreground"
                   }`}
+                  aria-label={`Ver imagem ${i + 1}`}
                 >
-                  <img src={img} alt="" width={200} height={267} loading="lazy" decoding="async" className="w-full h-full object-cover" />
+                  <Image
+                    src={img}
+                    alt=""
+                    width={80}
+                    height={107}
+                    aspectRatio="portrait"
+                    objectFit="cover"
+                    loading="lazy"
+                    className="w-20"
+                  />
                 </button>
               ))}
             </div>
+            
             {/* Main image */}
-            <div className="flex-1 aspect-[3/4] bg-muted overflow-hidden">
-              <button
-                onClick={() => setZoomOpen(true)}
-                className="w-full h-full cursor-zoom-in"
-              >
-                <img
-                  key={`${product.id}-${colorIdx}`}
-                  src={currentMainImg}
-                  alt={product.name}
-                  width={600}
-                  height={800}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-cover transition-opacity duration-300"
-                />
-              </button>
+            <div className="flex-1">
+              <Image
+                key={`${product.id}-${colorIdx}`}
+                src={currentMainImg}
+                alt={product.name}
+                width={600}
+                height={800}
+                aspectRatio="portrait"
+                objectFit="contain"
+                loading="eager"
+                fetchPriority="high"
+                className="w-full"
+              />
             </div>
 
             {/* Mobile horizontal thumbnails */}
@@ -132,33 +138,24 @@ export default function ProductPage() {
                   onClick={() => {
                     if (i < numColors) handleColorChange(i);
                   }}
-                  className={`shrink-0 w-16 h-20 border-2 overflow-hidden transition ${
+                  className={`shrink-0 border-2 transition ${
                     currentMainImg === img ? "border-primary" : "border-transparent hover:border-muted-foreground"
                   }`}
+                  aria-label={`Ver imagem ${i + 1}`}
                 >
-                  <img src={img} alt="" width={64} height={85} loading="lazy" decoding="async" className="w-full h-full object-cover" />
+                  <Image
+                    src={img}
+                    alt=""
+                    width={64}
+                    height={85}
+                    aspectRatio="portrait"
+                    objectFit="cover"
+                    loading="lazy"
+                    className="w-16 h-20"
+                  />
                 </button>
               ))}
             </div>
-
-            {/* Zoom dialog */}
-            <Dialog open={zoomOpen} onOpenChange={setZoomOpen}>
-              <DialogContent className="max-w-4xl w-full p-0 bg-transparent border-none">
-                <button
-                  onClick={() => setZoomOpen(false)}
-                  className="absolute top-4 right-4 z-10 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition"
-                >
-                  <X className="h-6 w-6" />
-                </button>
-                <div className="flex items-center justify-center bg-black/90 min-h-[80vh]">
-                  <img
-                    src={currentMainImg}
-                    alt={product.name}
-                    className="max-w-full max-h-[80vh] object-contain"
-                  />
-                </div>
-              </DialogContent>
-            </Dialog>
           </div>
 
           {/* Product info */}

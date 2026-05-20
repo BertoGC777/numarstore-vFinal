@@ -10,6 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Plus, X, Upload } from "lucide-react";
+import Image from "@/components/Image";
 
 const CATEGORIES = [
   "Biquínis",
@@ -457,10 +458,13 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
           <div className="grid grid-cols-4 gap-4">
             {formData.images.map((img, index) => (
               <div key={index} className="relative group">
-                <img
+                <Image
                   src={img.url}
                   alt={`Imagem ${index + 1}`}
-                  className="w-full h-32 object-cover rounded-lg border"
+                  aspectRatio="square"
+                  objectFit="contain"
+                  loading="lazy"
+                  className="w-full h-32 rounded-lg border"
                 />
                 <Button
                   type="button"

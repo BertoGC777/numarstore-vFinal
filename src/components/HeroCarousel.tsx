@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import hero1 from "@/assets/hero/hero-1.jpg";
 import hero2 from "@/assets/hero/hero-2.jpg";
 import hero3 from "@/assets/hero/hero-3.jpg";
+import Image from "@/components/Image";
 
 const slides = [
   {
@@ -60,16 +61,17 @@ export default function HeroCarousel() {
             idx === current ? "opacity-100 z-10" : "opacity-0 z-0"
           }`}
         >
-<img
-              src={s.img}
-              alt={s.title}
-              width={1920}
-              height={800}
-              loading={idx === 0 ? "eager" : "lazy"}
-              decoding="async"
-              fetchPriority={idx === 0 ? "high" : "low"}
-              className="w-full h-full object-cover object-center"
-            />
+          <Image
+            src={s.img}
+            alt={s.title}
+            width={1920}
+            height={800}
+            aspectRatio="landscape"
+            objectFit="cover"
+            loading={idx === 0 ? "eager" : "lazy"}
+            fetchPriority={idx === 0 ? "high" : "auto"}
+            className="w-full h-full"
+          />
           {/* Gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/30 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />

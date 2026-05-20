@@ -30,7 +30,7 @@ Sentry;
 
 app.use(compression());
 app.use(helmet({ crossOriginEmbedderPolicy: false }));
-app.use(cors({ origin: ["http://localhost:8080", "http://localhost:5173", "http://localhost:3000", "https://numarstore-v-final.vercel.app"], credentials: true }));
+app.use(cors({ origin: ["https://numarstore-v-final.vercel.app"], credentials: true }));
 
 // Raw body para webhook Stripe (antes do json parser)
 app.use("/api/stripe/webhook", express.raw({ type: "application/json" }));

@@ -6,6 +6,7 @@ import conjunto from "@/assets/products/conjunto-cropped-saia-1.jpeg";
 import vestidoLongo from "@/assets/products/vestido-sereia-rosa-1.jpg";
 import vestidoCurto from "@/assets/products/vestido-brisa-rosa-1.jpg";
 import promo from "@/assets/products/cropped2-amarelo.jpeg";
+import Image from "@/components/Image";
 
 const cats = [
   { label: "Biquínis", href: "/catalogo/biquinis", img: biquini },
@@ -25,7 +26,14 @@ export default function CategoryShortcuts() {
         {cats.map((c) => (
           <Link key={c.label} to={c.href} className="group block">
             <div className="aspect-square overflow-hidden bg-muted">
-              <img src={c.img} alt={c.label} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" />
+              <Image
+                src={c.img}
+                alt={c.label}
+                aspectRatio="square"
+                objectFit="contain"
+                loading="lazy"
+                className="w-full h-full group-hover:scale-110 transition-transform duration-700"
+              />
             </div>
             <p className="mt-3 text-center text-sm uppercase tracking-wider font-medium">{c.label}</p>
           </Link>

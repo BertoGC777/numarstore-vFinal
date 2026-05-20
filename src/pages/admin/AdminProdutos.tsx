@@ -18,6 +18,7 @@ import {
 import { api } from "@/api/client";
 import { useToast } from "@/components/ui/use-toast";
 import FormularioProduto from "./FormularioProduto";
+import Image from "@/components/Image";
 
 const CATEGORIES = [
   "Biquínis",
@@ -213,10 +214,13 @@ export default function AdminProdutos() {
               <Card key={product.id} className="overflow-hidden">
                 <div className="aspect-square bg-gray-100 relative">
                   {product.images && product.images.length > 0 ? (
-                    <img
+                    <Image
                       src={product.images[0].url}
                       alt={product.name}
-                      className="w-full h-full object-cover"
+                      aspectRatio="square"
+                      objectFit="contain"
+                      loading="lazy"
+                      className="w-full h-full"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">

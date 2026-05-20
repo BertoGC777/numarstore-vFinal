@@ -14,6 +14,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { formatBRL } from "@/data/products";
 import { loadStripe } from "@stripe/stripe-js";
 import CouponInput from "@/components/CouponInput";
+import Image from "@/components/Image";
 
 type PayMethod = "pix" | "card" | "boleto";
 
@@ -554,7 +555,16 @@ export default function Checkout() {
               <div className="space-y-3 max-h-64 overflow-y-auto">
                 {items.map((item) => (
                   <div key={item.id} className="flex gap-3">
-                    <img src={item.image} alt={item.name} className="w-14 h-20 object-cover rounded shrink-0" />
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      width={56}
+                      height={80}
+                      aspectRatio="portrait"
+                      objectFit="contain"
+                      loading="lazy"
+                      className="w-14 h-20 rounded shrink-0"
+                    />
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium line-clamp-2">{item.name}</p>
                       <p className="text-xs text-muted-foreground mt-0.5">{item.color} · {item.size} · Qtd: {item.quantity}</p>

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/CartContext";
 import Price from "@/components/Price";
+import Image from "@/components/Image";
 import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 import { calculateShipping } from "@/utils/shipping";
 
@@ -69,7 +70,16 @@ export default function CartDrawer() {
               {items.map((item) => (
                 <div key={item.id} className="flex gap-3 pb-4 border-b">
                   <Link to={`/produto/${item.slug}`} onClick={close} className="shrink-0">
-                    <img src={item.image} alt={item.name} className="w-20 h-28 object-cover" />
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      width={80}
+                      height={112}
+                      aspectRatio="portrait"
+                      objectFit="contain"
+                      loading="lazy"
+                      className="w-20 h-28"
+                    />
                   </Link>
                   <div className="flex-1 min-w-0">
                     <Link to={`/produto/${item.slug}`} onClick={close} className="text-sm font-medium hover:text-primary line-clamp-2">

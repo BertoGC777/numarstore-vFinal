@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Heart, ShoppingCart, Eye } from "lucide-react";
 import QuickView from "./QuickView";
 import Price from "./Price";
+import Image from "./Image";
 
 const ProductCard = React.memo(function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart();
@@ -33,28 +34,28 @@ const ProductCard = React.memo(function ProductCard({ product }: { product: Prod
   return (
     <div className="group fade-in" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
       <Link to={`/produto/${product.slug}`} className="block relative overflow-hidden bg-muted aspect-[3/4] cursor-pointer">
-        <img
+        <Image
           key={`main-${colorIdx}`}
           src={mainImg}
           alt={product.name}
           width={400}
           height={533}
-          className="w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-0"
+          aspectRatio="portrait"
+          objectFit="contain"
           loading="lazy"
-          decoding="async"
-          onError={(e) => e.currentTarget.src = "/placeholder.jpg"}
+          className={hovered ? "opacity-0" : "opacity-100"}
         />
         {hovered && (
-          <img
+          <Image
             key={`hover-${colorIdx}`}
             src={hoverImg}
             alt=""
             width={400}
             height={533}
-            className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+            aspectRatio="portrait"
+            objectFit="contain"
             loading="lazy"
-            decoding="async"
-            onError={(e) => e.currentTarget.src = "/placeholder.jpg"}
+            className="absolute inset-0 opacity-100"
           />
         )}
         <div className="absolute top-2 left-2 flex flex-col gap-1">
