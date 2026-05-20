@@ -6,7 +6,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2024-06-20",
 });
 
-const FRONTEND_URL = process.env.FRONTEND_URL || "https://numarstore-v-final.vercel.app";
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:8080";
 const STORE_NAME = process.env.LOJA_NOME || "Numar Store";
 
 export async function stripeCheckout(req: Request, res: Response) {
