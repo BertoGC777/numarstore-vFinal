@@ -21,7 +21,7 @@ export default function CategoryShortcuts() {
   return (
     <section className="container-numar py-12 md:py-16">
       <h2 className="font-serif text-3xl md:text-4xl text-center mb-8">Categorias</h2>
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 md:gap-5">
+      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 md:gap-5">
         {cats.map((c) => (
           <Link key={c.label} to={c.href} className="group block">
             <div className="aspect-square overflow-hidden bg-muted">

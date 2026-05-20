@@ -4,6 +4,7 @@ import { Suspense, lazy, useEffect } from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CartProvider } from "@/context/CartContext";
+import { WishlistProvider } from "@/context/WishlistContext";
 import { StripeProvider } from "@/context/StripeContext";
 import { ToastProvider } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
@@ -55,52 +56,54 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <StripeProvider>
-        <CartProvider>
-          <ToastProvider>
-            <Sonner />
-            <BrowserRouter>
-              <ScrollToTop />
-              <ShippingBar />
-              <WhatsAppButton />
-              <ErrorBoundary>
-                <Suspense
-                  fallback={
-                    <div className="flex items-center justify-center h-screen">
-                      <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full" />
-                    </div>
-                  }
-                >
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/catalogo" element={<Catalog />} />
-                    <Route path="/catalogo/:categoria" element={<Catalog />} />
-                    <Route path="/produto/:slug" element={<ProductPage />} />
-                    <Route path="/conta" element={<Account />} />
-                    <Route path="/busca" element={<Search />} />
-                    <Route path="/checkout" element={<Checkout />} />
-                    <Route path="/checkout/success" element={<CheckoutSuccess />} />
-                    <Route path="/checkout/cancel" element={<CheckoutCancel />} />
-                    <Route path="/forgot-password" element={<ForgotPassword />} />
-                    <Route path="/reset-password" element={<ResetPassword />} />
-                    <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>}>
-                      <Route index element={<Dashboard />} />
-                      <Route path="pedidos" element={<AdminPedidos />} />
-                      <Route path="produtos" element={<AdminProdutos />} />
-                      <Route path="analytics" element={<AdminAnalytics />} />
-                    </Route>
-                    <Route path="/rastreio" element={<Rastreio />} />
-                    <Route path="/quem-somos" element={<QuemSomos />} />
-                    <Route path="/privacidade" element={<Privacidade />} />
-                    <Route path="/termos" element={<Termos />} />
-                    <Route path="/trocas-e-devolucoes" element={<Trocas />} />
-                    <Route path="/faq" element={<FAQ />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </Suspense>
-              </ErrorBoundary>
-            </BrowserRouter>
-          </ToastProvider>
-        </CartProvider>
+        <WishlistProvider>
+          <CartProvider>
+            <ToastProvider>
+              <Sonner />
+              <BrowserRouter>
+                <ScrollToTop />
+                <ShippingBar />
+                <WhatsAppButton />
+                <ErrorBoundary>
+                  <Suspense
+                    fallback={
+                      <div className="flex items-center justify-center h-screen">
+                        <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full" />
+                      </div>
+                    }
+                  >
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/catalogo" element={<Catalog />} />
+                      <Route path="/catalogo/:categoria" element={<Catalog />} />
+                      <Route path="/produto/:slug" element={<ProductPage />} />
+                      <Route path="/conta" element={<Account />} />
+                      <Route path="/busca" element={<Search />} />
+                      <Route path="/checkout" element={<Checkout />} />
+                      <Route path="/checkout/success" element={<CheckoutSuccess />} />
+                      <Route path="/checkout/cancel" element={<CheckoutCancel />} />
+                      <Route path="/forgot-password" element={<ForgotPassword />} />
+                      <Route path="/reset-password" element={<ResetPassword />} />
+                      <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>}>
+                        <Route index element={<Dashboard />} />
+                        <Route path="pedidos" element={<AdminPedidos />} />
+                        <Route path="produtos" element={<AdminProdutos />} />
+                        <Route path="analytics" element={<AdminAnalytics />} />
+                      </Route>
+                      <Route path="/rastreio" element={<Rastreio />} />
+                      <Route path="/quem-somos" element={<QuemSomos />} />
+                      <Route path="/privacidade" element={<Privacidade />} />
+                      <Route path="/termos" element={<Termos />} />
+                      <Route path="/trocas-e-devolucoes" element={<Trocas />} />
+                      <Route path="/faq" element={<FAQ />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </Suspense>
+                </ErrorBoundary>
+              </BrowserRouter>
+            </ToastProvider>
+          </CartProvider>
+        </WishlistProvider>
       </StripeProvider>
     </TooltipProvider>
   </QueryClientProvider>

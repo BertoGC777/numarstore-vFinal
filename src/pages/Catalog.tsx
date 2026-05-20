@@ -41,6 +41,7 @@ export default function Catalog() {
   const [colors, setColors] = useState<string[]>([]);
   const [sizes, setSizes] = useState<string[]>([]);
   const [visible, setVisible] = useState(12);
+  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
   // Título: subcategoria tem prioridade, depois categoria, depois padrão
   const title = subFromUrl
@@ -110,9 +111,12 @@ export default function Catalog() {
     setColors([]);
     setSizes([]);
     setPrice([0, 500]);
+    setMobileFilterOpen(false);
   };
 
-  const Filters = () => (
+  const activeFiltersCount = colors.length + sizes.length + (price[0] !== 0 || price[1] !== 500 ? 1 : 0);
+
+  const Filters = ({ onClose }: { onClose?: () => void }) => (
     <div className="space-y-8">
       <div>
         <h4 className="text-xs uppercase tracking-widest mb-3 font-semibold">Faixa de preço</h4>
@@ -133,7 +137,10 @@ export default function Catalog() {
           {allColors.map((c) => (
             <button
               key={c.name}
-              onClick={() => toggle(c.name, colors, setColors)}
+              onClick={() => {
+                toggle(c.name, colors, setColors);
+                onClose?.();
+              }}
               aria-label={c.name}
               title={c.name}
               className={`h-7 w-7 rounded-full border-2 transition-all ${
@@ -151,7 +158,10 @@ export default function Catalog() {
           {allSizes.map((s) => (
             <button
               key={s}
-              onClick={() => toggle(s, sizes, setSizes)}
+              onClick={() => {
+                toggle(s, sizes, setSizes);
+                onClose?.();
+              }}
               className={`h-9 min-w-[44px] px-3 border text-sm transition ${
                 sizes.includes(s)
                   ? "bg-primary text-primary-foreground border-primary"
@@ -191,17 +201,17 @@ export default function Catalog() {
         </div>
 
         <div className="flex items-center justify-between mb-6 gap-4">
-          <Sheet>
+          <Sheet open={mobileFilterOpen} onOpenChange={setMobileFilterOpen}>
             <SheetTrigger asChild>
               <Button variant="outline" size="sm" className="md:hidden">
-                <SlidersHorizontal className="h-4 w-4 mr-2" /> Filtros
+                <SlidersHorizontal className="h-4 w-4 mr-2" /> Filtros {activeFiltersCount > 0 && <span className="ml-1 bg-primary text-white rounded-full text-xs px-1.5">{activeFiltersCount}</span>}
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-[85%] sm:max-w-sm bg-background">
               <SheetHeader>
                 <SheetTitle className="font-serif text-2xl">Filtros</SheetTitle>
               </SheetHeader>
-              <div className="mt-6"><Filters /></div>
+              <div className="mt-6"><Filters onClose={() => setMobileFilterOpen(false)} /></div>
             </SheetContent>
           </Sheet>
 
@@ -229,7 +239,7 @@ export default function Catalog() {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
                   {filtered.slice(0, visible).map((p) => (
                     <ProductCard key={p.id} product={p} />
                   ))}
@@ -239,7 +249,7 @@ export default function Catalog() {
                     <Button
                       variant="outline"
                       onClick={() => setVisible((v) => v + 12)}
-                      className="uppercase tracking-widest"
+                      className="text-xs uppercase tracking-wider md:text-sm md:tracking-widest h-10 md:h-12 px-6"
                     >
                       Ver mais ({filtered.length - visible} produtos)
                     </Button>

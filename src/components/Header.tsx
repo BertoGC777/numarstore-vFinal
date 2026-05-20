@@ -116,7 +116,7 @@ export default function Header() {
           <button onClick={() => setSearchOpen((v) => !v)} aria-label="Buscar" className="p-2 hover:text-primary transition-colors">
             <Search className="h-5 w-5" />
           </button>
-          <Link to="/conta" aria-label="Minha conta" className="p-2 hover:text-primary hidden sm:block transition-colors">
+          <Link to="/conta" aria-label="Minha conta" className="p-2 hover:text-primary transition-colors">
             <User className="h-5 w-5" />
           </Link>
           <button onClick={open} aria-label="Sacola" className="relative p-2 hover:text-primary transition-colors">

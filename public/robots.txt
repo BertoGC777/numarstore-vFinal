@@ -3,4 +3,4 @@ Allow: /
 Disallow: /checkout
 Disallow: /conta
 
-Sitemap: https://numarstore.com.br/sitemap.xml
+Sitemap: https://numarstore-v-final.vercel.app/sitemap.xml

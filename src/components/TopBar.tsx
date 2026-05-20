@@ -13,7 +13,7 @@ export default function TopBar() {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    const t = setInterval(() => setIdx((i) => (i + 1) % messages.length), 4000);
+    const t = setInterval(() => setIdx((i) => (i + 1) % messages.length), 5500);
     return () => clearInterval(t);
   }, []);
 

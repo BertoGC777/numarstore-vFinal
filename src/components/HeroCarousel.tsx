@@ -47,7 +47,7 @@ export default function HeroCarousel() {
 
   return (
     <section
-      className="relative w-full h-[62vh] md:h-[82vh] overflow-hidden bg-muted"
+      className="relative w-full h-[52vh] md:h-[82vh] overflow-hidden bg-muted"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       aria-label="Banner principal"
@@ -85,7 +85,7 @@ export default function HeroCarousel() {
                 <span className="inline-block text-xs uppercase tracking-[0.3em] text-primary-glow mb-4 font-medium">
                   {s.label}
                 </span>
-                <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-4 leading-[1.1] whitespace-pre-line">
+                <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-7xl mb-4 leading-[1.1] whitespace-pre-line">
                   {s.title}
                 </h1>
                 <p className="text-base md:text-lg mb-8 opacity-90 max-w-md leading-relaxed">

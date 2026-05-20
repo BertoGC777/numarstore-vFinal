@@ -2,12 +2,17 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Product } from "@/data/products";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 import { Button } from "@/components/ui/button";
 import Price from "@/components/Price";
+import { Heart } from "lucide-react";
 
 const ProductCard = React.memo(function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const [colorIdx, setColorIdx] = useState(0);
+  const [hovered, setHovered] = useState(false);
+  const inWishlist = isInWishlist(product.id);
 
   const numColors = product.colors.length;
   // Primary image for selected color
@@ -22,7 +27,7 @@ const ProductCard = React.memo(function ProductCard({ product }: { product: Prod
   };
 
   return (
-    <div className="group fade-in">
+    <div className="group fade-in" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
       <Link to={`/produto/${product.slug}`} className="block relative overflow-hidden bg-muted aspect-[3/4] cursor-pointer">
         <img
           key={`main-${colorIdx}`}
@@ -35,17 +40,19 @@ const ProductCard = React.memo(function ProductCard({ product }: { product: Prod
           decoding="async"
           onError={(e) => e.currentTarget.src = "/placeholder.jpg"}
         />
-        <img
-          key={`hover-${colorIdx}`}
-          src={hoverImg}
-          alt=""
-          width={400}
-          height={533}
-          className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-          loading="lazy"
-          decoding="async"
-          onError={(e) => e.currentTarget.src = "/placeholder.jpg"}
-        />
+        {hovered && (
+          <img
+            key={`hover-${colorIdx}`}
+            src={hoverImg}
+            alt=""
+            width={400}
+            height={533}
+            className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+            loading="lazy"
+            decoding="async"
+            onError={(e) => e.currentTarget.src = "/placeholder.jpg"}
+          />
+        )}
         <div className="absolute top-2 left-2 flex flex-col gap-1">
           {product.isNew && (
             <span className="bg-primary text-primary-foreground text-[10px] uppercase tracking-wider px-2 py-1">🔥 Novidade</span>
@@ -54,6 +61,21 @@ const ProductCard = React.memo(function ProductCard({ product }: { product: Prod
             <span className="bg-destructive text-destructive-foreground text-[10px] uppercase tracking-wider px-2 py-1">⚡ Oferta</span>
           )}
         </div>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (inWishlist) {
+              removeFromWishlist(product.id);
+            } else {
+              addToWishlist(product);
+            }
+          }}
+          className="absolute top-2 right-2 bg-white/90 hover:bg-white p-2 rounded-full shadow-md transition z-10"
+          aria-label={inWishlist ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+        >
+          <Heart className={`h-5 w-5 ${inWishlist ? "fill-red-500 text-red-500" : "text-gray-600"}`} />
+        </button>
       </Link>
 
       <div className="pt-3 space-y-2">
@@ -89,7 +111,7 @@ const ProductCard = React.memo(function ProductCard({ product }: { product: Prod
         <Button
           variant="outline"
           size="sm"
-          className="w-full mt-2 uppercase tracking-wider text-xs border-foreground hover:bg-foreground hover:text-background md:opacity-0 md:group-hover:opacity-100 transition-opacity"
+          className="w-full mt-2 uppercase tracking-wider text-xs border-foreground hover:bg-foreground hover:text-background transition md:opacity-0 md:group-hover:opacity-100 md:transition-opacity"
           onClick={() => addItem(product, product.colors[colorIdx].name, product.sizes[0], 1)}
         >
           Adicionar

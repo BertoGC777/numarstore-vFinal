@@ -4,13 +4,15 @@ import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { User, ShoppingBag, LogOut, Eye, EyeOff, Shield } from "lucide-react";
+import { User, ShoppingBag, LogOut, Eye, EyeOff, Shield, Heart } from "lucide-react";
 import { api } from "@/api/client";
 import { useToast } from "@/components/ui/use-toast";
+import { useWishlist } from "@/context/WishlistContext";
+import ProductCard from "@/components/ProductCard";
 
 type User = { name: string; email: string; phone?: string; role?: string };
 type Tab = "login" | "register";
-type Section = "profile" | "orders";
+type Section = "profile" | "orders" | "wishlist";
 
 export default function Account() {
   const navigate = useNavigate();
@@ -161,7 +163,7 @@ const handleLogout = () => {
           </div>
 
           <div className="flex gap-1 border-b border-border mb-8">
-            {([["profile", User, "Meu Perfil"], ["orders", ShoppingBag, "Meus Pedidos"]] as const).map(([s, Icon, label]) => (
+            {([["profile", User, "Meu Perfil"], ["orders", ShoppingBag, "Meus Pedidos"], ["wishlist", Heart, "Favoritos"]] as const).map(([s, Icon, label]) => (
               <button key={s} onClick={() => setSection(s as Section)}
                 className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px ${
                   section === s ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"
@@ -211,6 +213,10 @@ const handleLogout = () => {
 
           {section === "orders" && (
             <OrdersSection />
+          )}
+
+          {section === "wishlist" && (
+            <WishlistSection />
           )}
         </div>
       </Layout>
@@ -344,6 +350,31 @@ function OrdersSection() {
           <div className="text-sm text-muted-foreground">{new Date(order.created_at).toLocaleDateString("pt-BR")}</div>
           <div className="text-sm font-semibold">Total: {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(order.total)}</div>
         </div>
+      ))}
+    </div>
+  );
+}
+
+function WishlistSection() {
+  const { items } = useWishlist();
+
+  if (items.length === 0) {
+    return (
+      <div className="border border-border rounded-lg p-8 text-center">
+        <Heart className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+        <h2 className="font-serif text-xl mb-2">Nenhum favorito ainda</h2>
+        <p className="text-sm text-muted-foreground mb-6">Seus produtos favoritos aparecerão aqui.</p>
+        <Button asChild>
+          <Link to="/catalogo">Ver catálogo</Link>
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+      {items.map((product) => (
+        <ProductCard key={product.id} product={product} />
       ))}
     </div>
   );
