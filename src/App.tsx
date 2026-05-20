@@ -12,6 +12,7 @@ import { Toaster } from "@/components/ui/toaster";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import ShippingBar from "@/components/ShippingBar";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import CookieBanner from "@/components/CookieBanner";
 import { pageview } from "@/hooks/use-analytics";
 import Index from "./pages/Index";
 
