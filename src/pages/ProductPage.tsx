@@ -10,6 +10,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useCart } from "@/context/CartContext";
 import { Minus, Plus, MessageCircle, ChevronRight, CreditCard, Banknote, QrCode, Shield, Truck, RotateCcw, X } from "lucide-react";
+import ProductReviews from "@/components/ProductReviews";
 
 export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -334,6 +335,11 @@ export default function ProductPage() {
             </div>
           </section>
         )}
+
+        {/* Product Reviews */}
+        <section className="mt-20">
+          <ProductReviews productId={product.id} />
+        </section>
       </div>
     </Layout>
   );

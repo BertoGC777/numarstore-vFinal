@@ -5,6 +5,7 @@ import {
   createPasswordResetToken, resetPassword,
 } from "../services/auth.service";
 import { refreshMiddleware } from "../middleware/auth";
+import { sendWelcomeEmail, sendPasswordResetEmail } from "../services/email.service";
 
 const router = Router();
 
@@ -13,6 +14,10 @@ router.post("/register", async (req, res) => {
     const { name, email, phone, password } = req.body;
     if (!name || !email || !password) return res.status(400).json({ error: "Preencha todos os campos obrigatórios." });
     const result = await registerUser(name, email, phone || null, password);
+    
+    // Send welcome email
+    sendWelcomeEmail(email, name).catch(err => console.error('Failed to send welcome email:', err));
+    
     res.json(result);
   } catch (e: any) {
     if (e.message === "EMAIL_EXISTS") return res.status(409).json({ error: "E-mail já cadastrado" });
@@ -53,6 +58,11 @@ router.post("/forgot-password", async (req, res) => {
     if (!email) return res.status(400).json({ error: "E-mail é obrigatório" });
 
     const result = await createPasswordResetToken(email);
+    
+    // Send password reset email
+    const resetLink = `${process.env.FRONTEND_URL || 'https://numarstore-v-final.vercel.app'}/reset-password?token=${result.token}`;
+    sendPasswordResetEmail(email, resetLink).catch(err => console.error('Failed to send password reset email:', err));
+    
     res.json({ message: "Token de redefinição gerado", token: result.token });
   } catch (e: any) {
     if (e.message === "USER_NOT_FOUND") return res.status(404).json({ error: "E-mail não encontrado" });

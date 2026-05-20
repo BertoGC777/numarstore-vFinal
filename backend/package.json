@@ -9,6 +9,7 @@
     "create-admin": "npx tsx src/scripts/create-admin.ts"
   },
   "dependencies": {
+    "@sendgrid/mail": "^8.1.4",
     "@types/compression": "^1.8.1",
     "@types/pg": "^8.20.0",
     "bcryptjs": "^2.4.3",

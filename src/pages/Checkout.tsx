@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import { useCart } from "@/context/CartContext";
+import { useCoupon } from "@/context/CouponContext";
 import { sanitize } from "@/utils/sanitize";
 import { calculateShipping, ShippingOption } from "@/utils/shipping";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,7 @@ import { api } from "@/api/client";
 import { useToast } from "@/components/ui/use-toast";
 import { formatBRL } from "@/data/products";
 import { loadStripe } from "@stripe/stripe-js";
+import CouponInput from "@/components/CouponInput";
 
 type PayMethod = "pix" | "card" | "boleto";
 
@@ -23,6 +25,7 @@ function maskCEP(v: string) { return v.replace(/\D/g,'').slice(0,8).replace(/(\d
 
 export default function Checkout() {
   const { items, subtotal, close } = useCart();
+  const { discount: couponDiscount } = useCoupon();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [step, setStep] = useState(1);
@@ -50,9 +53,9 @@ export default function Checkout() {
   const [shippingOptions, setShippingOptions] = useState<ShippingOption[]>([]);
   const [selectedShipping, setSelectedShipping] = useState<ShippingOption | null>(null);
 
-  const discount = method === "pix" ? subtotal * 0.05 : 0;
+  const pixDiscount = method === "pix" ? subtotal * 0.05 : 0;
   const shipping = selectedShipping?.price ?? 0;
-  const total = subtotal + shipping - discount;
+  const total = subtotal + shipping - pixDiscount - couponDiscount;
 
   const setField = (k: string, v: string) => {
     switch (k) {
@@ -186,9 +189,9 @@ export default function Checkout() {
         console.log("📦 Criando pedido no backend...");
         const order = await api.orders.create({
           paymentMethod: method,
-          name: nome, email, cpf, phone: telefone,
+          name, email, cpf, phone: telefone,
           cep, logradouro, numero, complemento, bairro, localidade, uf,
-          subtotal, shipping, discount, total,
+          subtotal, shipping, discount: pixDiscount + couponDiscount, total,
           whatsappMsg: sanitizedMsg,
           items: items.map(i => ({
             product_id: i.id,
@@ -219,7 +222,7 @@ export default function Checkout() {
       const sessionRes = await api.post("/stripe/checkout", {
         items: stripeItems,
         shipping,
-        discount,
+        discount: pixDiscount + couponDiscount,
         orderId,
         metadata: {
           userId: localStorage.getItem("numar.user") ? JSON.parse(localStorage.getItem("numar.user") || "{}").id : "",
@@ -338,6 +341,8 @@ export default function Checkout() {
                 </div>
               </div>
 
+              <CouponInput subtotal={subtotal} />
+
               <Button onClick={handleNext} className="w-full h-12 uppercase tracking-widest">
                 Continuar
               </Button>
@@ -445,7 +450,8 @@ export default function Checkout() {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>{formatBRL(subtotal)}</span></div>
                   <div className="flex justify-between"><span className="text-muted-foreground">Frete</span><span>{shipping === 0 ? "Grátis" : formatBRL(shipping)}</span></div>
-                  {discount > 0 && <div className="flex justify-between text-green-600"><span>Desconto Pix (5%)</span><span>-{formatBRL(discount)}</span></div>}
+                  {pixDiscount > 0 && <div className="flex justify-between text-green-600"><span>Desconto Pix (5%)</span><span>-{formatBRL(pixDiscount)}</span></div>}
+                  {couponDiscount > 0 && <div className="flex justify-between text-green-600"><span>Desconto Cupom</span><span>-{formatBRL(couponDiscount)}</span></div>}
                   <div className="flex justify-between font-serif text-xl pt-2 border-t border-border"><span>Total</span><span className="text-primary">{formatBRL(total)}</span></div>
                   {method === "card" && <p className="text-xs text-muted-foreground text-right">ou 3x de {formatBRL(total / 3)} sem juros</p>}
                 </div>
@@ -498,6 +504,8 @@ export default function Checkout() {
                 <p className="text-sm font-medium text-yellow-800 dark:text-yellow-300">📄 Boleto Bancário</p>
               </div>}
             </div>
+
+            <CouponInput subtotal={subtotal} />
 
             <div className="border border-border rounded-lg p-6">
               <h2 className="font-serif text-xl mb-4">Seus Dados</h2>
@@ -597,7 +605,8 @@ export default function Checkout() {
                 ) : (
                   <div className="flex justify-between"><span className="text-muted-foreground">Frete</span><span className="text-muted-foreground">Digite o CEP para calcular</span></div>
                 )}
-                {discount > 0 && <div className="flex justify-between text-green-600"><span>Desconto Pix (5%)</span><span>-{formatBRL(discount)}</span></div>}
+                {pixDiscount > 0 && <div className="flex justify-between text-green-600"><span>Desconto Pix (5%)</span><span>-{formatBRL(pixDiscount)}</span></div>}
+                {couponDiscount > 0 && <div className="flex justify-between text-green-600"><span>Desconto Cupom</span><span>-{formatBRL(couponDiscount)}</span></div>}
                 <div className="flex justify-between font-serif text-xl pt-2 border-t border-border"><span>Total</span><span className="text-primary">{formatBRL(total)}</span></div>
                 {method === "card" && <p className="text-xs text-muted-foreground text-right">ou 3x de {formatBRL(total / 3)} sem juros</p>}
               </div>

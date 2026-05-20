@@ -1,17 +1,21 @@
 import React, { useState } from "react";
+import { memo } from "react";
 import { Link } from "react-router-dom";
 import { Product } from "@/data/products";
+import { formatBRL } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { Button } from "@/components/ui/button";
-import Price from "@/components/Price";
-import { Heart } from "lucide-react";
+import { Heart, ShoppingCart, Eye } from "lucide-react";
+import QuickView from "./QuickView";
+import Price from "./Price";
 
 const ProductCard = React.memo(function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const [colorIdx, setColorIdx] = useState(0);
   const [hovered, setHovered] = useState(false);
+  const [quickViewOpen, setQuickViewOpen] = useState(false);
   const inWishlist = isInWishlist(product.id);
 
   const numColors = product.colors.length;
@@ -117,6 +121,8 @@ const ProductCard = React.memo(function ProductCard({ product }: { product: Prod
           Adicionar
         </Button>
       </div>
+
+      <QuickView product={product} open={quickViewOpen} onClose={() => setQuickViewOpen(false)} />
     </div>
   );
 });

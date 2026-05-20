@@ -138,5 +138,43 @@ export async function createSchema() {
     )
   `);
 
+  await dbRun(`
+    CREATE TABLE IF NOT EXISTS coupons (
+      id TEXT PRIMARY KEY,
+      code TEXT NOT NULL UNIQUE,
+      type TEXT NOT NULL,
+      value REAL NOT NULL,
+      min_purchase REAL DEFAULT 0,
+      max_discount REAL,
+      usage_limit INTEGER,
+      used_count INTEGER DEFAULT 0,
+      valid_from BIGINT,
+      valid_until BIGINT,
+      categories TEXT,
+      products TEXT,
+      is_active INTEGER DEFAULT 1,
+      created_at BIGINT NOT NULL DEFAULT 0
+    )
+  `);
+
+  await dbRun(`
+    CREATE TABLE IF NOT EXISTS reviews (
+      id TEXT PRIMARY KEY,
+      product_id TEXT NOT NULL,
+      user_id TEXT NOT NULL,
+      order_id TEXT,
+      rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+      title TEXT,
+      comment TEXT,
+      verified_purchase INTEGER DEFAULT 0,
+      images TEXT,
+      helpful_count INTEGER DEFAULT 0,
+      is_approved INTEGER DEFAULT 0,
+      created_at BIGINT NOT NULL DEFAULT 0,
+      FOREIGN KEY (product_id) REFERENCES products(id),
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    )
+  `);
+
   console.log("✅ PostgreSQL schema created");
 }

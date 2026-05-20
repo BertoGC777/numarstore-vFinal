@@ -18,6 +18,8 @@ import paymentRoutes from "./routes/payment.routes";
 import stripeRoutes from "./routes/stripe.routes";
 import adminRoutes from "./routes/admin.routes";
 import setupRoutes from "./routes/setup.routes";
+import couponRoutes from "./routes/coupon.routes";
+import reviewRoutes from "./routes/review.routes";
 import { seedAll } from "./db/seed";
 
 const app = express();
@@ -46,6 +48,8 @@ app.use("/api/cep", cepLimiter, cepRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/coupons", couponRoutes);
+app.use("/api/reviews", reviewRoutes);
 app.use("/api/payments", authMiddleware, paymentRoutes);
 app.use("/api/stripe", stripeRoutes);
 app.use("/api/admin", adminRoutes);
