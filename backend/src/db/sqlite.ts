@@ -71,6 +71,17 @@ export async function getDatabase() {
       size TEXT NOT NULL,
       FOREIGN KEY (product_id) REFERENCES products(id)
     )`);
+    await dbRun(`
+      CREATE TABLE IF NOT EXISTS product_stock (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        product_id TEXT NOT NULL,
+        color TEXT,
+        size TEXT,
+        quantity INTEGER DEFAULT 0,
+        UNIQUE(product_id, color, size),
+        FOREIGN KEY (product_id) REFERENCES products(id)
+      )
+    `);
     db.run(`CREATE TABLE IF NOT EXISTS password_reset_tokens (
       id TEXT PRIMARY KEY, user_id TEXT NOT NULL, token TEXT NOT NULL UNIQUE,
       expires_at INTEGER NOT NULL, created_at INTEGER NOT NULL DEFAULT 0,

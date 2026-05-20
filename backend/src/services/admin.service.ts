@@ -363,11 +363,22 @@ export async function getProductById(id: string) {
     [id]
   );
 
+  const stock = await dbAll(
+    `SELECT color, size, quantity FROM product_stock WHERE product_id = $1`,
+    [id]
+  );
+
+  const stockRecord: Record<string, number> = {};
+  stock.forEach((s: any) => {
+    stockRecord[`${s.color}-${s.size}`] = s.quantity;
+  });
+
   return {
     ...product,
     images,
     colors,
-    sizes: sizes.map((s: any) => s.size)
+    sizes: sizes.map((s: any) => s.size),
+    stock: stockRecord
   };
 }
 
@@ -388,6 +399,7 @@ export async function createProduct(data: any) {
     colors,
     sizes,
     images,
+    stock,
     is_new,
     is_sale,
     is_active
@@ -405,9 +417,9 @@ export async function createProduct(data: any) {
 
   // Insert product
   await dbRun(
-    `INSERT INTO products (id, slug, name, description, category, subcategory, price_pix, price_card, old_price, is_new, is_sale, discount, created_at)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
-    [id, finalSlug, name, description, category, subcategory || null, price_pix, price_card, originalPrice || null, is_new ? 1 : 0, is_sale ? 1 : 0, discount || 0, now]
+    `INSERT INTO products (id, slug, name, description, short_description, category, subcategory, price_pix, price_card, old_price, is_new, is_sale, discount, is_active, created_at)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`,
+    [id, finalSlug, name, description, shortDescription || null, category, subcategory || null, price_pix, price_card, originalPrice || null, is_new ? 1 : 0, is_sale ? 1 : 0, discount || 0, is_active !== undefined ? (is_active ? 1 : 0) : 1, now]
   );
 
   // Insert colors
@@ -440,6 +452,20 @@ export async function createProduct(data: any) {
     }
   }
 
+  // Insert stock if provided
+  if (stock && typeof stock === 'object') {
+    for (const [key, quantity] of Object.entries(stock)) {
+      const [colorIdx, size] = key.split('-');
+      const qty = parseInt(String(quantity), 10) || 0;
+      if (qty > 0) {
+        await dbRun(
+          `INSERT INTO product_stock (product_id, color, size, quantity) VALUES ($1, $2, $3, $4)`,
+          [id, colorIdx, size, qty]
+        );
+      }
+    }
+  }
+
   return await getProductById(id);
 }
 
@@ -460,6 +486,7 @@ export async function updateProduct(id: string, data: any) {
     colors,
     sizes,
     images,
+    stock,
     is_new,
     is_sale,
     is_active
@@ -494,6 +521,11 @@ export async function updateProduct(id: string, data: any) {
     values.push(description);
     paramIndex++;
   }
+  if (shortDescription !== undefined) {
+    fields.push(`short_description = $${paramIndex}`);
+    values.push(shortDescription || null);
+    paramIndex++;
+  }
   if (price_pix !== undefined) {
     fields.push(`price_pix = $${paramIndex}`);
     values.push(price_pix);
@@ -522,6 +554,11 @@ export async function updateProduct(id: string, data: any) {
   if (discount !== undefined) {
     fields.push(`discount = $${paramIndex}`);
     values.push(discount);
+    paramIndex++;
+  }
+  if (is_active !== undefined) {
+    fields.push(`is_active = $${paramIndex}`);
+    values.push(is_active ? 1 : 0);
     paramIndex++;
   }
 
@@ -577,6 +614,21 @@ export async function updateProduct(id: string, data: any) {
     }
   }
 
+  // Update stock if provided
+  if (stock !== undefined && typeof stock === 'object') {
+    await dbRun(`DELETE FROM product_stock WHERE product_id = $1`, [id]);
+    for (const [key, quantity] of Object.entries(stock)) {
+      const [colorIdx, size] = key.split('-');
+      const qty = parseInt(String(quantity), 10) || 0;
+      if (qty > 0) {
+        await dbRun(
+          `INSERT INTO product_stock (product_id, color, size, quantity) VALUES ($1, $2, $3, $4)`,
+          [id, colorIdx, size, qty]
+        );
+      }
+    }
+  }
+
   return await getProductById(id);
 }
 
@@ -610,4 +662,38 @@ export async function removeProductImage(productId: string, imageId: string) {
     `DELETE FROM product_images WHERE id = $1 AND product_id = $2`,
     [imageId, productId]
   );
+}
+
+// Stock Management
+export async function updateProductStock(productId: string, stock: Record<string, number>) {
+  await getDatabase();
+  
+  // Delete existing stock for this product
+  await dbRun(`DELETE FROM product_stock WHERE product_id = $1`, [productId]);
+  
+  // Insert new stock entries
+  for (const [key, quantity] of Object.entries(stock)) {
+    const [colorIdx, size] = key.split('-');
+    await dbRun(
+      `INSERT INTO product_stock (product_id, color, size, quantity) VALUES ($1, $2, $3, $4)`,
+      [productId, colorIdx, size, quantity]
+    );
+  }
+}
+
+export async function getProductStock(productId: string) {
+  await getDatabase();
+  
+  const stock = await dbAll(
+    `SELECT color, size, quantity FROM product_stock WHERE product_id = $1`,
+    [productId]
+  );
+  
+  // Convert to record format
+  const stockRecord: Record<string, number> = {};
+  stock.forEach((s: any) => {
+    stockRecord[`${s.color}-${s.size}`] = s.quantity;
+  });
+  
+  return stockRecord;
 }

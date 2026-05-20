@@ -49,6 +49,7 @@ interface Product {
   colors?: Color[];
   sizes?: string[];
   images?: ProductImage[];
+  stock?: Record<string, string>;
   is_new: number;
   is_sale: number;
   is_active: number;
@@ -78,6 +79,7 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
     colors: [] as Color[],
     sizes: [] as string[],
     images: [] as ProductImage[],
+    stock: {} as Record<string, string>,
     is_new: false,
     is_sale: false,
     is_active: true
@@ -100,6 +102,7 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
         colors: product.colors || [],
         sizes: product.sizes || [],
         images: product.images || [],
+        stock: product.stock || {},
         is_new: product.is_new === 1,
         is_sale: product.is_sale === 1,
         is_active: product.is_active === 1
@@ -151,6 +154,7 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
         colors: formData.colors,
         sizes: formData.sizes,
         images: formData.images,
+        stock: formData.stock,
         is_new: formData.is_new ? 1 : 0,
         is_sale: formData.is_sale ? 1 : 0,
         is_active: formData.is_active ? 1 : 0
@@ -440,6 +444,60 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
         >
           <Plus className="h-4 w-4" /> Adicionar Cor
         </Button>
+      </div>
+
+      {/* Stock Management */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold">Gerenciamento de Estoque</h3>
+        <p className="text-sm text-muted-foreground mb-4">
+          Configure o estoque para cada combinação de cor e tamanho. Deixe em branco ou 0 para esgotado.
+        </p>
+        
+        {formData.colors.length > 0 && formData.sizes.length > 0 ? (
+          <div className="space-y-4">
+            {formData.colors.map((color, colorIdx) => (
+              <div key={colorIdx} className="border rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <div
+                    className="w-6 h-6 rounded-full border"
+                    style={{ backgroundColor: color.hex }}
+                  />
+                  <span className="font-medium">{color.name || `Cor ${colorIdx + 1}`}</span>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+                  {formData.sizes.map((size) => {
+                    const stockKey = `${colorIdx}-${size}`;
+                    return (
+                      <div key={stockKey} className="space-y-1">
+                        <Label className="text-xs">{size}</Label>
+                        <Input
+                          type="number"
+                          min="0"
+                          placeholder="Qtd"
+                          value={formData.stock?.[stockKey] || ""}
+                          onChange={(e) => {
+                            setFormData({
+                              ...formData,
+                              stock: {
+                                ...formData.stock,
+                                [stockKey]: e.target.value
+                              }
+                            });
+                          }}
+                          className="text-sm"
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            Adicione cores e tamanhos primeiro para gerenciar o estoque.
+          </p>
+        )}
       </div>
 
       {/* Images */}
