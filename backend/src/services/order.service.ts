@@ -16,8 +16,8 @@ export async function createOrder(userId: string | null, data: OrderData) {
   await dbRun(`INSERT INTO orders (id, user_id, status, subtotal, shipping, discount, total,
     payment_method, name, email, cpf, phone, cep, logradouro, bairro, localidade, uf,
     whatsapp_msg, stripe_payment_intent_id, stripe_status, created_at)
-    VALUES ($1, $2, 'pending', $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)`,
-    [orderId, userId, data.subtotal, data.shipping, data.discount, data.total,
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)`,
+    [orderId, userId, 'pending', data.subtotal, data.shipping, data.discount, data.total,
      data.paymentMethod, data.name, data.email, data.cpf || null, data.phone,
      data.cep || null, data.logradouro || null, data.bairro || null,
      data.localidade || null, data.uf || null, data.whatsappMsg,
