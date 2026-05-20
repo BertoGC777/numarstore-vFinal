@@ -85,6 +85,7 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
 
   useEffect(() => {
     if (product) {
+      console.log("Loading product data:", product);
       setFormData({
         name: product.name,
         slug: product.slug || "",
@@ -155,17 +156,23 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
         is_active: formData.is_active ? 1 : 0
       };
 
+      console.log("Saving product:", product?.id ? "UPDATE" : "CREATE", payload);
+
       if (product?.id) {
         await api.put(`/admin/products/${product.id}`, payload);
+        console.log("Product updated successfully");
         toast({ title: "Sucesso", description: "Produto atualizado com sucesso" });
       } else {
         await api.post("/admin/products", payload);
+        console.log("Product created successfully");
         toast({ title: "Sucesso", description: "Produto criado com sucesso" });
       }
 
       onSave();
     } catch (err: any) {
-      toast({ title: "Erro", description: err.response?.data?.error || "Erro ao salvar produto" });
+      console.error("Error saving product:", err);
+      const errorMsg = err.response?.data?.error || err.message || "Erro ao salvar produto";
+      toast({ title: "Erro", description: errorMsg });
     } finally {
       setLoading(false);
     }

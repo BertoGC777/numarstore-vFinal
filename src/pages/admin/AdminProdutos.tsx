@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Switch } from "@/components/ui/switch";
 import { 
   Package, 
   Plus, 
@@ -13,7 +14,8 @@ import {
   Search,
   RefreshCw,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Power
 } from "lucide-react";
 import { api } from "@/api/client";
 import { useToast } from "@/components/ui/use-toast";
@@ -78,12 +80,16 @@ export default function AdminProdutos() {
       params.append("page", page.toString());
       params.append("limit", limit.toString());
 
+      console.log("Fetching products with params:", params.toString());
       const data: ProductsResponse = await api.get(`/admin/products?${params.toString()}`);
+      console.log("Products fetched:", data.products.length, "total:", data.total);
       setProducts(data.products);
       setTotal(data.total);
       setTotalPages(data.totalPages);
     } catch (err: any) {
-      toast({ title: "Erro", description: err.response?.data?.error || "Erro ao carregar produtos" });
+      console.error("Error fetching products:", err);
+      const errorMsg = err.response?.data?.error || err.message || "Erro ao carregar produtos";
+      toast({ title: "Erro", description: errorMsg });
       if (err.response?.status === 403) {
         navigate("/conta");
       }
@@ -103,6 +109,7 @@ export default function AdminProdutos() {
   };
 
   const handleOpenDialog = (product?: Product) => {
+    console.log("Opening dialog for product:", product?.id, product?.name);
     setEditingProduct(product || null);
     setDialogOpen(true);
   };
@@ -120,14 +127,31 @@ export default function AdminProdutos() {
   const handleDeleteConfirm = async () => {
     if (!productToDelete) return;
     try {
+      console.log("Deleting product:", productToDelete.id, productToDelete.name);
       await api.delete(`/admin/products/${productToDelete.id}`);
+      console.log("Product deleted successfully");
       toast({ title: "Sucesso", description: "Produto excluído com sucesso" });
       fetchProducts();
     } catch (err: any) {
-      toast({ title: "Erro", description: err.response?.data?.error || "Erro ao excluir produto" });
+      console.error("Error deleting product:", err);
+      const errorMsg = err.response?.data?.error || err.message || "Erro ao excluir produto";
+      toast({ title: "Erro", description: errorMsg });
     } finally {
       setDeleteDialogOpen(false);
       setProductToDelete(null);
+    }
+  };
+
+  const handleToggleActive = async (product: Product) => {
+    try {
+      console.log("Toggling product active status:", product.id, product.name, !product.is_active);
+      await api.put(`/admin/products/${product.id}`, { is_active: product.is_active ? 0 : 1 });
+      toast({ title: "Sucesso", description: `Produto ${product.is_active ? "desativado" : "ativado"} com sucesso` });
+      fetchProducts();
+    } catch (err: any) {
+      console.error("Error toggling product active status:", err);
+      const errorMsg = err.response?.data?.error || err.message || "Erro ao alterar status do produto";
+      toast({ title: "Erro", description: errorMsg });
     }
   };
 
@@ -209,6 +233,9 @@ export default function AdminProdutos() {
         </Card>
       ) : (
         <>
+          <div className="mb-4 text-sm text-muted-foreground">
+            Mostrando {products.length} de {total} produtos
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {products.map((product) => (
               <Card key={product.id} className="overflow-hidden">
@@ -270,6 +297,14 @@ export default function AdminProdutos() {
                     </Button>
                     <Button
                       size="sm"
+                      variant="outline"
+                      onClick={() => handleToggleActive(product)}
+                      title={product.is_active ? "Desativar" : "Ativar"}
+                    >
+                      <Power className={`h-4 w-4 ${product.is_active ? "text-green-600" : "text-gray-400"}`} />
+                    </Button>
+                    <Button
+                      size="sm"
                       variant="destructive"
                       onClick={() => handleDeleteClick(product)}
                     >
@@ -283,9 +318,9 @@ export default function AdminProdutos() {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mt-6">
               <p className="text-sm text-muted-foreground">
-                Mostrando {products.length} de {total} produtos
+                Página {page} de {totalPages} ({total} produtos no total)
               </p>
               <div className="flex gap-2">
                 <Button
@@ -295,16 +330,15 @@ export default function AdminProdutos() {
                   disabled={page === 1}
                 >
                   <ChevronLeft className="h-4 w-4" />
+                  Anterior
                 </Button>
-                <span className="flex items-center px-3 text-sm">
-                  Página {page} de {totalPages}
-                </span>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
                 >
+                  Próxima
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { api } from "@/api/client";
 import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -43,6 +44,7 @@ const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#0088fe', '#00c49f'
 
 export default function AdminAnalytics() {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState("7d");
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
@@ -50,13 +52,17 @@ export default function AdminAnalytics() {
   const fetchAnalytics = async () => {
     setLoading(true);
     try {
+      console.log("Fetching analytics data with period:", period);
       const data = await api.get(`/admin/analytics?period=${period}`);
+      console.log("Analytics data fetched:", data);
       setAnalytics(data);
     } catch (err: any) {
-      toast({ 
-        title: "Erro", 
-        description: err.response?.data?.error || "Erro ao carregar analytics" 
-      });
+      console.error("Error fetching analytics:", err);
+      const errorMsg = err.response?.data?.error || err.message || "Erro ao carregar analytics";
+      toast({ title: "Erro", description: errorMsg });
+      if (err.response?.status === 403) {
+        navigate("/conta");
+      }
     } finally {
       setLoading(false);
     }

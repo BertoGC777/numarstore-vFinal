@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { api } from "@/api/client";
 import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,19 +34,24 @@ interface DashboardStats {
 
 export default function Dashboard() {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<DashboardStats | null>(null);
 
   const fetchDashboard = async () => {
     setLoading(true);
     try {
+      console.log("Fetching dashboard data...");
       const data = await api.get("/admin/dashboard");
+      console.log("Dashboard data fetched:", data);
       setStats(data);
     } catch (err: any) {
-      toast({ 
-        title: "Erro", 
-        description: err.response?.data?.error || "Erro ao carregar dashboard" 
-      });
+      console.error("Error fetching dashboard:", err);
+      const errorMsg = err.response?.data?.error || err.message || "Erro ao carregar dashboard";
+      toast({ title: "Erro", description: errorMsg });
+      if (err.response?.status === 403) {
+        navigate("/conta");
+      }
     } finally {
       setLoading(false);
     }
