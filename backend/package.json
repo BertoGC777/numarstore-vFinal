@@ -6,7 +6,9 @@
     "build": "npx tsc --outDir dist --skipLibCheck",
     "start": "node dist/index.js",
     "dev": "npx tsx src/index.ts",
-    "create-admin": "npx tsx src/scripts/create-admin.ts"
+    "create-admin": "npx tsx src/scripts/create-admin.ts",
+    "check-admin": "npx tsx src/scripts/check-admin.ts",
+    "reset-admin-password": "npx tsx src/scripts/reset-admin-password.ts"
   },
   "dependencies": {
     "@sendgrid/mail": "^8.1.4",

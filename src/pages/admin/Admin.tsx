@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Outlet, Link, useLocation } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
+import { api } from "@/api/client";
+import { useToast } from "@/components/ui/use-toast";
 import { 
   LayoutDashboard, 
   ShoppingCart, 
@@ -11,7 +13,8 @@ import {
   LogOut, 
   Menu, 
   X,
-  ChevronRight
+  ChevronRight,
+  AlertCircle
 } from "lucide-react";
 
 const sidebarItems = [
@@ -24,7 +27,39 @@ const sidebarItems = [
 export default function Admin() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { toast } = useToast();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
+  useEffect(() => {
+    const checkAdminRole = async () => {
+      try {
+        const user = await api.auth.profile();
+        console.log("User profile:", user);
+        if (user.role === "admin") {
+          setIsAdmin(true);
+        } else {
+          toast({ 
+            title: "Acesso Negado", 
+            description: "Você não tem permissão de administrador. Entre em contato com o suporte." 
+          });
+          navigate("/");
+        }
+      } catch (err: any) {
+        console.error("Error checking admin role:", err);
+        toast({ 
+          title: "Erro de Autenticação", 
+          description: "Sessão expirada. Por favor, faça login novamente." 
+        });
+        navigate("/conta");
+      } finally {
+        setCheckingAuth(false);
+      }
+    };
+
+    checkAdminRole();
+  }, [navigate, toast]);
 
   const handleLogout = () => {
     localStorage.removeItem("numar.token");
@@ -32,6 +67,38 @@ export default function Admin() {
     localStorage.removeItem("numar.user");
     navigate("/conta");
   };
+
+  if (checkingAuth) {
+    return (
+      <Layout>
+        <SEO title="Painel Admin" description="Painel administrativo da Numar Store" />
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4" />
+            <p className="text-muted-foreground">Verificando permissões...</p>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <Layout>
+        <SEO title="Acesso Negado" description="Acesso negado ao painel administrativo" />
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="text-center max-w-md">
+            <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
+            <h1 className="text-2xl font-bold mb-2">Acesso Negado</h1>
+            <p className="text-muted-foreground mb-4">
+              Você não tem permissão para acessar o painel administrativo.
+            </p>
+            <Button onClick={() => navigate("/")}>Voltar para a loja</Button>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
