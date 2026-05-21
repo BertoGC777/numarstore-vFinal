@@ -43,6 +43,9 @@ interface Product {
   discount: number;
   is_active: number;
   images?: Array<{ url: string }>;
+  stock?: Record<string, number>;
+  colors?: Array<{ name: string; hex: string }>;
+  sizes?: string[];
 }
 
 interface ProductsResponse {
@@ -285,6 +288,26 @@ export default function AdminProdutos() {
                       <p className="text-xs text-muted-foreground">Cartão</p>
                     </div>
                   </div>
+                  {/* Stock Display */}
+                  {product.stock && Object.keys(product.stock).length > 0 ? (
+                    <div className="mb-3 p-2 bg-gray-50 rounded text-xs">
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">Estoque Total:</span>
+                        <span className="font-medium">
+                          {Object.values(product.stock).reduce((sum, qty) => sum + qty, 0)} unidades
+                        </span>
+                      </div>
+                      {product.colors && product.sizes && (
+                        <div className="mt-1 text-muted-foreground">
+                          {product.colors.length} cor(es) × {product.sizes.length} tamanho(s)
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="mb-3 p-2 bg-yellow-50 rounded text-xs text-yellow-700">
+                      Estoque não configurado
+                    </div>
+                  )}
                   <div className="flex gap-2">
                     <Button
                       size="sm"

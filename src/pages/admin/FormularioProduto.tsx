@@ -49,6 +49,7 @@ interface Product {
   colors?: Color[];
   sizes?: string[];
   images?: ProductImage[];
+  stock?: Record<string, number>;
   is_new: number;
   is_sale: number;
   is_active: number;
@@ -78,6 +79,7 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
     colors: [] as Color[],
     sizes: [] as string[],
     images: [] as ProductImage[],
+    stock: {} as Record<string, number>,
     is_new: false,
     is_sale: false,
     is_active: true
@@ -100,6 +102,7 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
         colors: product.colors || [],
         sizes: product.sizes || [],
         images: product.images || [],
+        stock: product.stock || {},
         is_new: product.is_new === 1,
         is_sale: product.is_sale === 1,
         is_active: product.is_active === 1
@@ -151,6 +154,7 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
         colors: formData.colors,
         sizes: formData.sizes,
         images: formData.images,
+        stock: formData.stock,
         is_new: formData.is_new ? 1 : 0,
         is_sale: formData.is_sale ? 1 : 0,
         is_active: formData.is_active ? 1 : 0
@@ -440,6 +444,67 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
         >
           <Plus className="h-4 w-4" /> Adicionar Cor
         </Button>
+      </div>
+
+      {/* Stock Management */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold">Controle de Estoque</h3>
+        <p className="text-sm text-muted-foreground">
+          Defina a quantidade em estoque para cada combinação de cor e tamanho.
+        </p>
+        
+        {formData.colors.length > 0 && formData.sizes.length > 0 ? (
+          <div className="border rounded-lg overflow-hidden">
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 py-2 text-left text-sm font-medium">Cor</th>
+                  {formData.sizes.map((size) => (
+                    <th key={size} className="px-4 py-2 text-center text-sm font-medium">{size}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {formData.colors.map((color, colorIdx) => (
+                  <tr key={colorIdx} className="border-t">
+                    <td className="px-4 py-2 text-sm">
+                      <div className="flex items-center gap-2">
+                        <div 
+                          className="w-4 h-4 rounded-full border" 
+                          style={{ backgroundColor: color.hex }}
+                        />
+                        {color.name || `Cor ${colorIdx + 1}`}
+                      </div>
+                    </td>
+                    {formData.sizes.map((size) => {
+                      const stockKey = `${colorIdx}-${size}`;
+                      return (
+                        <td key={size} className="px-4 py-2 text-center">
+                          <Input
+                            type="number"
+                            min="0"
+                            value={formData.stock[stockKey] || 0}
+                            onChange={(e) => {
+                              const newStock = { ...formData.stock };
+                              newStock[stockKey] = parseInt(e.target.value) || 0;
+                              setFormData({ ...formData, stock: newStock });
+                            }}
+                            className="w-20 text-center"
+                            placeholder="0"
+                          />
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            Adicione pelo menos uma cor e um tamanho para gerenciar o estoque.
+          </p>
+        )}
       </div>
 
       {/* Images */}
