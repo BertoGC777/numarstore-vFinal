@@ -37,10 +37,19 @@ router.get("/debug-products", async (req, res) => {
       [productId]
     );
     
+    // Convert relative URLs to absolute backend URLs
+    const backendUrl = process.env.BACKEND_URL || 'https://numarstore-backend.onrender.com';
+    const convertedImages = images.rows.map((img: any) => {
+      if (img.url.startsWith('/images/')) {
+        return { ...img, url: `${backendUrl}${img.url}` };
+      }
+      return img;
+    });
+    
     res.json({
       product: product.rows[0],
       imagesCount: images.rows.length,
-      images: images.rows,
+      images: convertedImages,
       message: images.rows.length > 0 ? "Images found" : "No images found for this product"
     });
   } catch (error: any) {
@@ -90,6 +99,29 @@ router.post("/create-admin", async (req, res) => {
       stack: e.stack
     }, null, 2))
     res.status(500).json({ error: e.message, detail: e.detail })
+  }
+})
+
+// Update image URLs in database to use backend URL
+router.post("/update-image-urls", async (req, res) => {
+  try {
+    const backendUrl = process.env.BACKEND_URL || 'https://numarstore-backend.onrender.com';
+    
+    // Update all image URLs from relative to absolute
+    const result = await pool.query(
+      "UPDATE product_images SET url = CONCAT($1, url) WHERE url LIKE '/images/%' RETURNING id, url",
+      [backendUrl]
+    );
+    
+    res.json({
+      success: true,
+      updatedCount: result.rows.length,
+      backendUrl,
+      message: `Updated ${result.rows.length} image URLs to use backend URL`
+    });
+  } catch (error: any) {
+    console.error("Update image URLs error:", error);
+    res.status(500).json({ error: error.message });
   }
 })
 

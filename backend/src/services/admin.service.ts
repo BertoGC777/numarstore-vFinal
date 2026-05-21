@@ -316,18 +316,19 @@ export async function getProducts(filters: GetProductsFilters) {
     [...params, limit, offset]
   );
 
-  // Get images for each product and convert relative URLs to absolute
+  // Get images for each product and convert relative URLs to absolute backend URLs
   const productsWithImages = await Promise.all(
     products.map(async (product: any) => {
       const images = await dbAll(
         `SELECT url FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
         [product.id]
       );
-      // Convert relative URLs to absolute URLs
+      // Convert relative URLs to absolute backend URLs
       const convertedImages = images.map((img: any) => {
         if (img.url.startsWith('/images/')) {
-          // Use placeholder image service for admin panel
-          return { url: `https://placehold.co/400x500/FFB6C1/FFF?text=${encodeURIComponent(product.name || 'Produto')}` };
+          // Use backend URL for images
+          const backendUrl = process.env.BACKEND_URL || 'https://numarstore-backend.onrender.com';
+          return { url: `${backendUrl}${img.url}` };
         }
         return img;
       });
@@ -361,10 +362,12 @@ export async function getProductById(id: string) {
     [id]
   );
   
-  // Convert relative URLs to absolute URLs
+  // Convert relative URLs to absolute backend URLs
   const convertedImages = images.map((img: any) => {
     if (img.url.startsWith('/images/')) {
-      return { ...img, url: `https://placehold.co/400x500/FFB6C1/FFF?text=${encodeURIComponent(product.name || 'Produto')}` };
+      // Use backend URL for images
+      const backendUrl = process.env.BACKEND_URL || 'https://numarstore-backend.onrender.com';
+      return { ...img, url: `${backendUrl}${img.url}` };
     }
     return img;
   });

@@ -38,6 +38,9 @@ app.use("/api/payments/webhook", express.raw({ type: "application/json" }));
 
 app.use(express.json({ limit: "10mb" }));
 
+// Serve static files from public directory
+app.use(express.static("public"));
+
 const generalLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 200, standardHeaders: true });
 const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 20, standardHeaders: true });
 const cepLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 50, standardHeaders: true });
