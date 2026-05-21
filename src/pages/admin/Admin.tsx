@@ -48,12 +48,28 @@ export default function Admin() {
 
   useEffect(() => {
     const checkAdminRole = async () => {
+      const token = localStorage.getItem("numar.token");
+      const userStr = localStorage.getItem("numar.user");
+      console.log("Admin check - Token exists:", !!token);
+      console.log("Admin check - User in localStorage:", !!userStr);
+      
+      if (!token) {
+        console.log("No token found, redirecting to login");
+        localStorage.removeItem("numar.token");
+        localStorage.removeItem("numar.refreshToken");
+        localStorage.removeItem("numar.user");
+        navigate("/conta");
+        setCheckingAuth(false);
+        return;
+      }
+
       try {
         const user = await api.auth.profile();
-        console.log("User profile:", user);
+        console.log("User profile from API:", user);
         if (user.role === "admin") {
           setIsAdmin(true);
         } else {
+          console.log("User role is not admin:", user.role);
           toast({
             title: "Acesso Negado",
             description: "Você não tem permissão de administrador. Entre em contato com o suporte."
@@ -64,6 +80,8 @@ export default function Admin() {
         console.error("Error checking admin role:", err);
         // Try token refresh before redirecting
         const refreshToken = localStorage.getItem("numar.refreshToken");
+        console.log("Attempting token refresh, refresh token exists:", !!refreshToken);
+        
         if (refreshToken) {
           try {
             const refreshRes = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001/api"}/auth/refresh`, {
@@ -71,10 +89,12 @@ export default function Admin() {
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ refreshToken }),
             });
+            console.log("Refresh response status:", refreshRes.status);
             if (refreshRes.ok) {
               const { token: newToken, refreshToken: newRefresh } = await refreshRes.json();
               localStorage.setItem("numar.token", newToken);
               if (newRefresh) localStorage.setItem("numar.refreshToken", newRefresh);
+              console.log("Token refreshed successfully");
               // Retry profile check
               const user = await api.auth.profile();
               console.log("User profile after refresh:", user);
@@ -82,13 +102,18 @@ export default function Admin() {
                 setIsAdmin(true);
                 setCheckingAuth(false);
                 return;
+              } else {
+                console.log("After refresh, user role is still not admin:", user.role);
               }
+            } else {
+              console.log("Refresh failed with status:", refreshRes.status);
             }
           } catch (refreshErr) {
             console.error("Token refresh failed:", refreshErr);
           }
         }
         // If refresh failed or user still not admin, clear session and redirect
+        console.log("Clearing session and redirecting to /conta");
         localStorage.removeItem("numar.token");
         localStorage.removeItem("numar.refreshToken");
         localStorage.removeItem("numar.user");
