@@ -70,6 +70,14 @@ export default function Catalog() {
         const normalizedCategory = normalizeString(p.category || "");
         const normalizedSubcategory = normalizeString(p.subcategory || "");
         
+        // Special handling for lancamentos and promocao
+        if (normalizedCategoria === "lancamentos") {
+          return p.isNew === true;
+        }
+        if (normalizedCategoria === "promocao") {
+          return p.isSale === true;
+        }
+        
         // Check if the URL category matches either the main category or subcategory
         return normalizedCategory === normalizedCategoria || normalizedSubcategory === normalizedCategoria;
       });
