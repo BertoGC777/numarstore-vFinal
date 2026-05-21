@@ -14,6 +14,8 @@ console.log("JWT_SECRET configured:", !!process.env.JWT_SECRET);
 console.log("JWT_REFRESH_SECRET configured:", !!process.env.JWT_REFRESH_SECRET);
 console.log("TOKEN_EXPIRATION:", TOKEN_EXPIRATION, "seconds");
 console.log("REFRESH_EXPIRATION:", REFRESH_EXPIRATION, "seconds");
+console.log("JWT_SECRET length:", JWT_SECRET.length);
+console.log("JWT_REFRESH_SECRET length:", JWT_REFRESH_SECRET.length);
 console.log("========================");
 
 export interface AuthRequest extends Request {
@@ -43,6 +45,7 @@ export function generateToken(payload: AuthPayload): string {
   console.log("Token expires at:", new Date((decoded.exp || 0) * 1000).toISOString());
   console.log("Current time:", new Date().toISOString());
   console.log("Time until expiration:", decoded.exp ? `${((decoded.exp * 1000) - Date.now()) / 1000}s` : "N/A");
+  console.log("JWT_SECRET length used:", JWT_SECRET.length);
   return token;
 }
 
@@ -54,7 +57,7 @@ export function generateRefreshToken(payload: { id: string }): string {
 
 export function verifyToken(token: string): AuthPayload {
   const decoded = verifyJwt(token, JWT_SECRET);
-  console.log("Token verified - User:", decoded.email, "Expires at:", new Date((decoded.exp || 0) * 1000).toISOString());
+  console.log("Token verified - User:", decoded.email, "Expires at:", new Date((decoded.exp || 0) * 1000).toISOString(), "JWT_SECRET length:", JWT_SECRET.length);
   return { id: decoded.id as string, email: decoded.email as string, name: decoded.name as string, role: (decoded.role as string | undefined) };
 }
 

@@ -1,8 +1,21 @@
 import { Router } from "express"
 import bcrypt from "bcryptjs"
 import { pool } from "../db/postgres"
+import { generateToken, generateRefreshToken } from "../middleware/auth"
 
 const router = Router()
+
+// Debug endpoint to check JWT configuration
+router.get("/debug-jwt", (_req, res) => {
+  res.json({
+    jwtSecretConfigured: !!process.env.JWT_SECRET,
+    jwtRefreshSecretConfigured: !!process.env.JWT_REFRESH_SECRET,
+    tokenExpiration: process.env.TOKEN_EXPIRATION || "604800",
+    refreshExpiration: "2592000",
+    databaseUrlConfigured: !!process.env.DATABASE_URL,
+    nodeEnv: process.env.NODE_ENV || "development"
+  })
+})
 
 router.get("/check-admin", async (req, res) => {
   try {
@@ -45,6 +58,32 @@ router.post("/create-admin", async (req, res) => {
       stack: e.stack
     }, null, 2))
     res.status(500).json({ error: e.message, detail: e.detail })
+  }
+})
+
+// Test token generation
+router.get("/test-token", async (_req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT id, email, name, role FROM users WHERE email = 'admin@numarstore.com' LIMIT 1"
+    )
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Admin not found" })
+    }
+    
+    const admin = result.rows[0]
+    const token = generateToken({ id: admin.id, email: admin.email, name: admin.name, role: admin.role })
+    const refreshToken = generateRefreshToken({ id: admin.id })
+    
+    res.json({
+      tokenGenerated: !!token,
+      refreshTokenGenerated: !!refreshToken,
+      adminEmail: admin.email,
+      adminRole: admin.role
+    })
+  } catch (err) {
+    console.error("Test token error:", err)
+    res.status(500).json({ error: "Erro ao testar token" })
   }
 })
 
