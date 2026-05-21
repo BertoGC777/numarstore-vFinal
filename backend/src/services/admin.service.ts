@@ -316,23 +316,15 @@ export async function getProducts(filters: GetProductsFilters) {
     [...params, limit, offset]
   );
 
-  // Get images for each product and convert relative URLs to absolute backend URLs
+  // Get images for each product - URLs are already absolute in database
   const productsWithImages = await Promise.all(
     products.map(async (product: any) => {
       const images = await dbAll(
         `SELECT url FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
         [product.id]
       );
-      // Convert relative URLs to absolute backend URLs
-      const convertedImages = images.map((img: any) => {
-        if (img.url.startsWith('/images/')) {
-          // Use backend URL for images
-          const backendUrl = process.env.BACKEND_URL || 'https://numarstore-backend.onrender.com';
-          return { url: `${backendUrl}${img.url}` };
-        }
-        return img;
-      });
-      return { ...product, images: convertedImages };
+      // URLs are already absolute, no conversion needed
+      return { ...product, images };
     })
   );
 
@@ -362,15 +354,7 @@ export async function getProductById(id: string) {
     [id]
   );
   
-  // Convert relative URLs to absolute backend URLs
-  const convertedImages = images.map((img: any) => {
-    if (img.url.startsWith('/images/')) {
-      // Use backend URL for images
-      const backendUrl = process.env.BACKEND_URL || 'https://numarstore-backend.onrender.com';
-      return { ...img, url: `${backendUrl}${img.url}` };
-    }
-    return img;
-  });
+  // URLs are already absolute, no conversion needed
 
   const colors = await dbAll(
     `SELECT name, hex FROM product_colors WHERE product_id = $1`,
@@ -394,7 +378,7 @@ export async function getProductById(id: string) {
 
   return {
     ...product,
-    images: convertedImages,
+    images,
     colors,
     sizes: sizes.map((s: any) => s.size),
     stock: stockRecord
