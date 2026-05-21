@@ -7,14 +7,6 @@ const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || "sua-refresh-secret
 const TOKEN_EXPIRATION = process.env.TOKEN_EXPIRATION || "256h";
 const REFRESH_EXPIRATION = "7d";
 
-// Log warning if using default secrets
-if (!process.env.JWT_SECRET) {
-  console.warn("⚠️  WARNING: Using default JWT_SECRET. Set JWT_SECRET environment variable for production!");
-}
-if (!process.env.JWT_REFRESH_SECRET) {
-  console.warn("⚠️  WARNING: Using default JWT_REFRESH_SECRET. Set JWT_REFRESH_SECRET environment variable for production!");
-}
-
 export interface AuthRequest extends Request {
   user?: AuthPayload;
 }
@@ -56,18 +48,18 @@ export function verifyRefreshToken(token: string): RefreshPayload {
 export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
   const authHeader = (req as Request).headers?.authorization;
   if (!authHeader?.startsWith("Bearer ")) {
-    console.error("Auth middleware: No Bearer token provided");
     return res.status(401).json({ error: "Token não fornecido" });
   }
   try {
     const token = authHeader.split(" ")[1];
-    console.log("Auth middleware: Verifying token for user");
     req.user = verifyToken(token);
-    console.log("Auth middleware: Token verified successfully for user:", req.user.email);
     next();
-  } catch (err) {
-    console.error("Auth middleware error:", err);
-    console.error("JWT_SECRET configured:", !!process.env.JWT_SECRET);
+  } catch (err: any) {
+    // Handle token expired error specifically
+    if (err.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: "Token expirado" });
+    }
+    // Handle other JWT errors
     return res.status(401).json({ error: "Token inválido" });
   }
 };
@@ -75,7 +67,6 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
 export const adminMiddleware = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const authHeader = (req as Request).headers?.authorization;
   if (!authHeader?.startsWith("Bearer ")) {
-    console.error("Admin middleware: No Bearer token provided");
     return res.status(401).json({ error: "Token não fornecido" });
   }
   try {
@@ -85,18 +76,19 @@ export const adminMiddleware = async (req: AuthRequest, res: Response, next: Nex
     await getDatabase();
     const user = await dbGet<{ role: string }>("SELECT role FROM users WHERE id = $1", [decoded.id]);
     if (!user) {
-      console.error("Admin middleware: User not found in database for id:", decoded.id);
       return res.status(403).json({ error: "Usuário não encontrado" });
     }
     if (user.role !== "admin") {
-      console.error("Admin check failed for user:", decoded.id, "role:", user.role);
       return res.status(403).json({ error: "Acesso negado. Apenas administradores." });
     }
     
     req.user = { id: decoded.id, email: decoded.email, name: decoded.name, role: user.role };
     next();
-  } catch (err) {
-    console.error("Admin middleware error:", err);
+  } catch (err: any) {
+    // Handle token expired error specifically
+    if (err.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: "Token expirado" });
+    }
     return res.status(401).json({ error: "Token inválido" });
   }
 };
@@ -104,25 +96,20 @@ export const adminMiddleware = async (req: AuthRequest, res: Response, next: Nex
 export const refreshMiddleware = async (req: Request, res: Response) => {
   const { refreshToken } = req.body as { refreshToken?: string };
   if (!refreshToken) {
-    console.error("Refresh middleware: No refresh token provided");
     return res.status(400).json({ error: "Refresh token não fornecido" });
   }
   try {
-    console.log("Refresh middleware: Verifying refresh token");
     const decoded = verifyRefreshToken(refreshToken);
     if (decoded.type !== "refresh") {
-      console.error("Refresh middleware: Invalid token type:", decoded.type);
       return res.status(401).json({ error: "Tipo de token inválido" });
     }
 
     await getDatabase();
     const user = await dbGet<{ id: string; name: string; email: string; role: string }>("SELECT id, name, email, role FROM users WHERE id = $1", [decoded.id]);
     if (!user) {
-      console.error("Refresh middleware: User not found for id:", decoded.id);
       return res.status(404).json({ error: "Usuário não encontrado" });
     }
 
-    console.log("Refresh middleware: Refreshing token for user:", user.email);
     const newToken = generateToken({ id: user.id, email: user.email, name: user.name, role: user.role });
     const newRefreshToken = generateRefreshToken({ id: user.id });
     
@@ -130,9 +117,11 @@ export const refreshMiddleware = async (req: Request, res: Response) => {
       token: newToken,
       refreshToken: newRefreshToken,
     });
-  } catch (err) {
-    console.error("Refresh middleware error:", err);
-    console.error("JWT_REFRESH_SECRET configured:", !!process.env.JWT_REFRESH_SECRET);
+  } catch (err: any) {
+    // Handle token expired error specifically
+    if (err.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: "Refresh token expirado" });
+    }
     return res.status(401).json({ error: "Refresh token inválido" });
   }
 };

@@ -20,27 +20,19 @@ export async function registerUser(name: string, email: string, phone: string | 
 
 export async function loginUser(email: string, password: string) {
   await getDatabase();
-  console.log("Login attempt for email:", email);
-  console.log("JWT_SECRET configured:", !!process.env.JWT_SECRET);
-  console.log("JWT_REFRESH_SECRET configured:", !!process.env.JWT_REFRESH_SECRET);
   
   const user = await dbGet<{ id: string; name: string; email: string; password_hash: string; role: string; phone: string | null }>("SELECT * FROM users WHERE email = $1", [email]);
   if (!user) {
-    console.error("Login failed: User not found for email:", email);
     throw new Error("INVALID_CREDENTIALS");
   }
 
-  console.log("User found:", user.email, "Role:", user.role);
   const valid = await bcrypt.compare(password, user.password_hash);
   if (!valid) {
-    console.error("Login failed: Invalid password for email:", email);
     throw new Error("INVALID_CREDENTIALS");
   }
 
   const token = generateToken({ id: user.id, email: user.email, name: user.name, role: user.role || "user" });
   const refreshToken = generateRefreshToken({ id: user.id });
-  
-  console.log("Login successful for:", user.email, "Role:", user.role || "user");
   
   return { 
     token,
