@@ -17,6 +17,38 @@ router.get("/debug-jwt", (_req, res) => {
   })
 })
 
+// Debug endpoint to check product images
+router.get("/debug-products", async (req, res) => {
+  try {
+    // Get first product
+    const product = await pool.query(
+      "SELECT id, name, slug FROM products LIMIT 1"
+    );
+    
+    if (product.rows.length === 0) {
+      return res.json({ error: "No products found" });
+    }
+    
+    const productId = product.rows[0].id;
+    
+    // Get images for this product
+    const images = await pool.query(
+      "SELECT url, color, sort_order FROM product_images WHERE product_id = $1 ORDER BY sort_order",
+      [productId]
+    );
+    
+    res.json({
+      product: product.rows[0],
+      imagesCount: images.rows.length,
+      images: images.rows,
+      message: images.rows.length > 0 ? "Images found" : "No images found for this product"
+    });
+  } catch (error: any) {
+    console.error("Debug products error:", error);
+    res.status(500).json({ error: error.message });
+  }
+})
+
 router.get("/check-admin", async (req, res) => {
   try {
     const result = await pool.query(
