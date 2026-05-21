@@ -34,7 +34,6 @@ export async function loginUser(email: string, password: string) {
   const token = generateToken({ id: user.id, email: user.email, name: user.name, role: user.role || "user" });
   const refreshToken = generateRefreshToken({ id: user.id });
   
-  console.log("Login successful - Token expiration:", process.env.TOKEN_EXPIRATION || "7d");
   console.log("Login successful - User role:", user.role || "user");
   
   return { 

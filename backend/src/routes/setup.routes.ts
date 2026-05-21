@@ -10,8 +10,8 @@ router.get("/debug-jwt", (_req, res) => {
   res.json({
     jwtSecretConfigured: !!process.env.JWT_SECRET,
     jwtRefreshSecretConfigured: !!process.env.JWT_REFRESH_SECRET,
-    tokenExpiration: process.env.TOKEN_EXPIRATION || "604800",
-    refreshExpiration: "2592000",
+    tokenExpiration: "604800", // Hardcoded 7 days in seconds
+    refreshExpiration: "2592000", // Hardcoded 30 days in seconds
     databaseUrlConfigured: !!process.env.DATABASE_URL,
     nodeEnv: process.env.NODE_ENV || "development"
   })

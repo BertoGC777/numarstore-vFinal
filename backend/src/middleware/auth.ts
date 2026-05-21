@@ -4,16 +4,17 @@ import { dbGet, getDatabase } from "../db";
 
 const JWT_SECRET = process.env.JWT_SECRET || "sua-secret-aqui-troque-isso";
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || "sua-refresh-secret";
-// Use seconds instead of days to avoid potential parsing issues
-const TOKEN_EXPIRATION = process.env.TOKEN_EXPIRATION || "604800"; // 7 days in seconds
+// Hardcoded values to avoid environment variable issues
+// 7 days = 604800 seconds, 30 days = 2592000 seconds
+const TOKEN_EXPIRATION = "604800"; // 7 days in seconds - DO NOT use env var
 const REFRESH_EXPIRATION = "2592000"; // 30 days in seconds
 
 // Log configuration on startup
 console.log("=== JWT Configuration ===");
 console.log("JWT_SECRET configured:", !!process.env.JWT_SECRET);
 console.log("JWT_REFRESH_SECRET configured:", !!process.env.JWT_REFRESH_SECRET);
-console.log("TOKEN_EXPIRATION:", TOKEN_EXPIRATION, "seconds");
-console.log("REFRESH_EXPIRATION:", REFRESH_EXPIRATION, "seconds");
+console.log("TOKEN_EXPIRATION (hardcoded):", TOKEN_EXPIRATION, "seconds (7 days)");
+console.log("REFRESH_EXPIRATION (hardcoded):", REFRESH_EXPIRATION, "seconds (30 days)");
 console.log("JWT_SECRET length:", JWT_SECRET.length);
 console.log("JWT_REFRESH_SECRET length:", JWT_REFRESH_SECRET.length);
 console.log("========================");
