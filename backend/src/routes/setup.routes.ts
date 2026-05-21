@@ -102,8 +102,8 @@ router.post("/create-admin", async (req, res) => {
   }
 })
 
-// Update image URLs in database to use backend URL
-router.post("/update-image-urls", async (req, res) => {
+// Update image URLs in database to use backend URL (GET for easier testing)
+router.get("/update-image-urls", async (req, res) => {
   try {
     const backendUrl = process.env.BACKEND_URL || 'https://numarstore-backend.onrender.com';
     
@@ -117,7 +117,8 @@ router.post("/update-image-urls", async (req, res) => {
       success: true,
       updatedCount: result.rows.length,
       backendUrl,
-      message: `Updated ${result.rows.length} image URLs to use backend URL`
+      message: `Updated ${result.rows.length} image URLs to use backend URL`,
+      sampleUrls: result.rows.slice(0, 5)
     });
   } catch (error: any) {
     console.error("Update image URLs error:", error);
