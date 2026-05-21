@@ -4,8 +4,17 @@ import { dbGet, getDatabase } from "../db";
 
 const JWT_SECRET = process.env.JWT_SECRET || "sua-secret-aqui-troque-isso";
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || "sua-refresh-secret";
-const TOKEN_EXPIRATION = process.env.TOKEN_EXPIRATION || "7d";
-const REFRESH_EXPIRATION = "30d";
+// Use seconds instead of days to avoid potential parsing issues
+const TOKEN_EXPIRATION = process.env.TOKEN_EXPIRATION || "604800"; // 7 days in seconds
+const REFRESH_EXPIRATION = "2592000"; // 30 days in seconds
+
+// Log configuration on startup
+console.log("=== JWT Configuration ===");
+console.log("JWT_SECRET configured:", !!process.env.JWT_SECRET);
+console.log("JWT_REFRESH_SECRET configured:", !!process.env.JWT_REFRESH_SECRET);
+console.log("TOKEN_EXPIRATION:", TOKEN_EXPIRATION, "seconds");
+console.log("REFRESH_EXPIRATION:", REFRESH_EXPIRATION, "seconds");
+console.log("========================");
 
 export interface AuthRequest extends Request {
   user?: AuthPayload;
@@ -29,18 +38,23 @@ function verifyJwt(token: string, secret: string): jwt.JwtPayload {
 
 export function generateToken(payload: AuthPayload): string {
   const token = jwtSign(payload, JWT_SECRET, TOKEN_EXPIRATION);
-  console.log("Generated access token with expiration:", TOKEN_EXPIRATION);
+  const decoded = jwt.decode(token) as any;
+  console.log("Generated access token with expiration:", TOKEN_EXPIRATION, "seconds");
+  console.log("Token expires at:", new Date((decoded.exp || 0) * 1000).toISOString());
+  console.log("Current time:", new Date().toISOString());
+  console.log("Time until expiration:", decoded.exp ? `${((decoded.exp * 1000) - Date.now()) / 1000}s` : "N/A");
   return token;
 }
 
 export function generateRefreshToken(payload: { id: string }): string {
   const token = jwtSign({ ...payload, type: "refresh" }, JWT_REFRESH_SECRET, REFRESH_EXPIRATION);
-  console.log("Generated refresh token with expiration:", REFRESH_EXPIRATION);
+  console.log("Generated refresh token with expiration:", REFRESH_EXPIRATION, "seconds");
   return token;
 }
 
 export function verifyToken(token: string): AuthPayload {
   const decoded = verifyJwt(token, JWT_SECRET);
+  console.log("Token verified - User:", decoded.email, "Expires at:", new Date((decoded.exp || 0) * 1000).toISOString());
   return { id: decoded.id as string, email: decoded.email as string, name: decoded.name as string, role: (decoded.role as string | undefined) };
 }
 
@@ -61,9 +75,11 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
   } catch (err: any) {
     // Handle token expired error specifically
     if (err.name === 'TokenExpiredError') {
+      console.error("Token expired error - Expired at:", err.expiredAt, "Current time:", new Date().toISOString());
       return res.status(401).json({ error: "Token expirado" });
     }
     // Handle other JWT errors
+    console.error("JWT verification error:", err.message);
     return res.status(401).json({ error: "Token inválido" });
   }
 };
@@ -103,6 +119,7 @@ export const refreshMiddleware = async (req: Request, res: Response) => {
     return res.status(400).json({ error: "Refresh token não fornecido" });
   }
   try {
+    console.log("Refresh middleware - Verifying refresh token");
     const decoded = verifyRefreshToken(refreshToken);
     if (decoded.type !== "refresh") {
       return res.status(401).json({ error: "Tipo de token inválido" });
@@ -114,6 +131,7 @@ export const refreshMiddleware = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Usuário não encontrado" });
     }
 
+    console.log("Refresh middleware - Generating new tokens for user:", user.email);
     const newToken = generateToken({ id: user.id, email: user.email, name: user.name, role: user.role });
     const newRefreshToken = generateRefreshToken({ id: user.id });
     
@@ -124,8 +142,10 @@ export const refreshMiddleware = async (req: Request, res: Response) => {
   } catch (err: any) {
     // Handle token expired error specifically
     if (err.name === 'TokenExpiredError') {
+      console.error("Refresh token expired error - Expired at:", err.expiredAt);
       return res.status(401).json({ error: "Refresh token expirado" });
     }
+    console.error("Refresh middleware error:", err.message);
     return res.status(401).json({ error: "Refresh token inválido" });
   }
 };
