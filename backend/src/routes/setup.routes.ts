@@ -109,7 +109,7 @@ router.get("/update-image-urls", async (req, res) => {
     
     // Update all image URLs from relative to absolute
     const result = await pool.query(
-      "UPDATE product_images SET url = CONCAT($1, url) WHERE url LIKE '/images/%' RETURNING id, url",
+      "UPDATE product_images SET url = $1 || url WHERE url LIKE '/images/%' RETURNING id, url",
       [backendUrl]
     );
     
