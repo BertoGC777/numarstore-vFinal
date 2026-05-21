@@ -60,15 +60,22 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
 
 export const adminMiddleware = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const authHeader = (req as Request).headers?.authorization;
-  if (!authHeader?.startsWith("Bearer ")) return res.status(401).json({ error: "Token não fornecido" });
+  if (!authHeader?.startsWith("Bearer ")) {
+    console.error("Admin middleware: No Bearer token provided");
+    return res.status(401).json({ error: "Token não fornecido" });
+  }
   try {
     const token = authHeader.split(" ")[1];
     const decoded = verifyToken(token);
     
     await getDatabase();
     const user = await dbGet<{ role: string }>("SELECT role FROM users WHERE id = $1", [decoded.id]);
-    if (!user || user.role !== "admin") {
-      console.error("Admin check failed for user:", decoded.id, "role:", user?.role);
+    if (!user) {
+      console.error("Admin middleware: User not found in database for id:", decoded.id);
+      return res.status(403).json({ error: "Usuário não encontrado" });
+    }
+    if (user.role !== "admin") {
+      console.error("Admin check failed for user:", decoded.id, "role:", user.role);
       return res.status(403).json({ error: "Acesso negado. Apenas administradores." });
     }
     

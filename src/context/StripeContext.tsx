@@ -1,7 +1,10 @@
 import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from "react";
 import { loadStripe, Stripe, StripeElements } from "@stripe/stripe-js";
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || "").catch(() => null);
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || "").catch((err) => {
+  console.warn("Failed to load Stripe:", err);
+  return null;
+});
 
 interface StripeContextType {
   stripe: Stripe | null;

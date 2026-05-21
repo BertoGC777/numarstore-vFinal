@@ -7,7 +7,7 @@ const router = Router()
 router.get("/check-admin", async (req, res) => {
   try {
     const result = await pool.query(
-      "SELECT id, email, role FROM users WHERE email = 'admin@numarstore.com.br'"
+      "SELECT id, email, role FROM users WHERE email = 'admin@numarstore.com'"
     )
     if (result.rows.length === 0) {
       res.json({ exists: false, message: "Admin user not found" })
@@ -31,7 +31,7 @@ router.post("/create-admin", async (req, res) => {
     console.log("Tentando criar admin...")
     const result = await pool.query(`
       INSERT INTO users (id, name, email, password_hash, role, created_at)
-      VALUES (gen_random_uuid(), 'Admin', 'admin@numarstore.com.br', $1, 'admin', $2)
+      VALUES (gen_random_uuid(), 'Admin', 'admin@numarstore.com', $1, 'admin', $2)
       ON CONFLICT (email) DO UPDATE SET password_hash = $1, role = 'admin'
       RETURNING id, email, role
     `, [hash, Date.now()])
