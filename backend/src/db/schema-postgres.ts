@@ -19,7 +19,6 @@ export async function createSchema() {
       slug TEXT NOT NULL UNIQUE,
       name TEXT NOT NULL,
       description TEXT NOT NULL,
-      short_description TEXT,
       category TEXT NOT NULL,
       subcategory TEXT,
       price_pix REAL NOT NULL,
@@ -28,7 +27,6 @@ export async function createSchema() {
       is_new INTEGER DEFAULT 0,
       is_sale INTEGER DEFAULT 0,
       discount INTEGER DEFAULT 0,
-      is_active INTEGER DEFAULT 1,
       created_at BIGINT NOT NULL DEFAULT 0
     )
   `);
@@ -175,18 +173,6 @@ export async function createSchema() {
       created_at BIGINT NOT NULL DEFAULT 0,
       FOREIGN KEY (product_id) REFERENCES products(id),
       FOREIGN KEY (user_id) REFERENCES users(id)
-    )
-  `);
-
-  await dbRun(`
-    CREATE TABLE IF NOT EXISTS product_stock (
-      id SERIAL PRIMARY KEY,
-      product_id TEXT NOT NULL,
-      color TEXT,
-      size TEXT,
-      quantity INTEGER DEFAULT 0,
-      UNIQUE(product_id, color, size),
-      FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
     )
   `);
 

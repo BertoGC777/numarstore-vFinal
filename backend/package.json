@@ -8,9 +8,7 @@
     "dev": "npx tsx src/index.ts",
     "create-admin": "npx tsx src/scripts/create-admin.ts",
     "check-admin": "npx tsx src/scripts/check-admin.ts",
-    "reset-admin-password": "npx tsx src/scripts/reset-admin-password.ts",
-    "migrate-postgres": "npx tsx src/scripts/migrate-postgres.ts",
-    "migrate-production": "npx tsx src/scripts/migrate-production.ts"
+    "reset-admin-password": "npx tsx src/scripts/reset-admin-password.ts"
   },
   "dependencies": {
     "@sendgrid/mail": "^8.1.4",

@@ -151,29 +151,6 @@ router.delete("/products/:id/images/:imageId", adminMiddleware, async (req, res)
   }
 });
 
-// Products - Update stock
-router.put("/products/:id/stock", adminMiddleware, async (req, res) => {
-  try {
-    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
-    const { stock } = req.body;
-    await adminService.updateProductStock(id, stock);
-    res.json({ message: "Estoque atualizado com sucesso" });
-  } catch (err: any) {
-    res.status(500).json({ error: err.message || "Erro ao atualizar estoque" });
-  }
-});
-
-// Products - Get stock
-router.get("/products/:id/stock", adminMiddleware, async (req, res) => {
-  try {
-    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
-    const stock = await adminService.getProductStock(id);
-    res.json(stock);
-  } catch (err: any) {
-    res.status(500).json({ error: err.message || "Erro ao buscar estoque" });
-  }
-});
-
 // Customers - Get all with filters and pagination
 router.get("/customers", adminMiddleware, async (req, res) => {
   try {
