@@ -53,7 +53,7 @@ router.post("/create-checkout-session", authMiddleware, async (req: any, res) =>
     });
 
     const { dbRun: run } = await import("../db");
-    run("UPDATE orders SET stripe_payment_intent_id = ? WHERE id = ?", [session.id, orderId]);
+    run("UPDATE orders SET stripe_payment_intent_id = $1 WHERE id = $2", [session.id, orderId]);
 
     res.json({ url: session.url, sessionId: session.id });
   } catch (err: any) {
@@ -117,7 +117,7 @@ router.post("/webhook", async (req: any, res) => {
   if (update) {
     await getDatabase();
     const { dbRun: run } = await import("../db");
-    run("UPDATE orders SET status = ?, stripe_status = ? WHERE id = ?", [update.status, update.stripeStatus, orderId]);
+    run("UPDATE orders SET status = $1, stripe_status = $2 WHERE id = $3", [update.status, update.stripeStatus, orderId]);
   }
 
   res.json({ received: true });

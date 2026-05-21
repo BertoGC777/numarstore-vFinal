@@ -66,7 +66,7 @@ export async function stripeCheckout(req: Request, res: Response) {
     });
 
     await getDatabase();
-    dbRun("UPDATE orders SET stripe_payment_intent_id = ? WHERE id = ?", [session.id, metadata.orderId]);
+    dbRun("UPDATE orders SET stripe_payment_intent_id = $1 WHERE id = $2", [session.id, metadata.orderId]);
 
     res.json({ url: session.url, sessionId: session.id });
   } catch (err: any) {
@@ -102,7 +102,7 @@ export async function stripeWebhook(req: Request, res: Response) {
   const update = statusMap[event.type];
   if (update) {
     await getDatabase();
-    dbRun("UPDATE orders SET status = ?, stripe_status = ? WHERE id = ?", [update.status, update.stripeStatus, orderId]);
+    dbRun("UPDATE orders SET status = $1, stripe_status = $2 WHERE id = $3", [update.status, update.stripeStatus, orderId]);
   }
 
   res.json({ received: true });

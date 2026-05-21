@@ -65,7 +65,7 @@ export const adminMiddleware = async (req: AuthRequest, res: Response, next: Nex
     const decoded = verifyToken(token);
     
     await getDatabase();
-    const user = await dbGet<{ role: string }>("SELECT role FROM users WHERE id = ?", [decoded.id]);
+    const user = await dbGet<{ role: string }>("SELECT role FROM users WHERE id = $1", [decoded.id]);
     if (!user || user.role !== "admin") {
       return res.status(403).json({ error: "Acesso negado. Apenas administradores." });
     }
@@ -85,7 +85,7 @@ export const refreshMiddleware = async (req: Request, res: Response) => {
     if (decoded.type !== "refresh") return res.status(401).json({ error: "Tipo de token inválido" });
 
     await getDatabase();
-    const user = await dbGet<{ id: string; name: string; email: string }>("SELECT id, name, email FROM users WHERE id = ?", [decoded.id]);
+    const user = await dbGet<{ id: string; name: string; email: string }>("SELECT id, name, email FROM users WHERE id = $1", [decoded.id]);
     if (!user) return res.status(404).json({ error: "Usuário não encontrado" });
 
     res.json({
