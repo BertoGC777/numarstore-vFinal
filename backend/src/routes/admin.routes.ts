@@ -174,4 +174,248 @@ router.get("/products/:id/stock", adminMiddleware, async (req, res) => {
   }
 });
 
+// Customers - Get all with filters and pagination
+router.get("/customers", adminMiddleware, async (req, res) => {
+  try {
+    const search = req.query.search as string;
+    const role = req.query.role as string;
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 20;
+    
+    const data = await adminService.getCustomers({ search, role, page, limit });
+    res.json(data);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao buscar clientes" });
+  }
+});
+
+// Customers - Get by ID
+router.get("/customers/:id", adminMiddleware, async (req, res) => {
+  try {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const customer = await adminService.getCustomerById(id);
+    res.json(customer);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao buscar cliente" });
+  }
+});
+
+// Customers - Update
+router.put("/customers/:id", adminMiddleware, async (req, res) => {
+  try {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const customer = await adminService.updateCustomer(id, req.body);
+    res.json(customer);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao atualizar cliente" });
+  }
+});
+
+// Customers - Delete
+router.delete("/customers/:id", adminMiddleware, async (req, res) => {
+  try {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    await adminService.deleteCustomer(id);
+    res.json({ message: "Cliente excluído com sucesso" });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao excluir cliente" });
+  }
+});
+
+// Bundles/Combos - Get all with filters and pagination
+router.get("/bundles", adminMiddleware, async (req, res) => {
+  try {
+    const search = req.query.search as string;
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 12;
+    
+    const data = await adminService.getBundles({ search, page, limit });
+    res.json(data);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao buscar conjuntos" });
+  }
+});
+
+// Bundles/Combos - Get by ID
+router.get("/bundles/:id", adminMiddleware, async (req, res) => {
+  try {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const bundle = await adminService.getBundleById(id);
+    res.json(bundle);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao buscar conjunto" });
+  }
+});
+
+// Bundles/Combos - Create
+router.post("/bundles", adminMiddleware, async (req, res) => {
+  try {
+    const bundle = await adminService.createBundle(req.body);
+    res.json(bundle);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao criar conjunto" });
+  }
+});
+
+// Bundles/Combos - Update
+router.put("/bundles/:id", adminMiddleware, async (req, res) => {
+  try {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const bundle = await adminService.updateBundle(id, req.body);
+    res.json(bundle);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao atualizar conjunto" });
+  }
+});
+
+// Bundles/Combos - Delete
+router.delete("/bundles/:id", adminMiddleware, async (req, res) => {
+  try {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    await adminService.deleteBundle(id);
+    res.json({ message: "Conjunto excluído com sucesso" });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao excluir conjunto" });
+  }
+});
+
+// Coupons - Get all with filters and pagination
+router.get("/coupons", adminMiddleware, async (req, res) => {
+  try {
+    const search = req.query.search as string;
+    const status = req.query.status as string;
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 20;
+    
+    const data = await adminService.getCoupons({ search, status, page, limit });
+    res.json(data);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao buscar cupons" });
+  }
+});
+
+// Coupons - Get by ID
+router.get("/coupons/:id", adminMiddleware, async (req, res) => {
+  try {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const coupon = await adminService.getCouponById(id);
+    res.json(coupon);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao buscar cupom" });
+  }
+});
+
+// Coupons - Create
+router.post("/coupons", adminMiddleware, async (req, res) => {
+  try {
+    const coupon = await adminService.createCoupon(req.body);
+    res.json(coupon);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao criar cupom" });
+  }
+});
+
+// Coupons - Update
+router.put("/coupons/:id", adminMiddleware, async (req, res) => {
+  try {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const coupon = await adminService.updateCoupon(id, req.body);
+    res.json(coupon);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao atualizar cupom" });
+  }
+});
+
+// Coupons - Delete
+router.delete("/coupons/:id", adminMiddleware, async (req, res) => {
+  try {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    await adminService.deleteCoupon(id);
+    res.json({ message: "Cupom excluído com sucesso" });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao excluir cupom" });
+  }
+});
+
+// Categories - Get all
+router.get("/categories", adminMiddleware, async (req, res) => {
+  try {
+    const categories = await adminService.getCategories();
+    res.json({ categories });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao buscar categorias" });
+  }
+});
+
+// Categories - Add
+router.post("/categories", adminMiddleware, async (req, res) => {
+  try {
+    const { name } = req.body;
+    if (!name) return res.status(400).json({ error: "Nome da categoria é obrigatório" });
+    
+    const category = await adminService.addCategory(name);
+    res.json({ category });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao adicionar categoria" });
+  }
+});
+
+// Categories - Delete
+router.delete("/categories/:name", adminMiddleware, async (req, res) => {
+  try {
+    const name = Array.isArray(req.params.name) ? req.params.name[0] : req.params.name;
+    await adminService.deleteCategory(name);
+    res.json({ message: "Categoria excluída com sucesso" });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao excluir categoria" });
+  }
+});
+
+// Store Settings - Get
+router.get("/settings", adminMiddleware, async (req, res) => {
+  try {
+    const settings = await adminService.getStoreSettings();
+    res.json(settings);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao buscar configurações" });
+  }
+});
+
+// Store Settings - Update
+router.put("/settings", adminMiddleware, async (req, res) => {
+  try {
+    const settings = await adminService.updateStoreSettings(req.body);
+    res.json(settings);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao atualizar configurações" });
+  }
+});
+
+// Activity Logs - Get all with filters
+router.get("/activity-logs", adminMiddleware, async (req, res) => {
+  try {
+    const user_id = req.query.user_id as string;
+    const action = req.query.action as string;
+    const entity_type = req.query.entity_type as string;
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 50;
+    
+    const data = await adminService.getActivityLogs({ user_id, action, entity_type, page, limit });
+    res.json(data);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao buscar logs de atividade" });
+  }
+});
+
+// Low Stock - Get products with low stock
+router.get("/low-stock", adminMiddleware, async (req, res) => {
+  try {
+    const threshold = parseInt(req.query.threshold as string) || 5;
+    const products = await adminService.getLowStockProducts(threshold);
+    res.json({ products });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao buscar produtos com estoque baixo" });
+  }
+});
+
 export default router;

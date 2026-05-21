@@ -11,7 +11,8 @@ import {
   Users,
   ShoppingCart,
   DollarSign,
-  Package
+  Package,
+  Download
 } from "lucide-react";
 import { 
   LineChart, 
@@ -79,6 +80,61 @@ export default function AdminAnalytics() {
     }).format(value);
   };
 
+  const exportToCSV = () => {
+    if (!analytics) return;
+
+    // Prepare CSV data
+    const csvData = [
+      ["Relatório de Analytics - Período: " + period],
+      [],
+      ["Métricas Gerais"],
+      ["Receita Total", analytics.totalRevenue.toFixed(2)],
+      ["Total de Pedidos", analytics.totalOrders],
+      ["Total de Clientes", analytics.totalCustomers],
+      ["Taxa de Conversão", analytics.conversionRate.toFixed(2) + "%"],
+      ["Ticket Médio", analytics.averageTicket.toFixed(2)],
+      [],
+      ["Produtos Mais Vendidos"],
+      ["Produto", "Quantidade Vendida", "Receita"],
+      ...analytics.topProducts.map(p => [
+        p.name,
+        p.totalSold,
+        p.revenue.toFixed(2)
+      ]),
+      [],
+      ["Vendas por Categoria"],
+      ["Categoria", "Total", "Porcentagem"],
+      ...analytics.categorySales.map(c => [
+        c.category,
+        c.total.toFixed(2),
+        c.percentage.toFixed(2) + "%"
+      ]),
+      [],
+      ["Receita por Data"],
+      ["Data", "Receita"],
+      ...analytics.revenueChart.map(r => [
+        r.date,
+        r.revenue.toFixed(2)
+      ])
+    ];
+
+    // Convert to CSV string
+    const csvString = csvData.map(row => row.join(",")).join("\n");
+
+    // Create blob and download
+    const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", `analytics_${period}_${new Date().toISOString().split("T")[0]}.csv`);
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    toast({ title: "Sucesso", description: "Relatório exportado com sucesso" });
+  };
+
   const formatNumber = (value: number) => {
     return new Intl.NumberFormat("pt-BR").format(value);
   };
@@ -117,21 +173,32 @@ export default function AdminAnalytics() {
         <h2 className="text-2xl font-bold">Analytics</h2>
         <div className="flex gap-2">
           <Select value={period} onValueChange={setPeriod}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[150px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="7d">Últimos 7 dias</SelectItem>
               <SelectItem value="30d">Últimos 30 dias</SelectItem>
-              <SelectItem value="90d">Últimos 3 meses</SelectItem>
+              <SelectItem value="90d">Últimos 90 dias</SelectItem>
             </SelectContent>
           </Select>
           <Button
+            onClick={exportToCSV}
+            variant="outline"
+            size="sm"
+            className="gap-2"
+          >
+            <Download className="h-4 w-4" />
+            Exportar CSV
+          </Button>
+          <Button
             onClick={fetchAnalytics}
             variant="outline"
-            size="icon"
+            size="sm"
+            className="gap-2"
           >
             <RefreshCw className="h-4 w-4" />
+            Atualizar
           </Button>
         </div>
       </div>

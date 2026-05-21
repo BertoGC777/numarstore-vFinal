@@ -14,13 +14,27 @@ import {
   Menu, 
   X,
   ChevronRight,
-  AlertCircle
+  AlertCircle,
+  Users,
+  Layers,
+  Ticket,
+  Folder,
+  Settings,
+  FileText,
+  AlertTriangle
 } from "lucide-react";
 
 const sidebarItems = [
   { path: "/admin", icon: LayoutDashboard, label: "Dashboard" },
   { path: "/admin/pedidos", icon: ShoppingCart, label: "Pedidos" },
   { path: "/admin/produtos", icon: Package, label: "Produtos" },
+  { path: "/admin/conjuntos", icon: Layers, label: "Conjuntos" },
+  { path: "/admin/clientes", icon: Users, label: "Clientes" },
+  { path: "/admin/cupons", icon: Ticket, label: "Cupons" },
+  { path: "/admin/categorias", icon: Folder, label: "Categorias" },
+  { path: "/admin/configuracoes", icon: Settings, label: "Configurações" },
+  { path: "/admin/logs", icon: FileText, label: "Logs" },
+  { path: "/admin/estoque-baixo", icon: AlertTriangle, label: "Estoque Baixo" },
   { path: "/admin/analytics", icon: BarChart3, label: "Analytics" },
 ];
 
