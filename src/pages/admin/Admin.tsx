@@ -54,17 +54,47 @@ export default function Admin() {
         if (user.role === "admin") {
           setIsAdmin(true);
         } else {
-          toast({ 
-            title: "Acesso Negado", 
-            description: "Você não tem permissão de administrador. Entre em contato com o suporte." 
+          toast({
+            title: "Acesso Negado",
+            description: "Você não tem permissão de administrador. Entre em contato com o suporte."
           });
           navigate("/");
         }
       } catch (err: any) {
         console.error("Error checking admin role:", err);
-        toast({ 
-          title: "Erro de Autenticação", 
-          description: "Sessão expirada. Por favor, faça login novamente." 
+        // Try token refresh before redirecting
+        const refreshToken = localStorage.getItem("numar.refreshToken");
+        if (refreshToken) {
+          try {
+            const refreshRes = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001/api"}/auth/refresh`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ refreshToken }),
+            });
+            if (refreshRes.ok) {
+              const { token: newToken, refreshToken: newRefresh } = await refreshRes.json();
+              localStorage.setItem("numar.token", newToken);
+              if (newRefresh) localStorage.setItem("numar.refreshToken", newRefresh);
+              // Retry profile check
+              const user = await api.auth.profile();
+              console.log("User profile after refresh:", user);
+              if (user.role === "admin") {
+                setIsAdmin(true);
+                setCheckingAuth(false);
+                return;
+              }
+            }
+          } catch (refreshErr) {
+            console.error("Token refresh failed:", refreshErr);
+          }
+        }
+        // If refresh failed or user still not admin, clear session and redirect
+        localStorage.removeItem("numar.token");
+        localStorage.removeItem("numar.refreshToken");
+        localStorage.removeItem("numar.user");
+        toast({
+          title: "Erro de Autenticação",
+          description: "Sessão expirada. Por favor, faça login novamente."
         });
         navigate("/conta");
       } finally {
