@@ -8,6 +8,7 @@
     "dev": "npx tsx src/index.ts",
     "create-admin": "npx tsx src/scripts/create-admin.ts",
     "check-admin": "npx tsx src/scripts/check-admin.ts",
+    "verify-admin": "npx tsx src/scripts/verify-admin.ts",
     "reset-admin-password": "npx tsx src/scripts/reset-admin-password.ts"
   },
   "dependencies": {

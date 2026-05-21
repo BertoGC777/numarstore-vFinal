@@ -37,6 +37,16 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Skip caching for API requests - they should always be fresh
+  if (event.request.url.includes('/api/')) {
+    return;
+  }
+
+  // Skip caching for authentication-related requests
+  if (event.request.url.includes('/auth/') || event.request.url.includes('/login') || event.request.url.includes('/register')) {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
