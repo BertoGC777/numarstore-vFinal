@@ -52,7 +52,8 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
     const token = authHeader.split(" ")[1];
     req.user = verifyToken(token);
     next();
-  } catch {
+  } catch (err) {
+    console.error("Auth middleware error:", err);
     return res.status(401).json({ error: "Token inválido" });
   }
 };
@@ -67,12 +68,14 @@ export const adminMiddleware = async (req: AuthRequest, res: Response, next: Nex
     await getDatabase();
     const user = await dbGet<{ role: string }>("SELECT role FROM users WHERE id = $1", [decoded.id]);
     if (!user || user.role !== "admin") {
+      console.error("Admin check failed for user:", decoded.id, "role:", user?.role);
       return res.status(403).json({ error: "Acesso negado. Apenas administradores." });
     }
     
     req.user = { id: decoded.id, email: decoded.email, name: decoded.name, role: user.role };
     next();
-  } catch {
+  } catch (err) {
+    console.error("Admin middleware error:", err);
     return res.status(401).json({ error: "Token inválido" });
   }
 };
