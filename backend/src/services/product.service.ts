@@ -30,16 +30,25 @@ export async function getAllProducts(filters?: ProductFilters) {
 
      const products = await dbAll(query, params);
      
-     // Add images to each product
+     // Add images to each product - convert relative URLs to absolute placeholder URLs
      const productsWithImages = await Promise.all(
        products.map(async (p: any) => {
          const images = await dbAll(
            "SELECT url FROM product_images WHERE product_id = $1 ORDER BY sort_order",
            [p.id]
          );
+         // Convert relative URLs to placeholder URLs
+         const convertedImages = images.map((i: any, idx: number) => {
+           if (i.url.startsWith('/images/')) {
+             // Use placeholder image service
+             const slug = p.slug || 'product';
+             return `https://placehold.co/400x500/FFB6C1/FFF?text=${encodeURIComponent(p.name || 'Produto')}`;
+           }
+           return i.url;
+         });
          return {
            ...p,
-           images: images.map((i: any) => i.url)
+           images: convertedImages
          };
        })
      );
@@ -61,9 +70,17 @@ export async function getProductBySlug(slug: string) {
     [product.id]
   );
   
+  // Convert relative URLs to placeholder URLs
+  const convertedImages = images.map((i: any) => {
+    if (i.url.startsWith('/images/')) {
+      return `https://placehold.co/400x500/FFB6C1/FFF?text=${encodeURIComponent(product.name || 'Produto')}`;
+    }
+    return i.url;
+  });
+  
   return {
     ...product,
-    images: images.map((i: any) => i.url)
+    images: convertedImages
   };
 }
 
@@ -82,9 +99,15 @@ export async function getRelatedProducts(productId: string, category: string, li
         "SELECT url FROM product_images WHERE product_id = $1 ORDER BY sort_order",
         [p.id]
       );
+      const convertedImages = images.map((i: any) => {
+        if (i.url.startsWith('/images/')) {
+          return `https://placehold.co/400x500/FFB6C1/FFF?text=${encodeURIComponent(p.name || 'Produto')}`;
+        }
+        return i.url;
+      });
       return {
         ...p,
-        images: images.map((i: any) => i.url)
+        images: convertedImages
       };
     })
   );
@@ -103,9 +126,15 @@ export async function searchProducts(query: string) {
         "SELECT url FROM product_images WHERE product_id = $1 ORDER BY sort_order",
         [p.id]
       );
+      const convertedImages = images.map((i: any) => {
+        if (i.url.startsWith('/images/')) {
+          return `https://placehold.co/400x500/FFB6C1/FFF?text=${encodeURIComponent(p.name || 'Produto')}`;
+        }
+        return i.url;
+      });
       return {
         ...p,
-        images: images.map((i: any) => i.url)
+        images: convertedImages
       };
     })
   );

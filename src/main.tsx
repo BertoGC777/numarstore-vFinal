@@ -4,12 +4,14 @@ import "./index.css";
 import App from "./App";
 import { StripeProvider } from "@/context/StripeContext";
 
-// Service worker disabled temporarily due to caching issues with authentication
-// if ("serviceWorker" in navigator) {
-//   window.addEventListener("load", () => {
-//     navigator.serviceWorker.register("/sw.js").catch(() => {});
-//   });
-// }
+// Unregister any existing service worker to fix cache issues
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    registrations.forEach((registration) => {
+      registration.unregister();
+    });
+  });
+}
 
 createRoot(document.getElementById("root")!).render(
   <HelmetProvider>
