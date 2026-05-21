@@ -316,14 +316,22 @@ export async function getProducts(filters: GetProductsFilters) {
     [...params, limit, offset]
   );
 
-  // Get images for each product
+  // Get images for each product and convert relative URLs to absolute
   const productsWithImages = await Promise.all(
     products.map(async (product: any) => {
       const images = await dbAll(
         `SELECT url FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
         [product.id]
       );
-      return { ...product, images };
+      // Convert relative URLs to absolute URLs
+      const convertedImages = images.map((img: any) => {
+        if (img.url.startsWith('/images/')) {
+          // Use placeholder image service for admin panel
+          return { url: `https://placehold.co/400x500/FFB6C1/FFF?text=${encodeURIComponent(product.name || 'Produto')}` };
+        }
+        return img;
+      });
+      return { ...product, images: convertedImages };
     })
   );
 
@@ -352,6 +360,14 @@ export async function getProductById(id: string) {
     `SELECT id, url, color, color_hex as colorHex, sort_order as sortOrder FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
     [id]
   );
+  
+  // Convert relative URLs to absolute URLs
+  const convertedImages = images.map((img: any) => {
+    if (img.url.startsWith('/images/')) {
+      return { ...img, url: `https://placehold.co/400x500/FFB6C1/FFF?text=${encodeURIComponent(product.name || 'Produto')}` };
+    }
+    return img;
+  });
 
   const colors = await dbAll(
     `SELECT name, hex FROM product_colors WHERE product_id = $1`,
@@ -375,7 +391,7 @@ export async function getProductById(id: string) {
 
   return {
     ...product,
-    images,
+    images: convertedImages,
     colors,
     sizes: sizes.map((s: any) => s.size),
     stock: stockRecord

@@ -1,9 +1,9 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import ProductCard from "@/components/ProductCard";
-import { api } from "@/api/client";
+import { products as allProducts } from "@/data/products";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -42,45 +42,6 @@ export default function Catalog() {
   const [sizes, setSizes] = useState<string[]>([]);
   const [visible, setVisible] = useState(12);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  // Fetch products from API
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        let categoryParam = categoria;
-        if (categoria === "lancamentos") categoryParam = "lancamentos";
-        else if (categoria === "promocao") categoryParam = "promocao";
-        
-        const data = await api.products.list({ category: categoryParam });
-        const mapped = data.map((p: any) => ({
-          id: p.id,
-          slug: p.slug,
-          name: p.name,
-          description: p.description,
-          category: p.category,
-          subcategory: p.subcategory,
-          pricePix: p.price_pix,
-          priceCard: p.price_card,
-          oldPrice: p.old_price,
-          isNew: p.is_new === 1,
-          isSale: p.is_sale === 1,
-          discount: p.discount,
-          images: p.images || [],
-          colors: [],
-          sizes: []
-        }));
-        setProducts(mapped);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
-  }, [categoria]);
 
   // Título: subcategoria tem prioridade, depois categoria, depois padrão
   const title = subFromUrl
@@ -91,16 +52,16 @@ export default function Catalog() {
 
   const allColors = useMemo(() => {
     return Array.from(
-      new Map(products.flatMap((p) => p.colors || []).map((c: any) => [c.name, c])).values()
+      new Map(allProducts.flatMap((p) => p.colors || []).map((c: any) => [c.name, c])).values()
     );
-  }, [products]);
+  }, [allProducts]);
 
   const allSizes = useMemo(() => {
-    return Array.from(new Set(products.flatMap((p) => p.sizes || [])));
-  }, [products]);
+    return Array.from(new Set(allProducts.flatMap((p) => p.sizes || [])));
+  }, [allProducts]);
 
   const filtered = useMemo(() => {
-    let list = [...products];
+    let list = [...allProducts];
 
     // Filter by category from URL
     if (categoria) {
@@ -109,9 +70,12 @@ export default function Catalog() {
         const normalizedCategory = normalizeString(p.category || "");
         const normalizedSubcategory = normalizeString(p.subcategory || "");
         
-        // Special handling for lancamentos and promocao - already filtered by API
-        if (normalizedCategoria === "lancamentos" || normalizedCategoria === "promocao") {
-          return true;
+        // Special handling for lancamentos and promocao
+        if (normalizedCategoria === "lancamentos") {
+          return p.isNew === true;
+        }
+        if (normalizedCategoria === "promocao") {
+          return p.isSale === true;
         }
         
         // Check if the URL category matches either the main category or subcategory
@@ -146,7 +110,7 @@ export default function Catalog() {
     // "recent" keeps original order
 
     return list;
-  }, [products, colors, sizes, categoria, subFromUrl, price, sort]);
+  }, [allProducts, colors, sizes, categoria, subFromUrl, price, sort]);
 
   const toggle = (val: string, list: string[], setList: (v: string[]) => void) =>
     setList(list.includes(val) ? list.filter((x) => x !== val) : [...list, val]);
@@ -240,76 +204,69 @@ export default function Catalog() {
         <div className="text-center mb-8">
           <h1 className="font-serif text-4xl md:text-5xl">{title}</h1>
           <p className="text-sm text-muted-foreground mt-2">
-            {loading ? "Carregando..." : `${filtered.length} produto${filtered.length !== 1 ? "s" : ""}`}
+            {`${filtered.length} produto${filtered.length !== 1 ? "s" : ""}`}
           </p>
         </div>
 
-        {loading ? (
-          <div className="flex items-center justify-center h-64">
-            <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full" />
+        <div className="flex items-center justify-between mb-6 gap-4">
+          <Sheet open={mobileFilterOpen} onOpenChange={setMobileFilterOpen}>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="sm" className="md:hidden">
+                <SlidersHorizontal className="h-4 w-4 mr-2" /> Filtros {activeFiltersCount > 0 && <span className="ml-1 bg-primary text-white rounded-full text-xs px-1.5">{activeFiltersCount}</span>}
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-[85%] sm:max-w-sm bg-background">
+              <SheetHeader>
+                <SheetTitle className="font-serif text-2xl">Filtros</SheetTitle>
+              </SheetHeader>
+              <div className="mt-6"><Filters onClose={() => setMobileFilterOpen(false)} /></div>
+            </SheetContent>
+          </Sheet>
+
+          <div className="ml-auto">
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
+              className="bg-background border border-border px-3 py-2 text-sm"
+            >
+              <option value="recent">Mais Recentes</option>
+              <option value="asc">Menor Preço</option>
+              <option value="desc">Maior Preço</option>
+            </select>
           </div>
-        ) : (
-          <>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-8">
+          <aside className="hidden md:block"><Filters /></aside>
+
+          <div>
             {filtered.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground">Nenhum produto encontrado.</p>
+              <div className="text-center py-20 text-muted-foreground">
+                <p className="mb-4">Nenhum produto encontrado.</p>
+                <Button variant="outline" onClick={clearFilters}>Limpar filtros</Button>
               </div>
             ) : (
               <>
-                <div className="flex items-center justify-between mb-6 gap-4">
-                  <Sheet open={mobileFilterOpen} onOpenChange={setMobileFilterOpen}>
-                    <SheetTrigger asChild>
-                      <Button variant="outline" size="sm" className="md:hidden">
-                        <SlidersHorizontal className="h-4 w-4 mr-2" /> Filtros {activeFiltersCount > 0 && <span className="ml-1 bg-primary text-white rounded-full text-xs px-1.5">{activeFiltersCount}</span>}
-                      </Button>
-                    </SheetTrigger>
-                    <SheetContent side="left" className="w-[85%] sm:max-w-sm bg-background">
-                      <SheetHeader>
-                        <SheetTitle className="font-serif text-2xl">Filtros</SheetTitle>
-                      </SheetHeader>
-                      <div className="mt-6"><Filters onClose={() => setMobileFilterOpen(false)} /></div>
-                    </SheetContent>
-                  </Sheet>
-
-                  <div className="ml-auto">
-                    <select
-                      value={sort}
-                      onChange={(e) => setSort(e.target.value)}
-                      className="bg-background border border-border px-3 py-2 text-sm"
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+                  {filtered.slice(0, visible).map((p) => (
+                    <ProductCard key={p.id} product={p} />
+                  ))}
+                </div>
+                {visible < filtered.length && (
+                  <div className="text-center mt-10">
+                    <Button
+                      variant="outline"
+                      onClick={() => setVisible((v) => v + 12)}
+                      className="text-xs uppercase tracking-wider md:text-sm md:tracking-widest h-10 md:h-12 px-6"
                     >
-                      <option value="recent">Mais Recentes</option>
-                      <option value="asc">Menor Preço</option>
-                      <option value="desc">Maior Preço</option>
-                    </select>
+                      Ver mais ({filtered.length - visible} produtos)
+                    </Button>
                   </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-8">
-                  <aside className="hidden md:block"><Filters /></aside>
-
-                  <div>
-                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
-                      {filtered.slice(0, visible).map((p) => (
-                        <ProductCard key={p.id} product={p} />
-                      ))}
-                    </div>
-                    {visible < filtered.length && (
-                      <div className="text-center mt-10">
-                        <Button
-                          variant="outline"
-                          onClick={() => setVisible((v) => v + 12)}
-                          className="text-xs uppercase tracking-wider md:text-sm md:tracking-widest h-10 md:h-12 px-6"
-                        >
-                          Ver mais ({filtered.length - visible} produtos)
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                </div>
+                )}
               </>
             )}
-          </>
-        )}
+          </div>
+        </div>
       </div>
     </Layout>
   );
