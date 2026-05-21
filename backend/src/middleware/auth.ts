@@ -4,8 +4,8 @@ import { dbGet, getDatabase } from "../db";
 
 const JWT_SECRET = process.env.JWT_SECRET || "sua-secret-aqui-troque-isso";
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || "sua-refresh-secret";
-const TOKEN_EXPIRATION = process.env.TOKEN_EXPIRATION || "256h";
-const REFRESH_EXPIRATION = "7d";
+const TOKEN_EXPIRATION = process.env.TOKEN_EXPIRATION || "7d";
+const REFRESH_EXPIRATION = "30d";
 
 export interface AuthRequest extends Request {
   user?: AuthPayload;
@@ -28,11 +28,15 @@ function verifyJwt(token: string, secret: string): jwt.JwtPayload {
 }
 
 export function generateToken(payload: AuthPayload): string {
-  return jwtSign(payload, JWT_SECRET, TOKEN_EXPIRATION);
+  const token = jwtSign(payload, JWT_SECRET, TOKEN_EXPIRATION);
+  console.log("Generated access token with expiration:", TOKEN_EXPIRATION);
+  return token;
 }
 
 export function generateRefreshToken(payload: { id: string }): string {
-  return jwtSign({ ...payload, type: "refresh" }, JWT_REFRESH_SECRET, REFRESH_EXPIRATION);
+  const token = jwtSign({ ...payload, type: "refresh" }, JWT_REFRESH_SECRET, REFRESH_EXPIRATION);
+  console.log("Generated refresh token with expiration:", REFRESH_EXPIRATION);
+  return token;
 }
 
 export function verifyToken(token: string): AuthPayload {

@@ -95,7 +95,8 @@ export default function Admin() {
               localStorage.setItem("numar.token", newToken);
               if (newRefresh) localStorage.setItem("numar.refreshToken", newRefresh);
               console.log("Token refreshed successfully");
-              // Retry profile check
+              console.log("New token stored:", newToken ? "Yes" : "No");
+              // Retry profile check with new token
               const user = await api.auth.profile();
               console.log("User profile after refresh:", user);
               if (user.role === "admin") {
@@ -107,6 +108,8 @@ export default function Admin() {
               }
             } else {
               console.log("Refresh failed with status:", refreshRes.status);
+              const errorText = await refreshRes.text();
+              console.log("Refresh error response:", errorText);
             }
           } catch (refreshErr) {
             console.error("Token refresh failed:", refreshErr);
