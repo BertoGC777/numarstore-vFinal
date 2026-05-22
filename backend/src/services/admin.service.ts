@@ -626,13 +626,9 @@ export async function updateProduct(id: string, data: any) {
     throw new Error("Nenhum campo para atualizar");
   }
 
-  fields.push(`id = $${paramIndex}`);
-  values.push(id);
-  paramIndex++;
-
   await dbRun(
     `UPDATE products SET ${fields.join(", ")} WHERE id = $${paramIndex}`,
-    values
+    [...values, id]
   );
 
   // Update colors if provided
