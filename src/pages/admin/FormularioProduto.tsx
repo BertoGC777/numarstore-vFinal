@@ -143,38 +143,57 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
     console.log("Form data:", formData);
     
     // Validação no frontend
+    console.log("=== Validation ===");
+    console.log("Name:", formData.name, "Valid:", !!formData.name.trim());
+    console.log("Category:", formData.category, "Valid:", !!formData.category);
+    console.log("Description:", formData.description, "Valid:", !!formData.description.trim());
+    console.log("Price PIX:", formData.price_pix, "Valid:", !!(formData.price_pix && parseFloat(formData.price_pix) > 0));
+    console.log("Price Card:", formData.price_card, "Valid:", !!(formData.price_card && parseFloat(formData.price_card) > 0));
+    console.log("Sizes:", formData.sizes, "Valid:", formData.sizes.length > 0);
+    console.log("Colors:", formData.colors, "Valid:", formData.colors.length > 0);
+    console.log("Images:", formData.images, "Valid:", formData.images.length > 0);
+
     if (!formData.name.trim()) {
+      console.error("Validation failed: Name is empty");
       toast({ title: "Erro", description: "Nome do produto é obrigatório" });
       return;
     }
     if (!formData.category) {
+      console.error("Validation failed: Category is empty");
       toast({ title: "Erro", description: "Categoria do produto é obrigatória" });
       return;
     }
     if (!formData.description.trim()) {
+      console.error("Validation failed: Description is empty");
       toast({ title: "Erro", description: "Descrição do produto é obrigatória" });
       return;
     }
     if (!formData.price_pix || parseFloat(formData.price_pix) <= 0) {
+      console.error("Validation failed: Price PIX is invalid");
       toast({ title: "Erro", description: "Preço PIX deve ser maior que zero" });
       return;
     }
     if (!formData.price_card || parseFloat(formData.price_card) <= 0) {
+      console.error("Validation failed: Price Card is invalid");
       toast({ title: "Erro", description: "Preço cartão deve ser maior que zero" });
       return;
     }
     if (formData.sizes.length === 0) {
+      console.error("Validation failed: No sizes selected");
       toast({ title: "Erro", description: "Selecione pelo menos um tamanho" });
       return;
     }
     if (formData.colors.length === 0) {
+      console.error("Validation failed: No colors added");
       toast({ title: "Erro", description: "Adicione pelo menos uma cor" });
       return;
     }
     if (formData.images.length === 0) {
+      console.error("Validation failed: No images added");
       toast({ title: "Erro", description: "Adicione pelo menos uma imagem" });
       return;
     }
+    console.log("=== Validation passed ===");
     
     setLoading(true);
 
