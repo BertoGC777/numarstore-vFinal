@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { adminMiddleware } from "../middleware/auth";
+import { adminMiddleware, AuthRequest } from "../middleware/auth";
 import * as adminService from "../services/admin.service";
 
 const router = Router();
@@ -102,7 +102,7 @@ router.post("/products", adminMiddleware, async (req, res) => {
 });
 
 // Products - Update
-router.put("/products/:id", adminMiddleware, async (req, res) => {
+router.put("/products/:id", adminMiddleware, async (req: AuthRequest, res) => {
   try {
     const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
     console.log("=== PUT /admin/products/:id ===");
