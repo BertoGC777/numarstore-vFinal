@@ -27,6 +27,7 @@ export async function createSchema() {
       is_new INTEGER DEFAULT 0,
       is_sale INTEGER DEFAULT 0,
       discount INTEGER DEFAULT 0,
+      is_active INTEGER DEFAULT 1,
       created_at BIGINT NOT NULL DEFAULT 0
     )
   `);

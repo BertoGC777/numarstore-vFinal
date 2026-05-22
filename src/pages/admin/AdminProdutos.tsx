@@ -20,8 +20,6 @@ import {
 import { api } from "@/api/client";
 import { useToast } from "@/components/ui/use-toast";
 import FormularioProduto from "./FormularioProduto";
-import Image from "@/components/Image";
-
 const CATEGORIES = [
   "Biquínis",
   "Partes de Cima",
@@ -148,8 +146,9 @@ export default function AdminProdutos() {
   const handleToggleActive = async (product: Product) => {
     try {
       console.log("Toggling product active status:", product.id, product.name, !product.is_active);
-      await api.put(`/admin/products/${product.id}`, { is_active: product.is_active ? 0 : 1 });
-      toast({ title: "Sucesso", description: `Produto ${product.is_active ? "desativado" : "ativado"} com sucesso` });
+      const newActive = product.is_active === 0 ? 1 : 0;
+      await api.put(`/admin/products/${product.id}`, { is_active: newActive });
+      toast({ title: "Sucesso", description: `Produto ${newActive ? "ativado" : "desativado"} com sucesso` });
       fetchProducts();
     } catch (err: any) {
       console.error("Error toggling product active status:", err);
@@ -244,15 +243,29 @@ export default function AdminProdutos() {
               <Card key={product.id} className="overflow-hidden">
                 <div className="aspect-square bg-gray-100 relative">
                   {product.images && product.images.length > 0 ? (
-                    <Image
+                    <img
                       src={product.images[0].url}
                       alt={product.name}
-                      aspectRatio="square"
-                      objectFit="contain"
                       loading="lazy"
-                      className="w-full h-full"
+                      decoding="async"
+                      className="w-full h-full object-contain"
+                      onError={(e) => {
+                        const el = e.currentTarget;
+                        el.style.display = "none";
+                        const fallback = el.parentElement?.querySelector("[data-img-fallback]");
+                        if (fallback) (fallback as HTMLElement).style.display = "flex";
+                      }}
                     />
-                  ) : (
+                  ) : null}
+                  {product.images && product.images.length > 0 ? (
+                    <div
+                      data-img-fallback
+                      className="absolute inset-0 hidden items-center justify-center bg-muted"
+                    >
+                      <span className="text-muted-foreground text-sm">Imagem não disponível</span>
+                    </div>
+                  ) : null}
+                  {(!product.images || product.images.length === 0) && (
                     <div className="w-full h-full flex items-center justify-center">
                       <Package className="h-12 w-12 text-gray-300" />
                     </div>
@@ -269,8 +282,8 @@ export default function AdminProdutos() {
                       </span>
                     )}
                   </div>
-                  {!product.is_active && (
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                  {product.is_active === 0 && (
+                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
                       <span className="text-white font-medium">Inativo</span>
                     </div>
                   )}

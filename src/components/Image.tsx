@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
 interface ImageProps {
@@ -30,7 +30,6 @@ export default function Image({
 }: ImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const imgRef = useRef<HTMLImageElement>(null);
 
   const aspectRatioClasses: Record<string, string> = {
     square: 'aspect-square',
@@ -40,35 +39,6 @@ export default function Image({
   };
 
   const aspectClass = aspectRatioClasses[aspectRatio] || aspectRatio;
-
-  useEffect(() => {
-    setHasError(false);
-    setIsLoaded(false);
-
-    const img = imgRef.current;
-    if (!img) return;
-
-    const handleLoad = () => {
-      setIsLoaded(true);
-      setHasError(false);
-    };
-    const handleError = () => {
-      setHasError(true);
-      setIsLoaded(true);
-    };
-
-    img.addEventListener('load', handleLoad);
-    img.addEventListener('error', handleError);
-
-    if (img.complete && img.naturalWidth > 0) {
-      setIsLoaded(true);
-    }
-
-    return () => {
-      img.removeEventListener('load', handleLoad);
-      img.removeEventListener('error', handleError);
-    };
-  }, [src]);
 
   if (hasError) {
     return (
@@ -94,7 +64,7 @@ export default function Image({
         </div>
       )}
       <img
-        ref={imgRef}
+        key={src}
         src={src}
         alt={alt}
         width={width}
@@ -112,6 +82,14 @@ export default function Image({
           isLoaded ? 'opacity-100' : 'opacity-0',
           zoomable && 'cursor-zoom-in'
         )}
+        onLoad={() => {
+          setIsLoaded(true);
+          setHasError(false);
+        }}
+        onError={() => {
+          setHasError(true);
+          setIsLoaded(true);
+        }}
         onClick={onClick}
       />
     </div>

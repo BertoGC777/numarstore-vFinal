@@ -318,12 +318,16 @@ export async function getProducts(filters: GetProductsFilters) {
   );
 
   const productsWithImages = await Promise.all(
-    products.map(async (product: { id: string; slug: string }) => {
+    products.map(async (product: { id: string; slug: string; is_active?: number }) => {
       const images = await dbAll(
         `SELECT url, color FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
         [product.id]
       );
-      return { ...product, images: resolveImageRows(product.slug, images) };
+      return {
+        ...product,
+        is_active: product.is_active ?? 1,
+        images: resolveImageRows(product.slug, images),
+      };
     })
   );
 
@@ -378,6 +382,7 @@ export async function getProductById(id: string) {
 
   return {
     ...product,
+    is_active: product.is_active ?? 1,
     images,
     colors,
     sizes: sizes.map((s: any) => s.size),

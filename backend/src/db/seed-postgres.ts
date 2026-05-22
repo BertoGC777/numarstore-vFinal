@@ -1,5 +1,6 @@
 import { dbRun, dbGet, getDatabase } from "./postgres";
 import { getSeedImagePath } from "../utils/imageResolver";
+import { runMigrations } from "./migrate";
 
 const COLOR_MAP: Record<string, string> = {
   amarelo: "#f5d547", azul: "#2e5cb8", branco: "#fafafa", ciano: "#5fc9d6",
@@ -58,7 +59,8 @@ const productData: SeedProduct[] = [
 
 export async function seedAll() {
   await getDatabase();
-  
+  await runMigrations();
+
   // Admin seed - sempre executa para garantir que o admin exista
   const bcrypt = require("bcryptjs");
   try {

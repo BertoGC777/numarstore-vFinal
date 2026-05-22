@@ -29,8 +29,26 @@ const PORT = process.env.PORT || 3001;
 
 Sentry;
 
+const publicDir = path.join(process.cwd(), "public");
+
+// Imagens estáticas ANTES do helmet — permitir carregamento cross-origin (Vercel → Render)
+app.use(
+  "/images",
+  express.static(path.join(publicDir, "images"), {
+    setHeaders(res) {
+      res.set("Access-Control-Allow-Origin", "*");
+      res.set("Cross-Origin-Resource-Policy", "cross-origin");
+    },
+  })
+);
+
 app.use(compression());
-app.use(helmet({ crossOriginEmbedderPolicy: false }));
+app.use(
+  helmet({
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+  })
+);
 app.use(cors({ origin: ["http://localhost:8080", "http://localhost:5173", "http://localhost:3000", "https://numarstore-v-final.vercel.app"], credentials: true }));
 
 // Raw body para webhook Stripe (antes do json parser)
@@ -39,8 +57,7 @@ app.use("/api/payments/webhook", express.raw({ type: "application/json" }));
 
 app.use(express.json({ limit: "10mb" }));
 
-// Serve static files from public directory (path absoluto para funcionar no Render)
-app.use(express.static(path.join(process.cwd(), "public")));
+app.use(express.static(publicDir));
 
 const generalLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 200, standardHeaders: true });
 const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 20, standardHeaders: true });
