@@ -12,12 +12,12 @@ import { Plus, X, Upload } from "lucide-react";
 import Image from "@/components/Image";
 
 const CATEGORIES = [
-  "Biquínis",
-  "Partes de Cima",
-  "Partes de Baixo",
-  "Conjuntos",
-  "Vestidos Longos",
-  "Vestidos Curtos"
+  { label: "Biquínis", value: "biquinis" },
+  { label: "Partes de Cima", value: "partes-de-cima" },
+  { label: "Partes de Baixo", value: "partes-de-baixo" },
+  { label: "Conjuntos", value: "conjuntos" },
+  { label: "Vestidos Longos", value: "vestidos-longos" },
+  { label: "Vestidos Curtos", value: "vestidos-curtos" }
 ];
 
 const SIZES = ["PP", "P", "M", "G", "GG", "Único"];
@@ -346,7 +346,7 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
               </SelectTrigger>
               <SelectContent>
                 {CATEGORIES.map((cat) => (
-                  <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                  <SelectItem key={cat.value} value={cat.value}>{cat.label}</SelectItem>
                 ))}
               </SelectContent>
             </Select>

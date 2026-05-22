@@ -32,7 +32,7 @@ const ProductCard = React.memo(function ProductCard({ product }: { product: Prod
   };
 
   return (
-    <div className="group fade-in" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+    <div className="group opacity-0 animate-in fade-in duration-300" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
       <Link to={`/produto/${product.slug}`} className="block relative overflow-hidden bg-muted aspect-[3/4] cursor-pointer">
         <Image
           key={`main-${colorIdx}`}
@@ -60,10 +60,10 @@ const ProductCard = React.memo(function ProductCard({ product }: { product: Prod
         )}
         <div className="absolute top-2 left-2 flex flex-col gap-1">
           {product.isNew && (
-            <span className="bg-primary text-primary-foreground text-[10px] uppercase tracking-wider px-2 py-1">🔥 Novidade</span>
+            <span className="bg-green-600 text-white text-[10px] uppercase tracking-wider px-2 py-1 font-semibold">NOVO</span>
           )}
           {product.isSale && (
-            <span className="bg-destructive text-destructive-foreground text-[10px] uppercase tracking-wider px-2 py-1">⚡ Oferta</span>
+            <span className="bg-red-600 text-white text-[10px] uppercase tracking-wider px-2 py-1 font-semibold">PROMO</span>
           )}
           {product.outOfStock && (
             <span className="bg-muted-foreground text-white text-[10px] uppercase tracking-wider px-2 py-1">Esgotado</span>
@@ -87,7 +87,7 @@ const ProductCard = React.memo(function ProductCard({ product }: { product: Prod
       </Link>
 
       <div className="pt-3 space-y-2">
-        <Link to={`/produto/${product.slug}`} className="block text-sm font-medium hover:text-primary line-clamp-1">
+        <Link to={`/produto/${product.slug}`} className="block text-sm font-medium hover:text-primary line-clamp-2">
           {product.name}
         </Link>
 
@@ -97,22 +97,25 @@ const ProductCard = React.memo(function ProductCard({ product }: { product: Prod
         </div>
 
         {numColors > 1 && (
-          <div className="flex items-center gap-1.5 flex-wrap">
-            {product.colors.map((c, i) => (
-              <button
-                key={c.name}
-                type="button"
-                onClick={(e) => handleColorClick(e, i)}
-                aria-label={c.name}
-                title={c.name}
-                className={`h-5 w-5 rounded-full border-2 transition-all ${
-                  i === colorIdx
-                    ? "ring-2 ring-primary ring-offset-1 border-transparent scale-110"
-                    : "border-border hover:scale-110"
-                }`}
-                style={{ backgroundColor: c.hex }}
-              />
-            ))}
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {product.colors.map((c, i) => (
+                <button
+                  key={c.name}
+                  type="button"
+                  onClick={(e) => handleColorClick(e, i)}
+                  aria-label={c.name}
+                  title={c.name}
+                  className={`h-5 w-5 rounded-full border-2 transition-all ${
+                    i === colorIdx
+                      ? "ring-2 ring-primary ring-offset-1 border-transparent scale-110"
+                      : "border-border hover:scale-110"
+                  }`}
+                  style={{ backgroundColor: c.hex }}
+                />
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground">{product.colors[colorIdx].name}</p>
           </div>
         )}
 

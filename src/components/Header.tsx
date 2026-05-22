@@ -16,8 +16,8 @@ const menu = [
     { label: "Vestidos Curtos", href: "/catalogo/vestidos-curtos" },
     { label: "Ver todos os vestidos", href: "/catalogo/vestidos" }
   ] },
-  { label: "Partes de Cima", href: "/catalogo/partes-de-cima", children: [{ label: "Ver todas", href: "/catalogo/partes-de-cima" }] },
-  { label: "Partes de Baixo", href: "/catalogo/partes-de-baixo", children: [{ label: "Ver todas", href: "/catalogo/partes-de-baixo" }] },
+  { label: "Partes de Cima", href: "/catalogo/partes-de-cima" },
+  { label: "Partes de Baixo", href: "/catalogo/partes-de-baixo" },
   { label: "Biquínis", href: "/catalogo/biquinis" },
   { label: "Conjuntos", href: "/catalogo/conjuntos" },
   { label: "Lançamentos", href: "/catalogo/lancamentos" },

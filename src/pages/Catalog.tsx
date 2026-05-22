@@ -9,6 +9,14 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { SlidersHorizontal } from "lucide-react";
+import biquini from "@/assets/products/biquini-rosa.jpeg";
+import blusinha from "@/assets/products/blusinha1-vermelha.jpeg";
+import saia from "@/assets/products/saia-longa-preta-1.jpeg";
+import conjunto from "@/assets/products/conjunto-cropped-saia-1.jpeg";
+import vestidoLongo from "@/assets/products/vestido-sereia-rosa-1.jpg";
+import vestidoCurto from "@/assets/products/vestido-brisa-rosa-1.jpg";
+import promo from "@/assets/products/cropped2-amarelo.jpeg";
+import Image from "@/components/Image";
 
 // Normalize string for comparison: lowercase, remove accents, replace spaces with hyphens
 const normalizeString = (str: string): string => {
@@ -30,6 +38,17 @@ const categoryLabels: Record<string, string> = {
   conjuntos: "Conjuntos",
   lancamentos: "Lançamentos",
   promocao: "Promoção",
+};
+
+const categoryImages: Record<string, string> = {
+  biquinis: biquini,
+  "partes-de-cima": blusinha,
+  "partes-de-baixo": saia,
+  conjuntos: conjunto,
+  "vestidos-longos": vestidoLongo,
+  "vestidos-curtos": vestidoCurto,
+  lancamentos: promo,
+  promocao: promo,
 };
 
 export default function Catalog() {
@@ -227,12 +246,30 @@ export default function Catalog() {
         }}
       />
       <div className="container-numar py-8 md:py-12">
-        <div className="text-center mb-8">
-          <h1 className="font-serif text-4xl md:text-5xl">{title}</h1>
-          <p className="text-sm text-muted-foreground mt-2">
-            {`${filtered.length} produto${filtered.length !== 1 ? "s" : ""}`}
-          </p>
-        </div>
+        {categoria && categoryImages[categoria] && (
+          <div className="relative h-48 md:h-72 mb-8 rounded-lg overflow-hidden">
+            <Image
+              src={categoryImages[categoria]}
+              alt={title}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-6">
+              <h1 className="font-serif text-3xl md:text-5xl text-white">{title}</h1>
+              <p className="text-sm text-white/80 mt-2">
+                {`${filtered.length} produto${filtered.length !== 1 ? "s" : ""}`}
+              </p>
+            </div>
+          </div>
+        )}
+        {!categoria || !categoryImages[categoria] && (
+          <div className="text-center mb-8">
+            <h1 className="font-serif text-4xl md:text-5xl">{title}</h1>
+            <p className="text-sm text-muted-foreground mt-2">
+              {`${filtered.length} produto${filtered.length !== 1 ? "s" : ""}`}
+            </p>
+          </div>
+        )}
 
         <div className="flex items-center justify-between mb-6 gap-4">
           <Sheet open={mobileFilterOpen} onOpenChange={setMobileFilterOpen}>
@@ -267,12 +304,18 @@ export default function Catalog() {
 
           <div>
             {loading ? (
-              <div className="flex justify-center py-20">
-                <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full" />
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="space-y-3">
+                    <div className="bg-muted aspect-[3/4] rounded-lg animate-pulse" />
+                    <div className="h-4 bg-muted rounded animate-pulse" />
+                    <div className="h-4 bg-muted rounded w-3/4 animate-pulse" />
+                  </div>
+                ))}
               </div>
             ) : filtered.length === 0 ? (
               <div className="text-center py-20 text-muted-foreground">
-                <p className="mb-4">Nenhum produto encontrado.</p>
+                <p className="mb-4">Não encontramos produtos com esses filtros. Que tal explorar nossa coleção completa?</p>
                 <Button variant="outline" onClick={clearFilters}>Limpar filtros</Button>
               </div>
             ) : (
