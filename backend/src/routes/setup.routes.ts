@@ -66,7 +66,15 @@ router.get("/check-admin", async (req, res) => {
     if (result.rows.length === 0) {
       res.json({ exists: false, message: "Admin user not found" })
     } else {
-      res.json({ exists: true, user: result.rows[0] })
+      const user = result.rows[0]
+      // Ensure role is admin
+      if (user.role !== 'admin') {
+        await pool.query(
+          "UPDATE users SET role = 'admin' WHERE email = 'admin@numarstore.com'"
+        )
+        user.role = 'admin'
+      }
+      res.json({ exists: true, user })
     }
   } catch (e: any) {
     res.status(500).json({ error: e.message })
@@ -95,6 +103,53 @@ router.post("/create-admin", async (req, res) => {
       stack: e.stack
     }, null, 2))
     res.status(500).json({ error: e.message, detail: e.detail })
+  }
+})
+
+// Ensure admin user exists and has correct role
+router.get("/ensure-admin", async (_req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT id, email, role FROM users WHERE email = 'admin@numarstore.com'"
+    )
+    
+    if (result.rows.length === 0) {
+      // Create admin user
+      const hash = await bcrypt.hash("admin123", 10)
+      const createResult = await pool.query(`
+        INSERT INTO users (id, name, email, password_hash, role, created_at)
+        VALUES (gen_random_uuid(), 'Admin', 'admin@numarstore.com', $1, 'admin', $2)
+        RETURNING id, email, role
+      `, [hash, Date.now()])
+      res.json({ 
+        success: true, 
+        action: "created",
+        user: createResult.rows[0] 
+      })
+    } else {
+      const user = result.rows[0]
+      if (user.role !== 'admin') {
+        // Update role to admin
+        await pool.query(
+          "UPDATE users SET role = 'admin' WHERE email = 'admin@numarstore.com'"
+        )
+        user.role = 'admin'
+        res.json({ 
+          success: true, 
+          action: "updated_role",
+          user 
+        })
+      } else {
+        res.json({ 
+          success: true, 
+          action: "already_exists",
+          user 
+        })
+      }
+    }
+  } catch (error: any) {
+    console.error("Ensure admin error:", error)
+    res.status(500).json({ error: error.message })
   }
 })
 
