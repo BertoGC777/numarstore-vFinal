@@ -424,8 +424,8 @@ export async function createProduct(data: any) {
     is_active
   } = data;
 
-  if (!name || !category || !price_pix || !price_card) {
-    throw new Error("Nome, categoria, preço PIX e preço cartão são obrigatórios");
+  if (!name || !price_pix || !price_card) {
+    throw new Error("Nome, preço PIX e preço cartão são obrigatórios");
   }
 
   const id = crypto.randomUUID();
@@ -551,11 +551,12 @@ export async function updateProduct(id: string, data: any) {
     paramIndex++;
   }
   if (category !== undefined) {
-    if (!category || category.trim() === "") {
-      throw new Error("Categoria do produto é obrigatória");
-    }
+    // Categoria opcional - permitir edição de produtos sem categoria
+    // if (!category || category.trim() === "") {
+    //   throw new Error("Categoria do produto é obrigatória");
+    // }
     fields.push(`category = $${paramIndex}`);
-    values.push(category.trim());
+    values.push(category ? category.trim() : null);
     paramIndex++;
   }
   if (subcategory !== undefined) {
