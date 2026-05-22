@@ -109,10 +109,25 @@ export default function AdminProdutos() {
     fetchProducts();
   };
 
-  const handleOpenDialog = (product?: Product) => {
+  const handleOpenDialog = async (product?: Product) => {
     console.log("Opening dialog for product:", product?.id, product?.name);
-    setEditingProduct(product || null);
-    setDialogOpen(true);
+    
+    if (product?.id) {
+      // Carregar o produto completo do backend
+      try {
+        console.log("Fetching complete product data from backend:", product.id);
+        const completeProduct = await api.get(`/admin/products/${product.id}`);
+        console.log("Complete product data:", completeProduct);
+        setEditingProduct(completeProduct);
+        setDialogOpen(true);
+      } catch (err: any) {
+        console.error("Error fetching complete product:", err);
+        toast({ title: "Erro", description: "Erro ao carregar dados do produto" });
+      }
+    } else {
+      setEditingProduct(null);
+      setDialogOpen(true);
+    }
   };
 
   const handleCloseDialog = () => {
