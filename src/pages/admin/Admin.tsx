@@ -71,47 +71,14 @@ export default function Admin() {
           navigate("/");
         }
       } catch (err: any) {
-        // Log out user if token is invalid or expired and cannot be refreshed
+        // Se houver um erro na chamada api.auth.profile(), assume que o token é inválido/expirado
+        // E o client.ts não conseguiu refreshá-lo.
         localStorage.removeItem("numar.token");
         localStorage.removeItem("numar.refreshToken");
         localStorage.removeItem("numar.user");
         toast({
           title: "Sessão Expirada",
           description: "Por favor, faça login novamente."
-        });
-        navigate("/conta");
-      } finally {
-        setCheckingAuth(false);
-      }
-    };
-
-    checkAdminRole();
-  }, [navigate, toast]);
-              console.log("User profile after refresh:", user);
-              if (user.role === "admin") {
-                setIsAdmin(true);
-                setCheckingAuth(false);
-                return;
-              } else {
-                console.log("After refresh, user role is still not admin:", user.role);
-              }
-            } else {
-              console.log("Refresh failed with status:", refreshRes.status);
-              const errorText = await refreshRes.text();
-              console.log("Refresh error response:", errorText);
-            }
-          } catch (refreshErr) {
-            console.error("Token refresh failed:", refreshErr);
-          }
-        }
-        // If refresh failed or user still not admin, clear session and redirect
-        console.log("Clearing session and redirecting to /conta");
-        localStorage.removeItem("numar.token");
-        localStorage.removeItem("numar.refreshToken");
-        localStorage.removeItem("numar.user");
-        toast({
-          title: "Erro de Autenticação",
-          description: "Sessão expirada. Por favor, faça login novamente."
         });
         navigate("/conta");
       } finally {
