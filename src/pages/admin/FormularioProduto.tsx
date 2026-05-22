@@ -158,11 +158,12 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
       toast({ title: "Erro", description: "Nome do produto é obrigatório" });
       return;
     }
-    if (!formData.category) {
-      console.error("Validation failed: Category is empty");
-      toast({ title: "Erro", description: "Categoria do produto é obrigatória" });
-      return;
-    }
+    // Categoria opcional - permitir edição de produtos sem categoria
+    // if (!formData.category) {
+    //   console.error("Validation failed: Category is empty");
+    //   toast({ title: "Erro", description: "Categoria do produto é obrigatória" });
+    //   return;
+    // }
     if (!formData.description.trim()) {
       console.error("Validation failed: Description is empty");
       toast({ title: "Erro", description: "Descrição do produto é obrigatória" });

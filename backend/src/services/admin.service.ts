@@ -343,10 +343,16 @@ export async function getProducts(filters: GetProductsFilters) {
 export async function getProductById(id: string) {
   await getDatabase();
   
+  console.log("=== getProductById ===");
+  console.log("Product ID:", id);
+  
   const product = await dbGet(
     `SELECT * FROM products WHERE id = $1`,
     [id]
   );
+
+  console.log("Product from database:", product);
+  console.log("Product category:", product?.category);
 
   if (!product) {
     throw new Error("Produto não encontrado");
@@ -380,7 +386,7 @@ export async function getProductById(id: string) {
     stockRecord[`${s.color}-${s.size}`] = s.quantity;
   });
 
-  return {
+  const result = {
     ...product,
     is_active: product.is_active ?? 1,
     images,
@@ -388,6 +394,11 @@ export async function getProductById(id: string) {
     sizes: sizes.map((s: any) => s.size),
     stock: stockRecord
   };
+
+  console.log("Product to return:", result);
+  console.log("Product category in result:", result.category);
+
+  return result;
 }
 
 export async function createProduct(data: any) {
