@@ -21,6 +21,15 @@ export async function runMigrations() {
 
   await dbRun(`UPDATE products SET is_active = 1 WHERE is_active IS NULL`);
 
+  // Migration para permitir NULL na coluna category
+  const categoryColumn = await dbAll<{ is_nullable: string }>(
+    `SELECT is_nullable FROM information_schema.columns WHERE table_name = 'products' AND column_name = 'category'`
+  );
+  if (categoryColumn.length > 0 && categoryColumn[0].is_nullable === 'NO') {
+    await dbRun(`ALTER TABLE products ALTER COLUMN category DROP NOT NULL`);
+    console.log("✅ Migração: category agora permite NULL");
+  }
+
   const stockExists = await dbAll(
     `SELECT column_name FROM information_schema.columns WHERE table_name = 'product_stock'`
   );

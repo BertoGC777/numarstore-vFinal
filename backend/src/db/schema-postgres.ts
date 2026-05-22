@@ -20,7 +20,7 @@ export async function createSchema() {
       name TEXT NOT NULL,
       description TEXT NOT NULL,
       short_description TEXT,
-      category TEXT NOT NULL,
+      category TEXT,
       subcategory TEXT,
       price_pix REAL NOT NULL,
       price_card REAL NOT NULL,
