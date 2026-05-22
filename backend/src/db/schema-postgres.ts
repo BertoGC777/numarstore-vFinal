@@ -19,6 +19,7 @@ export async function createSchema() {
       slug TEXT NOT NULL UNIQUE,
       name TEXT NOT NULL,
       description TEXT NOT NULL,
+      short_description TEXT,
       category TEXT NOT NULL,
       subcategory TEXT,
       price_pix REAL NOT NULL,
@@ -125,6 +126,18 @@ export async function createSchema() {
       product_id TEXT NOT NULL,
       size TEXT NOT NULL,
       FOREIGN KEY (product_id) REFERENCES products(id)
+    )
+  `);
+
+  await dbRun(`
+    CREATE TABLE IF NOT EXISTS product_stock (
+      id SERIAL PRIMARY KEY,
+      product_id TEXT NOT NULL,
+      color TEXT,
+      size TEXT,
+      quantity INTEGER DEFAULT 0,
+      UNIQUE(product_id, color, size),
+      FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
     )
   `);
 

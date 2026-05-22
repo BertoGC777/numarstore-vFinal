@@ -14,7 +14,8 @@ export async function getDatabase() {
 export async function dbRun(sql: string, params: any[] = []) {
   const client = await pool.connect();
   try {
-    await client.query(sql, params);
+    const result = await client.query(sql, params);
+    return result;
   } finally {
     client.release();
   }
