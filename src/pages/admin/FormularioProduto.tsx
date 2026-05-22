@@ -138,6 +138,41 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validação no frontend
+    if (!formData.name.trim()) {
+      toast({ title: "Erro", description: "Nome do produto é obrigatório" });
+      return;
+    }
+    if (!formData.category) {
+      toast({ title: "Erro", description: "Categoria do produto é obrigatória" });
+      return;
+    }
+    if (!formData.description.trim()) {
+      toast({ title: "Erro", description: "Descrição do produto é obrigatória" });
+      return;
+    }
+    if (!formData.price_pix || parseFloat(formData.price_pix) <= 0) {
+      toast({ title: "Erro", description: "Preço PIX deve ser maior que zero" });
+      return;
+    }
+    if (!formData.price_card || parseFloat(formData.price_card) <= 0) {
+      toast({ title: "Erro", description: "Preço cartão deve ser maior que zero" });
+      return;
+    }
+    if (formData.sizes.length === 0) {
+      toast({ title: "Erro", description: "Selecione pelo menos um tamanho" });
+      return;
+    }
+    if (formData.colors.length === 0) {
+      toast({ title: "Erro", description: "Adicione pelo menos uma cor" });
+      return;
+    }
+    if (formData.images.length === 0) {
+      toast({ title: "Erro", description: "Adicione pelo menos uma imagem" });
+      return;
+    }
+    
     setLoading(true);
 
     try {
@@ -579,11 +614,16 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
       </div>
 
       <DialogFooter>
-        <Button type="button" variant="outline" onClick={onCancel}>
+        <Button type="button" variant="outline" onClick={onCancel} disabled={loading}>
           Cancelar
         </Button>
-        <Button type="submit" disabled={loading}>
-          {loading ? "Salvando..." : product ? "Atualizar Produto" : "Criar Produto"}
+        <Button type="submit" disabled={loading} className="min-w-[140px]">
+          {loading ? (
+            <span className="flex items-center gap-2">
+              <div className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full" />
+              Salvando...
+            </span>
+          ) : product ? "Atualizar Produto" : "Criar Produto"}
         </Button>
       </DialogFooter>
     </form>
