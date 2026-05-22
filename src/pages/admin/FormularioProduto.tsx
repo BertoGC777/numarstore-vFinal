@@ -29,9 +29,10 @@ interface Color {
 }
 
 interface ProductImage {
-  url: string;
+  url: string; // Isso agora pode ser uma URL ou uma Data URL temporária para preview
   color?: string;
   colorHex?: string;
+  file?: File; // Adicionar uma propriedade para o arquivo original
 }
 
 interface Product {
