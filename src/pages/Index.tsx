@@ -7,13 +7,20 @@ import CollectionsGrid from "@/components/CollectionsGrid";
 import ProductCard from "@/components/ProductCard";
 import SaleBanner from "@/components/SaleBanner";
 import InstagramSection from "@/components/InstagramSection";
-import { getFeatured as getFeaturedFallback } from "@/data/products";
+import { fetchFeatured } from "@/lib/productApi";
+import type { Product } from "@/data/products";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+const SITE_URL = import.meta.env.VITE_SITE_URL || "https://numarstore-v-final.vercel.app";
 
 const Index = () => {
-  const featured = getFeaturedFallback(8);
+  const [featured, setFeatured] = useState<Product[]>([]);
   const [showMore, setShowMore] = useState(false);
+
+  useEffect(() => {
+    fetchFeatured(8).then(setFeatured);
+  }, []);
 
   return (
     <Layout>
@@ -23,11 +30,11 @@ const Index = () => {
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "Organization",
-          "name": "Numar Store",
-          "url": "https://numarstore.com.br",
-          "logo": "https://numarstore.com.br/logo.png",
-          "description": "Moda feminina sofisticada — vestidos, biquínis, conjuntos e muito mais.",
-          "sameAs": [
+          name: "Numar Store",
+          url: SITE_URL,
+          logo: `${SITE_URL}/logo.png`,
+          description: "Moda feminina sofisticada — vestidos, biquínis, conjuntos e muito mais.",
+          sameAs: [
             "https://instagram.com/use.numar",
             "https://wa.me/5521979674510",
           ],
@@ -44,18 +51,17 @@ const Index = () => {
           <h2 className="font-serif text-3xl md:text-4xl">Destaques da Semana</h2>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {(showMore ? featured : featured.slice(0, 4)).map((p) => <ProductCard key={p.id} product={p} />)}
+          {(showMore ? featured : featured.slice(0, 4)).map((p) => (
+            <ProductCard key={p.id} product={p} />
+          ))}
         </div>
         <div className="text-center mt-10 flex flex-col md:flex-row gap-4 justify-center items-center">
-          {!showMore && (
-            <button
-              onClick={() => setShowMore(true)}
-              className="inline-block border border-foreground px-8 py-3 text-sm uppercase tracking-widest hover:bg-foreground hover:text-background transition"
-            >
+          {!showMore && featured.length > 4 && (
+            <button onClick={() => setShowMore(true)} className="text-sm uppercase tracking-widest border border-primary px-8 py-3 hover:bg-primary hover:text-primary-foreground transition">
               Ver mais
             </button>
           )}
-          <Link to="/catalogo" className="inline-block border border-foreground px-8 py-3 text-sm uppercase tracking-widest hover:bg-foreground hover:text-background transition">
+          <Link to="/catalogo" className="text-sm uppercase tracking-widest text-primary underline underline-offset-4">
             Ver todos os produtos
           </Link>
         </div>

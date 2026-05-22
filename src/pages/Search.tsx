@@ -4,6 +4,7 @@ import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import ProductCard from "@/components/ProductCard";
 import { products as fallbackProducts } from "@/data/products";
+import { mapApiProduct } from "@/lib/productApi";
 import { api } from "@/api/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -45,24 +46,7 @@ export default function Search() {
       setError(null);
       try {
         const data = await api.products.search(localQuery);
-        const mapped = data.map((p: any) => ({
-          id: p.id,
-          slug: p.slug,
-          name: p.name,
-          category: p.category,
-          subcategory: p.subcategory,
-          pricePix: p.price_pix,
-          priceCard: p.price_card,
-          oldPrice: p.old_price,
-          isNew: !!p.is_new,
-          isSale: !!p.is_sale,
-          discount: p.discount,
-          colors: p.colors || [],
-          sizes: p.sizes || [],
-          images: p.images?.map((img: any) => img.url) || [],
-          description: p.description,
-        }));
-        setResults(mapped);
+        setResults(data.map((p: Record<string, unknown>) => mapApiProduct(p)));
       } catch (err: any) {
         console.error("Erro ao buscar produtos:", err);
         setError(err.message || "Erro ao buscar produtos");

@@ -65,6 +65,9 @@ const ProductCard = React.memo(function ProductCard({ product }: { product: Prod
           {product.isSale && (
             <span className="bg-destructive text-destructive-foreground text-[10px] uppercase tracking-wider px-2 py-1">⚡ Oferta</span>
           )}
+          {product.outOfStock && (
+            <span className="bg-muted-foreground text-white text-[10px] uppercase tracking-wider px-2 py-1">Esgotado</span>
+          )}
         </div>
         <button
           onClick={(e) => {

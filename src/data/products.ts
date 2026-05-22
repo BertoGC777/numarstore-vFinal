@@ -82,6 +82,8 @@ export type Product = {
   // images layout: [color0_img1, color1_img1, color2_img1, color0_img2, color1_img2, ...]
   // so images[colorIdx] = main photo, images[colorIdx + numColors] = hover/second photo
   images: string[]; description: string;
+  /** true quando estoque configurado no admin e total = 0 */
+  outOfStock?: boolean;
 };
 
 const card = (pix: number) => Math.round(pix * 1.05 * 100) / 100;

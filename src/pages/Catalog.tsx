@@ -1,9 +1,10 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import ProductCard from "@/components/ProductCard";
-import { products as allProducts } from "@/data/products";
+import { fetchAllProducts } from "@/lib/productApi";
+import type { Product } from "@/data/products";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -42,6 +43,23 @@ export default function Catalog() {
   const [sizes, setSizes] = useState<string[]>([]);
   const [visible, setVisible] = useState(12);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    const params: Record<string, string> = {};
+    if (categoria && categoria !== "todos") {
+      if (categoria === "lancamentos") params.new = "1";
+      else if (categoria === "promocao") params.sale = "1";
+      else params.category = categoria;
+    }
+    if (subFromUrl) params.sub = subFromUrl;
+    fetchAllProducts(params).then((list) => {
+      setAllProducts(list);
+      setLoading(false);
+    });
+  }, [categoria, subFromUrl]);
 
   // Título: subcategoria tem prioridade, depois categoria, depois padrão
   const title = subFromUrl
@@ -240,7 +258,11 @@ export default function Catalog() {
           <aside className="hidden md:block"><Filters /></aside>
 
           <div>
-            {filtered.length === 0 ? (
+            {loading ? (
+              <div className="flex justify-center py-20">
+                <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full" />
+              </div>
+            ) : filtered.length === 0 ? (
               <div className="text-center py-20 text-muted-foreground">
                 <p className="mb-4">Nenhum produto encontrado.</p>
                 <Button variant="outline" onClick={clearFilters}>Limpar filtros</Button>

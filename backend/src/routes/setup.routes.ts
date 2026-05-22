@@ -3,8 +3,10 @@ import bcrypt from "bcryptjs"
 import { pool } from "../db/postgres"
 import { generateToken, generateRefreshToken } from "../middleware/auth"
 import { resolveImageUrl } from "../utils/imageResolver"
+import { setupGuard } from "../middleware/setupGuard"
 
 const router = Router()
+router.use(setupGuard)
 
 // Debug endpoint to check JWT configuration
 router.get("/debug-jwt", (_req, res) => {
@@ -72,10 +74,6 @@ router.get("/check-admin", async (req, res) => {
 })
 
 router.post("/create-admin", async (req, res) => {
-  const secret = req.headers["x-setup-secret"]
-  if (secret !== "numar-setup-2026") {
-    return res.status(403).json({ error: "Não autorizado" })
-  }
   console.log("DATABASE_URL existe?", !!process.env.DATABASE_URL)
   console.log("Pool importado?", !!pool)
   try {

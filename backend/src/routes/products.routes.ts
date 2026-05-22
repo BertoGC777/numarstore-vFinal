@@ -12,8 +12,8 @@ router.get("/", async (req, res) => {
     if (req.query.maxPrice) filters.maxPrice = Number(req.query.maxPrice);
     if (req.query.sort) filters.sort = req.query.sort as any;
     if (req.query.q) filters.search = req.query.q as string;
-    if (req.query.new) filters.isNew = true;
-    if (req.query.sale) filters.isSale = true;
+    if (req.query.new === "1" || req.query.new === "true") filters.isNew = true;
+    if (req.query.sale === "1" || req.query.sale === "true") filters.isSale = true;
     res.json(await getAllProducts(filters));
   } catch { res.status(500).json({ error: "Erro ao buscar produtos" }); }
 });

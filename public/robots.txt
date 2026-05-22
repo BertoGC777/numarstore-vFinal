@@ -2,5 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /checkout
 Disallow: /conta
+Disallow: /admin
 
 Sitemap: https://numarstore-v-final.vercel.app/sitemap.xml

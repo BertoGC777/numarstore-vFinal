@@ -4,19 +4,17 @@ import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import { useCart } from "@/context/CartContext";
 import { useCoupon } from "@/context/CouponContext";
-import { sanitize } from "@/utils/sanitize";
 import { calculateShipping, ShippingOption } from "@/utils/shipping";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CreditCard, QrCode, Banknote, ChevronRight, Lock, MessageCircle, Truck, ChevronLeft } from "lucide-react";
+import { ChevronRight, Lock, MessageCircle, Truck, ChevronLeft } from "lucide-react";
 import { api } from "@/api/client";
 import { useToast } from "@/components/ui/use-toast";
 import { formatBRL } from "@/data/products";
-import { loadStripe } from "@stripe/stripe-js";
 import CouponInput from "@/components/CouponInput";
 import Image from "@/components/Image";
 
-type PayMethod = "pix" | "card" | "boleto";
+const WHATSAPP = import.meta.env.VITE_WHATSAPP_NUMBER || "5521979674510";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -25,12 +23,11 @@ function maskPhone(v: string) { return v.replace(/\D/g,'').slice(0,11).replace(/
 function maskCEP(v: string) { return v.replace(/\D/g,'').slice(0,8).replace(/(\d{5})(\d)/,'$1-$2') }
 
 export default function Checkout() {
-  const { items, subtotal, close } = useCart();
+  const { items, subtotal, close, clear } = useCart();
   const { discount: couponDiscount } = useCoupon();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [step, setStep] = useState(1);
-  const [method, setMethod] = useState<PayMethod>("pix");
   const [loading, setLoading] = useState(false);
 
   const [nome, setNome] = useState("");
@@ -54,9 +51,8 @@ export default function Checkout() {
   const [shippingOptions, setShippingOptions] = useState<ShippingOption[]>([]);
   const [selectedShipping, setSelectedShipping] = useState<ShippingOption | null>(null);
 
-  const pixDiscount = method === "pix" ? subtotal * 0.05 : 0;
   const shipping = selectedShipping?.price ?? 0;
-  const total = subtotal + shipping - pixDiscount - couponDiscount;
+  const total = subtotal + shipping - couponDiscount;
 
   const setField = (k: string, v: string) => {
     switch (k) {
@@ -181,73 +177,69 @@ export default function Checkout() {
 
     setLoading(true);
     try {
+      const fullName = `${nome.trim()} ${sobrenome.trim()}`.trim();
       const shippingName = selectedShipping?.name || "PAC";
-      const sanitizedMsg = sanitize(`Olá! Gostaria de finalizar meu pedido:\n\n${items.map(i => `• ${i.name} | ${i.color} | ${i.size} | Qtd: ${i.quantity}`).join("\n")}\n\nFrete: ${shippingName} (${shipping === 0 ? "Grátis" : formatBRL(shipping)})\nTotal: ${formatBRL(total)}\nPagamento: ${method}`);
+      const addressLine = `${logradouro}, ${numero}${complemento ? ` - ${complemento}` : ""} - ${bairro}, ${localidade}/${uf} - CEP ${cep}`;
 
-      // 1. Criar pedido no backend (opcional - se falhar, usa undefined)
-      let orderId: string | undefined = undefined;
-      try {
-        console.log("📦 Criando pedido no backend...");
-        const order = await api.orders.create({
-          paymentMethod: method,
-          name, email, cpf, phone: telefone,
-          cep, logradouro, numero, complemento, bairro, localidade, uf,
-          subtotal, shipping, discount: pixDiscount + couponDiscount, total,
-          whatsappMsg: sanitizedMsg,
-          items: items.map(i => ({
-            product_id: i.id,
-            name: i.name,
-            image: i.image,
-            color: i.color,
-            size: i.size,
-            quantity: i.quantity,
-            price_pix: i.pricePix,
-          })),
-        });
-        console.log("✅ Pedido criado:", order.id);
-        orderId = order.id;
-      } catch (err) {
-        console.log("⚠️ Pedido não criado no backend, usando orderId undefined");
-      }
-
-      // 2. Criar sessão Stripe via backend
-      const stripeItems = items.map(i => ({
-        name: i.name,
-        pricePix: i.pricePix,
-        color: i.color,
-        size: i.size,
-        quantity: i.quantity,
-      }));
-
-      console.log("💳 Criando sessão Stripe...");
-      const sessionRes = await api.post("/stripe/checkout", {
-        items: stripeItems,
+      const order = await api.orders.create({
+        paymentMethod: "whatsapp",
+        name: fullName,
+        email,
+        cpf,
+        phone: telefone,
+        cep,
+        logradouro,
+        numero,
+        complemento,
+        bairro,
+        localidade,
+        uf,
+        subtotal,
         shipping,
-        discount: pixDiscount + couponDiscount,
-        orderId,
-        metadata: {
-          userId: localStorage.getItem("numar.user") ? JSON.parse(localStorage.getItem("numar.user") || "{}").id : "",
-          email,
-        },
+        discount: couponDiscount,
+        total,
+        whatsappMsg: "",
+        items: items.map((i) => ({
+          product_id: i.productId || i.id,
+          name: i.name,
+          image: i.image,
+          color: i.color,
+          size: i.size,
+          quantity: i.quantity,
+          price_pix: i.pricePix,
+        })),
       });
-      console.log("Resposta Stripe:", sessionRes);
 
-      if (sessionRes?.url) {
-        window.location.href = sessionRes.url;
-        return;
-      }
-      if (sessionRes?.sessionId) {
-        const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
-        await stripe?.redirectToCheckout({ sessionId: sessionRes.sessionId });
-        return;
-      }
+      const orderId = order?.id || "";
+      const wppMsg = [
+        "Olá! Finalizei um pedido no site *Numar Store*",
+        orderId ? `\n📦 Pedido: ${orderId}` : "",
+        `\n👤 ${fullName}`,
+        `📧 ${email}`,
+        `📱 ${telefone}`,
+        `\n📍 ${addressLine}`,
+        `\n🛍️ Itens:`,
+        ...items.map(
+          (i) =>
+            `• ${i.name} | ${i.color} | ${i.size} | Qtd: ${i.quantity} | ${formatBRL(i.pricePix * i.quantity)}`
+        ),
+        `\n🚚 Frete: ${shippingName} (${shipping === 0 ? "Grátis" : formatBRL(shipping)})`,
+        couponDiscount > 0 ? `🏷️ Desconto cupom: -${formatBRL(couponDiscount)}` : "",
+        `\n💰 *Total: ${formatBRL(total)}*`,
+        "\nAguardo confirmação e opções de pagamento. Obrigada!",
+      ]
+        .filter(Boolean)
+        .join("\n");
 
-      throw new Error("Stripe não retornou URL");
-    } catch (e: any) {
-      console.error("❌ Erro no checkout:", e);
-      toast({ 
-        title: "❌ Erro no pagamento", 
-        description: e.message || "Erro ao processar pagamento. Verifique o console para detalhes."
+      close();
+      await clear();
+      window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(wppMsg)}`, "_blank");
+      navigate(orderId ? `/checkout/success?order=${orderId}` : "/checkout/success");
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Erro ao registrar pedido";
+      toast({
+        title: "Erro ao finalizar",
+        description: message,
       });
     } finally {
       setLoading(false);
@@ -297,33 +289,13 @@ export default function Checkout() {
           {/* Step 1: Payment and Personal Data */}
           {step === 1 && (
             <div className="space-y-6">
-              <div className="border border-border rounded-lg p-6">
-                <h2 className="font-serif text-xl mb-4">Forma de Pagamento</h2>
-                <div className="grid grid-cols-3 gap-3 mb-6">
-                  {[
-                    { id: "pix" as PayMethod, icon: QrCode, label: "Pix", desc: "5% de desconto" },
-                    { id: "card" as PayMethod, icon: CreditCard, label: "Cartão", desc: "3x sem juros" },
-                    { id: "boleto" as PayMethod, icon: Banknote, label: "Boleto", desc: "Vence em 3 dias" },
-                  ].map(({ id, icon: Icon, label, desc }) => (
-                    <button key={id} onClick={() => setMethod(id)}
-                      className={`flex flex-col items-center gap-2 p-4 border-2 rounded-lg transition-all ${
-                        method === id ? "border-primary bg-primary/5" : "border-border hover:border-muted-foreground"
-                      }`}>
-                      <Icon className={`h-6 w-6 ${method === id ? "text-primary" : "text-muted-foreground"}`} />
-                      <span className={`text-sm font-medium ${method === id ? "text-primary" : ""}`}>{label}</span>
-                      <span className="text-xs text-muted-foreground text-center">{desc}</span>
-                    </button>
-                  ))}
-                </div>
-                {method === "pix" && <div className="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded p-4">
-                  <p className="text-sm font-medium text-green-800 dark:text-green-300">✅ Pix com 5% de desconto!</p>
-                </div>}
-                {method === "card" && <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded p-4">
-                  <p className="text-sm font-medium text-blue-800 dark:text-blue-300">💳 Cartão em até 3x sem juros</p>
-                </div>}
-                {method === "boleto" && <div className="bg-yellow-50 dark:bg-yellow-950/30 border border-yellow-200 dark:border-yellow-800 rounded p-4">
-                  <p className="text-sm font-medium text-yellow-800 dark:text-yellow-300">📄 Boleto Bancário</p>
-                </div>}
+              <div className="border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-950/30 rounded-lg p-6">
+                <h2 className="font-serif text-xl mb-2 flex items-center gap-2">
+                  <MessageCircle className="h-5 w-5 text-green-700" /> Finalização pelo WhatsApp
+                </h2>
+                <p className="text-sm text-green-800 dark:text-green-300">
+                  Ao confirmar, seu pedido será salvo e o WhatsApp abrirá com o resumo. Nossa equipe confirma estoque, frete e pagamento (Mercado Pago em breve no site).
+                </p>
               </div>
 
               <div className="border border-border rounded-lg p-6">
@@ -451,10 +423,9 @@ export default function Checkout() {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>{formatBRL(subtotal)}</span></div>
                   <div className="flex justify-between"><span className="text-muted-foreground">Frete</span><span>{shipping === 0 ? "Grátis" : formatBRL(shipping)}</span></div>
-                  {pixDiscount > 0 && <div className="flex justify-between text-green-600"><span>Desconto Pix (5%)</span><span>-{formatBRL(pixDiscount)}</span></div>}
                   {couponDiscount > 0 && <div className="flex justify-between text-green-600"><span>Desconto Cupom</span><span>-{formatBRL(couponDiscount)}</span></div>}
                   <div className="flex justify-between font-serif text-xl pt-2 border-t border-border"><span>Total</span><span className="text-primary">{formatBRL(total)}</span></div>
-                  {method === "card" && <p className="text-xs text-muted-foreground text-right">ou 3x de {formatBRL(total / 3)} sem juros</p>}
+                  <p className="text-xs text-muted-foreground text-right">Pagamento combinado no WhatsApp</p>
                 </div>
               </div>
 
@@ -463,7 +434,7 @@ export default function Checkout() {
                   <ChevronLeft className="h-4 w-4" /> Voltar
                 </Button>
                 <Button onClick={handleCheckout} disabled={loading} className="flex-1 h-12 uppercase tracking-widest gap-2">
-                  <MessageCircle className="h-4 w-4" />{loading ? "Processando..." : "Finalizar Compra"}
+                  <MessageCircle className="h-4 w-4" />{loading ? "Processando..." : "Confirmar e abrir WhatsApp"}
                 </Button>
               </div>
 
@@ -477,33 +448,13 @@ export default function Checkout() {
         {/* Desktop: Keep original two-column layout */}
         <div className="hidden md:grid lg:grid-cols-[1fr_380px] gap-8">
           <div className="space-y-6">
-            <div className="border border-border rounded-lg p-6">
-              <h2 className="font-serif text-xl mb-4">Forma de Pagamento</h2>
-              <div className="grid grid-cols-3 gap-3 mb-6">
-                {[
-                  { id: "pix" as PayMethod, icon: QrCode, label: "Pix", desc: "5% de desconto" },
-                  { id: "card" as PayMethod, icon: CreditCard, label: "Cartão", desc: "3x sem juros" },
-                  { id: "boleto" as PayMethod, icon: Banknote, label: "Boleto", desc: "Vence em 3 dias" },
-                ].map(({ id, icon: Icon, label, desc }) => (
-                  <button key={id} onClick={() => setMethod(id)}
-                    className={`flex flex-col items-center gap-2 p-4 border-2 rounded-lg transition-all ${
-                      method === id ? "border-primary bg-primary/5" : "border-border hover:border-muted-foreground"
-                    }`}>
-                    <Icon className={`h-6 w-6 ${method === id ? "text-primary" : "text-muted-foreground"}`} />
-                    <span className={`text-sm font-medium ${method === id ? "text-primary" : ""}`}>{label}</span>
-                    <span className="text-xs text-muted-foreground text-center">{desc}</span>
-                  </button>
-                ))}
-              </div>
-              {method === "pix" && <div className="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded p-4">
-                <p className="text-sm font-medium text-green-800 dark:text-green-300">✅ Pix com 5% de desconto!</p>
-              </div>}
-              {method === "card" && <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded p-4">
-                <p className="text-sm font-medium text-blue-800 dark:text-blue-300">💳 Cartão em até 3x sem juros</p>
-              </div>}
-              {method === "boleto" && <div className="bg-yellow-50 dark:bg-yellow-950/30 border border-yellow-200 dark:border-yellow-800 rounded p-4">
-                <p className="text-sm font-medium text-yellow-800 dark:text-yellow-300">📄 Boleto Bancário</p>
-              </div>}
+            <div className="border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-950/30 rounded-lg p-6">
+              <h2 className="font-serif text-xl mb-2 flex items-center gap-2">
+                <MessageCircle className="h-5 w-5 text-green-700" /> Finalização pelo WhatsApp
+              </h2>
+              <p className="text-sm text-green-800 dark:text-green-300">
+                Ao confirmar, seu pedido será salvo e o WhatsApp abrirá com o resumo. Nossa equipe confirma estoque, frete e pagamento (Mercado Pago em breve no site).
+              </p>
             </div>
 
             <CouponInput subtotal={subtotal} />
@@ -615,13 +566,12 @@ export default function Checkout() {
                 ) : (
                   <div className="flex justify-between"><span className="text-muted-foreground">Frete</span><span className="text-muted-foreground">Digite o CEP para calcular</span></div>
                 )}
-                {pixDiscount > 0 && <div className="flex justify-between text-green-600"><span>Desconto Pix (5%)</span><span>-{formatBRL(pixDiscount)}</span></div>}
                 {couponDiscount > 0 && <div className="flex justify-between text-green-600"><span>Desconto Cupom</span><span>-{formatBRL(couponDiscount)}</span></div>}
                 <div className="flex justify-between font-serif text-xl pt-2 border-t border-border"><span>Total</span><span className="text-primary">{formatBRL(total)}</span></div>
-                {method === "card" && <p className="text-xs text-muted-foreground text-right">ou 3x de {formatBRL(total / 3)} sem juros</p>}
+                <p className="text-xs text-muted-foreground text-right">Pagamento combinado no WhatsApp</p>
               </div>
               <Button onClick={handleCheckout} disabled={loading} className="w-full h-12 uppercase tracking-widest gap-2">
-                <MessageCircle className="h-4 w-4" />{loading ? "Processando..." : "Finalizar Compra"}
+                <MessageCircle className="h-4 w-4" />{loading ? "Processando..." : "Confirmar e abrir WhatsApp"}
               </Button>
               <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
                 <Lock className="h-3 w-3" /><span>Compra 100% segura</span>

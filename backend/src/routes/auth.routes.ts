@@ -53,20 +53,26 @@ router.put("/profile", authMiddleware, async (req: any, res) => {
 });
 
 router.post("/forgot-password", async (req, res) => {
+  const genericMessage =
+    "Se o e-mail estiver cadastrado, você receberá instruções para redefinir sua senha.";
   try {
     const { email } = req.body;
     if (!email) return res.status(400).json({ error: "E-mail é obrigatório" });
 
-    const result = await createPasswordResetToken(email);
-    
-    // Send password reset email
-    const resetLink = `${process.env.FRONTEND_URL || 'https://numarstore-v-final.vercel.app'}/reset-password?token=${result.token}`;
-    sendPasswordResetEmail(email, resetLink).catch(err => console.error('Failed to send password reset email:', err));
-    
-    res.json({ message: "Token de redefinição gerado", token: result.token });
-  } catch (e: any) {
-    if (e.message === "USER_NOT_FOUND") return res.status(404).json({ error: "E-mail não encontrado" });
-    res.status(500).json({ error: e.message || "Erro ao gerar token" });
+    try {
+      const result = await createPasswordResetToken(email);
+      const resetLink = `${process.env.FRONTEND_URL || "https://numarstore-v-final.vercel.app"}/reset-password?token=${result.token}`;
+      sendPasswordResetEmail(email, resetLink).catch((err) =>
+        console.error("Failed to send password reset email:", err)
+      );
+    } catch (e: unknown) {
+      if (!(e instanceof Error) || e.message !== "USER_NOT_FOUND") throw e;
+    }
+
+    res.json({ message: genericMessage });
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : "Erro ao processar solicitação";
+    res.status(500).json({ error: msg });
   }
 });
 
