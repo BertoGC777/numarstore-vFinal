@@ -8,7 +8,6 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DialogFooter } from "@/components/ui/dialog";
 import { Plus, X, Upload } from "lucide-react";
 import Image from "@/components/Image";
 
@@ -282,7 +281,15 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form 
+      onSubmit={(e) => {
+        console.log("Form onSubmit event triggered");
+        console.log("Event target:", e.target);
+        console.log("Event type:", e.type);
+        handleSubmit(e);
+      }} 
+      className="space-y-6"
+    >
       {/* Basic Information */}
       <div className="space-y-4">
         <h3 className="text-lg font-semibold">Informações Básicas</h3>
@@ -624,11 +631,19 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
         </div>
       </div>
 
-      <DialogFooter>
+      <div className="flex justify-end gap-2 pt-4 border-t">
         <Button type="button" variant="outline" onClick={onCancel} disabled={loading}>
           Cancelar
         </Button>
-        <Button type="submit" disabled={loading} className="min-w-[140px]">
+        <Button 
+          type="submit" 
+          disabled={loading} 
+          className="min-w-[140px]"
+          onClick={(e) => {
+            console.log("Submit button clicked");
+            console.log("Form data before submit:", formData);
+          }}
+        >
           {loading ? (
             <span className="flex items-center gap-2">
               <div className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full" />
@@ -636,7 +651,7 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
             </span>
           ) : product ? "Atualizar Produto" : "Criar Produto"}
         </Button>
-      </DialogFooter>
+      </div>
     </form>
   );
 }
