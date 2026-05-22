@@ -480,13 +480,20 @@ export async function createProduct(data: any) {
 export async function updateProduct(id: string, data: any) {
   await getDatabase();
   
+  console.log("=== updateProduct ===");
+  console.log("Product ID:", id);
+  console.log("Data received:", JSON.stringify(data, null, 2));
+  
   // Verificar se o produto existe
   const existingProduct = await dbGet(
     `SELECT id FROM products WHERE id = $1`,
     [id]
   );
   
+  console.log("Existing product:", existingProduct);
+  
   if (!existingProduct) {
+    console.error("Product not found:", id);
     throw new Error("Produto não encontrado");
   }
   

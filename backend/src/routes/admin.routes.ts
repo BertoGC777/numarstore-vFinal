@@ -105,9 +105,18 @@ router.post("/products", adminMiddleware, async (req, res) => {
 router.put("/products/:id", adminMiddleware, async (req, res) => {
   try {
     const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    console.log("=== PUT /admin/products/:id ===");
+    console.log("Product ID:", id);
+    console.log("Request body keys:", Object.keys(req.body));
+    console.log("Request body:", JSON.stringify(req.body, null, 2));
+    console.log("User:", req.user);
+    
     const product = await adminService.updateProduct(id, req.body);
+    console.log("Product updated successfully:", product.id);
     res.json(product);
   } catch (err: any) {
+    console.error("Error updating product:", err);
+    console.error("Error stack:", err.stack);
     res.status(500).json({ error: err.message || "Erro ao atualizar produto" });
   }
 });

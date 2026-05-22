@@ -139,6 +139,10 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log("=== FormularioProduto: handleSubmit ===");
+    console.log("Product ID:", product?.id);
+    console.log("Form data:", formData);
+    
     // Validação no frontend
     if (!formData.name.trim()) {
       toast({ title: "Erro", description: "Nome do produto é obrigatório" });
@@ -196,13 +200,17 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
         is_active: formData.is_active ? 1 : 0
       };
 
-      console.log("Saving product:", product?.id ? "UPDATE" : "CREATE", payload);
+      console.log("Sending payload:", JSON.stringify(payload, null, 2));
+      console.log("API URL:", import.meta.env.VITE_API_URL || "http://localhost:3001/api");
+      console.log("Endpoint:", `/admin/products/${product?.id}`);
 
       if (product?.id) {
+        console.log("Calling PUT /admin/products/" + product.id);
         await api.put(`/admin/products/${product.id}`, payload);
         console.log("Product updated successfully");
         toast({ title: "Sucesso", description: "Produto atualizado com sucesso" });
       } else {
+        console.log("Calling POST /admin/products");
         await api.post("/admin/products", payload);
         console.log("Product created successfully");
         toast({ title: "Sucesso", description: "Produto criado com sucesso" });
@@ -211,6 +219,9 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
       onSave();
     } catch (err: any) {
       console.error("Error saving product:", err);
+      console.error("Error response:", err.response);
+      console.error("Error status:", err.response?.status);
+      console.error("Error data:", err.response?.data);
       const errorMsg = err.response?.data?.error || err.message || "Erro ao salvar produto";
       toast({ title: "Erro", description: errorMsg });
     } finally {
