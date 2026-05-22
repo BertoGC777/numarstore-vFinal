@@ -47,8 +47,8 @@ export async function fetchAllProducts(params?: Record<string, string>): Promise
     const list = Array.isArray(data) ? data : [];
     return list.map((p) => mapApiProduct(p));
   } catch (e) {
-    console.warn("[productApi] API indisponível, usando catálogo local:", e);
-    return localProducts;
+    console.error("[productApi] Erro ao buscar produtos da API:", e);
+    return []; // Retornar um array vazio em caso de erro da API
   }
 }
 
@@ -79,5 +79,5 @@ export async function fetchFeatured(count = 8): Promise<Product[]> {
 }
 
 export function getLocalProducts(): Product[] {
-  return localProducts;
+  return []; // Esta função não será mais usada para o catálogo principal.
 }

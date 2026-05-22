@@ -55,10 +55,18 @@ export default function Catalog() {
       else params.category = categoria;
     }
     if (subFromUrl) params.sub = subFromUrl;
-    fetchAllProducts(params).then((list) => {
-      setAllProducts(list);
-      setLoading(false);
-    });
+    // Chamar fetchAllProducts sem localProducts
+    fetchAllProducts(params)
+      .then((list) => {
+        setAllProducts(list);
+      })
+      .catch((err) => {
+        console.error("Erro ao buscar produtos da API:", err);
+        setAllProducts([]); // Em caso de erro, mostre uma lista vazia
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [categoria, subFromUrl]);
 
   // Título: subcategoria tem prioridade, depois categoria, depois padrão

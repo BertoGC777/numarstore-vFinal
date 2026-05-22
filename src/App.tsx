@@ -56,8 +56,8 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 
 const AdminRoute = ({ children }: { children: React.ReactNode }) => {
   const token = localStorage.getItem("numar.token");
-  const user = JSON.parse(localStorage.getItem("numar.user") || "{}");
-  if (!token || user.role !== "admin") return <Navigate to="/conta" />;
+  // Apenas verificar a existência do token. A lógica de role será no Admin.tsx
+  if (!token) return <Navigate to="/conta" />;
   return <>{children}</>;
 };
 
