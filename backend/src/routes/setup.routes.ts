@@ -2,6 +2,7 @@ import { Router } from "express"
 import bcrypt from "bcryptjs"
 import { pool } from "../db/postgres"
 import { generateToken, generateRefreshToken } from "../middleware/auth"
+import { resolveImageUrl } from "../utils/imageResolver"
 
 const router = Router()
 
@@ -37,15 +38,12 @@ router.get("/debug-products", async (req, res) => {
       [productId]
     );
     
-    // Convert relative URLs to absolute backend URLs
-    const backendUrl = process.env.BACKEND_URL || 'https://numarstore-backend.onrender.com';
-    const convertedImages = images.rows.map((img: any) => {
-      if (img.url.startsWith('/images/')) {
-        return { ...img, url: `${backendUrl}${img.url}` };
-      }
-      return img;
-    });
-    
+    const slug = product.rows[0].slug;
+    const convertedImages = images.rows.map((img: { url: string; color?: string }) => ({
+      ...img,
+      url: resolveImageUrl(slug, img),
+    }));
+
     res.json({
       product: product.rows[0],
       imagesCount: images.rows.length,
@@ -122,6 +120,49 @@ router.get("/update-image-urls", async (req, res) => {
     });
   } catch (error: any) {
     console.error("Update image URLs error:", error);
+    res.status(500).json({ error: error.message });
+  }
+})
+
+// Corrige URLs de imagens no banco para arquivos reais em public/images
+router.get("/fix-image-urls", async (_req, res) => {
+  try {
+    const products = await pool.query("SELECT id, slug FROM products");
+    let updatedCount = 0;
+    const samples: Array<{ slug: string; color: string; oldUrl: string; newUrl: string }> = [];
+
+    for (const product of products.rows) {
+      const images = await pool.query(
+        "SELECT id, url, color FROM product_images WHERE product_id = $1",
+        [product.id]
+      );
+
+      for (const img of images.rows) {
+        const newUrl = resolveImageUrl(product.slug, img);
+        if (newUrl !== img.url) {
+          await pool.query("UPDATE product_images SET url = $1 WHERE id = $2", [newUrl, img.id]);
+          updatedCount++;
+          if (samples.length < 8) {
+            samples.push({
+              slug: product.slug,
+              color: img.color,
+              oldUrl: img.url,
+              newUrl,
+            });
+          }
+        }
+      }
+    }
+
+    res.json({
+      success: true,
+      updatedCount,
+      totalProducts: products.rows.length,
+      message: `Corrigidas ${updatedCount} URLs de imagens`,
+      samples,
+    });
+  } catch (error: any) {
+    console.error("Fix image URLs error:", error);
     res.status(500).json({ error: error.message });
   }
 })

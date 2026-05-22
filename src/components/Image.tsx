@@ -42,10 +42,16 @@ export default function Image({
   const aspectClass = aspectRatioClasses[aspectRatio] || aspectRatio;
 
   useEffect(() => {
+    setHasError(false);
+    setIsLoaded(false);
+
     const img = imgRef.current;
     if (!img) return;
 
-    const handleLoad = () => setIsLoaded(true);
+    const handleLoad = () => {
+      setIsLoaded(true);
+      setHasError(false);
+    };
     const handleError = () => {
       setHasError(true);
       setIsLoaded(true);
@@ -54,7 +60,7 @@ export default function Image({
     img.addEventListener('load', handleLoad);
     img.addEventListener('error', handleError);
 
-    if (img.complete) {
+    if (img.complete && img.naturalWidth > 0) {
       setIsLoaded(true);
     }
 

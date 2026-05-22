@@ -1,4 +1,5 @@
 import { dbRun, dbGet, getDatabase } from "./postgres";
+import { getSeedImagePath } from "../utils/imageResolver";
 
 const COLOR_MAP: Record<string, string> = {
   amarelo: "#f5d547", azul: "#2e5cb8", branco: "#fafafa", ciano: "#5fc9d6",
@@ -100,7 +101,7 @@ export async function seedAll() {
     for (const c of p.colors) {
       const hex = COLOR_MAP[c.toLowerCase()] || "#666";
       await dbRun("INSERT INTO product_images (product_id, url, color, color_hex, sort_order) VALUES ($1, $2, $3, $4, $5)",
-        [id, `/images/${p.slug}-0.jpg`, c, hex, 0]);
+        [id, getSeedImagePath(p.slug, c), c, hex, 0]);
       await dbRun("INSERT INTO product_colors (product_id, name, hex) VALUES ($1, $2, $3)", [id, c, hex]);
     }
     for (const s of p.sizes) {

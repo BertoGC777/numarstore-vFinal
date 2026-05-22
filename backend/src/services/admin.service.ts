@@ -1,4 +1,5 @@
 import { dbAll, dbGet, dbRun, getDatabase } from "../db";
+import { resolveImageRows } from "../utils/imageResolver";
 
 // Dashboard
 export async function getDashboard() {
@@ -316,15 +317,13 @@ export async function getProducts(filters: GetProductsFilters) {
     [...params, limit, offset]
   );
 
-  // Get images for each product - URLs are already absolute in database
   const productsWithImages = await Promise.all(
-    products.map(async (product: any) => {
+    products.map(async (product: { id: string; slug: string }) => {
       const images = await dbAll(
-        `SELECT url FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
+        `SELECT url, color FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
         [product.id]
       );
-      // URLs are already absolute, no conversion needed
-      return { ...product, images };
+      return { ...product, images: resolveImageRows(product.slug, images) };
     })
   );
 
@@ -349,12 +348,13 @@ export async function getProductById(id: string) {
     throw new Error("Produto não encontrado");
   }
 
-  const images = await dbAll(
-    `SELECT id, url, color, color_hex as colorHex, sort_order as sortOrder FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
-    [id]
+  const images = resolveImageRows(
+    product.slug,
+    await dbAll(
+      `SELECT id, url, color, color_hex as colorHex, sort_order as sortOrder FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
+      [id]
+    )
   );
-  
-  // URLs are already absolute, no conversion needed
 
   const colors = await dbAll(
     `SELECT name, hex FROM product_colors WHERE product_id = $1`,
@@ -880,14 +880,13 @@ export async function getBundles(filters: GetBundlesFilters) {
     [...params, limit, offset]
   );
 
-  // Get images for each bundle
   const bundlesWithImages = await Promise.all(
-    bundles.map(async (bundle: any) => {
+    bundles.map(async (bundle: { id: string; slug: string }) => {
       const images = await dbAll(
-        `SELECT url FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
+        `SELECT url, color FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
         [bundle.id]
       );
-      return { ...bundle, images };
+      return { ...bundle, images: resolveImageRows(bundle.slug, images) };
     })
   );
 
@@ -912,9 +911,12 @@ export async function getBundleById(id: string) {
     throw new Error("Conjunto não encontrado");
   }
 
-  const images = await dbAll(
-    `SELECT id, url, color, color_hex as colorHex, sort_order as sortOrder FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
-    [id]
+  const images = resolveImageRows(
+    bundle.slug,
+    await dbAll(
+      `SELECT id, url, color, color_hex as colorHex, sort_order as sortOrder FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
+      [id]
+    )
   );
 
   const colors = await dbAll(

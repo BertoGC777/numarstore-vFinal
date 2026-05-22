@@ -4,6 +4,7 @@
 import Sentry from "./sentry";
 import "dotenv/config";
 import express, { Request, Response } from "express";
+import path from "path";
 import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
@@ -38,8 +39,8 @@ app.use("/api/payments/webhook", express.raw({ type: "application/json" }));
 
 app.use(express.json({ limit: "10mb" }));
 
-// Serve static files from public directory
-app.use(express.static("public"));
+// Serve static files from public directory (path absoluto para funcionar no Render)
+app.use(express.static(path.join(process.cwd(), "public")));
 
 const generalLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 200, standardHeaders: true });
 const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 20, standardHeaders: true });

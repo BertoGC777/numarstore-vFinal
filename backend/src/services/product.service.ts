@@ -1,4 +1,5 @@
-import { dbRun, dbAll, dbGet, getDatabase } from "../db";
+import { dbAll, dbGet, getDatabase } from "../db";
+import { resolveImageUrl } from "../utils/imageResolver";
 
 export interface ProductFilters {
   category?: string;
@@ -9,6 +10,16 @@ export interface ProductFilters {
   maxPrice?: number;
   search?: string;
   sort?: "recent" | "asc" | "desc";
+}
+
+async function getResolvedImageUrls(productId: string, slug: string): Promise<string[]> {
+  const images = await dbAll(
+    "SELECT url, color FROM product_images WHERE product_id = $1 ORDER BY sort_order",
+    [productId]
+  );
+  return images.map((i: { url: string; color?: string | null }) =>
+    resolveImageUrl(slug, i)
+  );
 }
 
 export async function getAllProducts(filters?: ProductFilters) {
@@ -29,30 +40,14 @@ export async function getAllProducts(filters?: ProductFilters) {
      else query += " ORDER BY created_at DESC";
 
      const products = await dbAll(query, params);
-     
-     // Add images to each product - convert relative URLs to absolute placeholder URLs
+
      const productsWithImages = await Promise.all(
-       products.map(async (p: any) => {
-         const images = await dbAll(
-           "SELECT url FROM product_images WHERE product_id = $1 ORDER BY sort_order",
-           [p.id]
-         );
-         // Convert relative URLs to placeholder URLs
-         const convertedImages = images.map((i: any, idx: number) => {
-           if (i.url.startsWith('/images/')) {
-             // Use placeholder image service
-             const slug = p.slug || 'product';
-             return `https://placehold.co/400x500/FFB6C1/FFF?text=${encodeURIComponent(p.name || 'Produto')}`;
-           }
-           return i.url;
-         });
-         return {
-           ...p,
-           images: convertedImages
-         };
-       })
+       products.map(async (p: { id: string; slug: string }) => ({
+         ...p,
+         images: await getResolvedImageUrls(p.id, p.slug),
+       }))
      );
-     
+
      return productsWithImages;
    } catch (e: any) {
      console.error("getAllProducts error:", e.message);
@@ -64,23 +59,10 @@ export async function getProductBySlug(slug: string) {
   await getDatabase();
   const product = await dbGet("SELECT * FROM products WHERE slug = $1", [slug]);
   if (!product) return null;
-  
-  const images = await dbAll(
-    "SELECT url FROM product_images WHERE product_id = $1 ORDER BY sort_order",
-    [product.id]
-  );
-  
-  // Convert relative URLs to placeholder URLs
-  const convertedImages = images.map((i: any) => {
-    if (i.url.startsWith('/images/')) {
-      return `https://placehold.co/400x500/FFB6C1/FFF?text=${encodeURIComponent(product.name || 'Produto')}`;
-    }
-    return i.url;
-  });
-  
+
   return {
     ...product,
-    images: convertedImages
+    images: await getResolvedImageUrls(product.id, product.slug),
   };
 }
 
@@ -92,54 +74,26 @@ export async function getProductById(id: string) {
 export async function getRelatedProducts(productId: string, category: string, limit = 4) {
   await getDatabase();
   const products = await dbAll("SELECT * FROM products WHERE category = $1 AND id != $2 LIMIT $3", [category, productId, limit]);
-  
-  const productsWithImages = await Promise.all(
-    products.map(async (p: any) => {
-      const images = await dbAll(
-        "SELECT url FROM product_images WHERE product_id = $1 ORDER BY sort_order",
-        [p.id]
-      );
-      const convertedImages = images.map((i: any) => {
-        if (i.url.startsWith('/images/')) {
-          return `https://placehold.co/400x500/FFB6C1/FFF?text=${encodeURIComponent(p.name || 'Produto')}`;
-        }
-        return i.url;
-      });
-      return {
-        ...p,
-        images: convertedImages
-      };
-    })
+
+  return Promise.all(
+    products.map(async (p: { id: string; slug: string }) => ({
+      ...p,
+      images: await getResolvedImageUrls(p.id, p.slug),
+    }))
   );
-  
-  return productsWithImages;
 }
 
 export async function searchProducts(query: string) {
   await getDatabase();
   if (!query.trim()) return [];
   const products = await dbAll("SELECT * FROM products WHERE name LIKE $1", [`%${query}%`]);
-  
-  const productsWithImages = await Promise.all(
-    products.map(async (p: any) => {
-      const images = await dbAll(
-        "SELECT url FROM product_images WHERE product_id = $1 ORDER BY sort_order",
-        [p.id]
-      );
-      const convertedImages = images.map((i: any) => {
-        if (i.url.startsWith('/images/')) {
-          return `https://placehold.co/400x500/FFB6C1/FFF?text=${encodeURIComponent(p.name || 'Produto')}`;
-        }
-        return i.url;
-      });
-      return {
-        ...p,
-        images: convertedImages
-      };
-    })
+
+  return Promise.all(
+    products.map(async (p: { id: string; slug: string }) => ({
+      ...p,
+      images: await getResolvedImageUrls(p.id, p.slug),
+    }))
   );
-  
-  return productsWithImages;
 }
 
 export async function checkStock(productId: string) {
