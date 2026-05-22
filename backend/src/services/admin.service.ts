@@ -463,12 +463,12 @@ export async function createProduct(data: any) {
   // Insert stock if provided
   if (stock && typeof stock === 'object') {
     for (const [key, quantity] of Object.entries(stock)) {
-      const [colorIdx, size] = key.split('-');
+      const [colorName, size] = key.split('-');
       const qty = parseInt(String(quantity), 10) || 0;
       if (qty > 0) {
         await dbRun(
           `INSERT INTO product_stock (product_id, color, size, quantity) VALUES ($1, $2, $3, $4)`,
-          [id, colorIdx, size, qty]
+          [id, colorName, size, qty]
         );
       }
     }
@@ -479,6 +479,16 @@ export async function createProduct(data: any) {
 
 export async function updateProduct(id: string, data: any) {
   await getDatabase();
+  
+  // Verificar se o produto existe
+  const existingProduct = await dbGet(
+    `SELECT id FROM products WHERE id = $1`,
+    [id]
+  );
+  
+  if (!existingProduct) {
+    throw new Error("Produto não encontrado");
+  }
   
   const {
     name,
@@ -505,41 +515,61 @@ export async function updateProduct(id: string, data: any) {
   let paramIndex = 1;
 
   if (name !== undefined) {
+    if (!name || name.trim() === "") {
+      throw new Error("Nome do produto é obrigatório");
+    }
     fields.push(`name = $${paramIndex}`);
-    values.push(name);
+    values.push(name.trim());
     paramIndex++;
-    
-    const finalSlug = slug || name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  }
+  
+  if (slug !== undefined) {
+    const finalSlug = slug || name?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    if (!finalSlug || finalSlug.trim() === "") {
+      throw new Error("Slug do produto é obrigatório");
+    }
     fields.push(`slug = $${paramIndex}`);
-    values.push(finalSlug);
+    values.push(finalSlug.trim());
     paramIndex++;
   }
   if (category !== undefined) {
+    if (!category || category.trim() === "") {
+      throw new Error("Categoria do produto é obrigatória");
+    }
     fields.push(`category = $${paramIndex}`);
-    values.push(category);
+    values.push(category.trim());
     paramIndex++;
   }
   if (subcategory !== undefined) {
     fields.push(`subcategory = $${paramIndex}`);
-    values.push(subcategory || null);
+    values.push(subcategory ? subcategory.trim() : null);
     paramIndex++;
   }
   if (description !== undefined) {
+    if (!description || description.trim() === "") {
+      throw new Error("Descrição do produto é obrigatória");
+    }
     fields.push(`description = $${paramIndex}`);
-    values.push(description);
+    values.push(description.trim());
     paramIndex++;
   }
   if (shortDescription !== undefined) {
     fields.push(`short_description = $${paramIndex}`);
-    values.push(shortDescription || null);
+    values.push(shortDescription ? shortDescription.trim() : null);
     paramIndex++;
   }
   if (price_pix !== undefined) {
+    if (isNaN(price_pix) || price_pix < 0) {
+      throw new Error("Preço PIX deve ser um número válido");
+    }
     fields.push(`price_pix = $${paramIndex}`);
     values.push(price_pix);
     paramIndex++;
   }
   if (price_card !== undefined) {
+    if (isNaN(price_card) || price_card < 0) {
+      throw new Error("Preço cartão deve ser um número válido");
+    }
     fields.push(`price_card = $${paramIndex}`);
     values.push(price_card);
     paramIndex++;
@@ -560,6 +590,9 @@ export async function updateProduct(id: string, data: any) {
     paramIndex++;
   }
   if (discount !== undefined) {
+    if (isNaN(discount) || discount < 0 || discount > 100) {
+      throw new Error("Desconto deve ser um número entre 0 e 100");
+    }
     fields.push(`discount = $${paramIndex}`);
     values.push(discount);
     paramIndex++;
@@ -626,12 +659,12 @@ export async function updateProduct(id: string, data: any) {
   if (stock !== undefined && typeof stock === 'object') {
     await dbRun(`DELETE FROM product_stock WHERE product_id = $1`, [id]);
     for (const [key, quantity] of Object.entries(stock)) {
-      const [colorIdx, size] = key.split('-');
+      const [colorName, size] = key.split('-');
       const qty = parseInt(String(quantity), 10) || 0;
       if (qty > 0) {
         await dbRun(
           `INSERT INTO product_stock (product_id, color, size, quantity) VALUES ($1, $2, $3, $4)`,
-          [id, colorIdx, size, qty]
+          [id, colorName, size, qty]
         );
       }
     }

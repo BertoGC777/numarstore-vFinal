@@ -470,15 +470,15 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
                   <tr key={colorIdx} className="border-t">
                     <td className="px-4 py-2 text-sm">
                       <div className="flex items-center gap-2">
-                        <div 
-                          className="w-4 h-4 rounded-full border" 
+                        <div
+                          className="w-4 h-4 rounded-full border"
                           style={{ backgroundColor: color.hex }}
                         />
                         {color.name || `Cor ${colorIdx + 1}`}
                       </div>
                     </td>
                     {formData.sizes.map((size) => {
-                      const stockKey = `${colorIdx}-${size}`;
+                      const stockKey = `${color.name || colorIdx}-${size}`;
                       return (
                         <td key={size} className="px-4 py-2 text-center">
                           <Input
