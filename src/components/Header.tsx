@@ -9,20 +9,24 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { api } from "@/api/client";
 
-const menu = [
+const FIXED_MENU = [
   { label: "Todos", href: "/catalogo" },
-  { label: "Vestidos", href: "/catalogo/vestidos", children: [
-    { label: "Vestidos Longos", href: "/catalogo/vestidos-longos" },
-    { label: "Vestidos Curtos", href: "/catalogo/vestidos-curtos" },
-    { label: "Ver todos os vestidos", href: "/catalogo/vestidos" }
-  ] },
-  { label: "Partes de Cima", href: "/catalogo/partes-de-cima" },
-  { label: "Partes de Baixo", href: "/catalogo/partes-de-baixo" },
-  { label: "Biquínis", href: "/catalogo/biquinis" },
-  { label: "Conjuntos", href: "/catalogo/conjuntos" },
+  { label: "Vestidos", href: "/catalogo/vestidos", categorySlug: "vestidos" },
+  { label: "Partes de Cima", href: "/catalogo/partes-de-cima", categorySlug: "partes-de-cima" },
+  { label: "Partes de Baixo", href: "/catalogo/partes-de-baixo", categorySlug: "partes-de-baixo" },
+  { label: "Biquínis", href: "/catalogo/biquinis", categorySlug: "biquinis" },
+  { label: "Conjuntos", href: "/catalogo/conjuntos", categorySlug: "conjuntos" },
   { label: "Lançamentos", href: "/catalogo/lancamentos" },
   { label: "Promoção", href: "/catalogo/promocao", highlight: true },
 ];
+
+interface MenuItem {
+  label: string;
+  href: string;
+  categorySlug?: string;
+  highlight?: boolean;
+  children?: { label: string; href: string }[];
+}
 
 export default function Header() {
   const { count, open } = useCart();
@@ -30,12 +34,62 @@ export default function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [q, setQ] = useState("");
+  const [subcategories, setSubcategories] = useState<Record<string, any[]>>({});
+  const [menu, setMenu] = useState<MenuItem[]>(FIXED_MENU);
   const navigate = useNavigate();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Fetch subcategories on mount
+  useEffect(() => {
+    const fetchSubcategories = async () => {
+      try {
+        const data = await api.get("/admin/subcategories");
+        const subs = data.subcategories || [];
+        
+        // Group subcategories by category_slug
+        const grouped: Record<string, any[]> = {};
+        subs.forEach((sub: any) => {
+          if (!grouped[sub.category_slug]) {
+            grouped[sub.category_slug] = [];
+          }
+          grouped[sub.category_slug].push(sub);
+        });
+        
+        setSubcategories(grouped);
+        
+        // Update menu with dynamic subcategories
+        const updatedMenu = FIXED_MENU.map((item) => {
+          if (!item.categorySlug) return item;
+          
+          const categorySubs = grouped[item.categorySlug] || [];
+          if (categorySubs.length === 0) return item;
+          
+          return {
+            ...item,
+            children: [
+              ...categorySubs.map((sub: any) => ({
+                label: sub.name,
+                href: `/catalogo/${item.categorySlug}?sub=${sub.slug}`
+              })),
+              { label: `Ver todos os ${item.label.toLowerCase()}`, href: item.href }
+            ]
+          };
+        });
+        
+        setMenu(updatedMenu);
+      } catch (err) {
+        console.error("Error fetching subcategories, using fallback:", err);
+        // Keep using FIXED_MENU as fallback
+        setMenu(FIXED_MENU);
+      }
+    };
+    
+    fetchSubcategories();
   }, []);
 
   const submitSearch = (e: React.FormEvent) => {

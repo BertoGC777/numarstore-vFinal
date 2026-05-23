@@ -64,6 +64,7 @@ interface FormularioProdutoProps {
 export default function FormularioProduto({ product, onSave, onCancel }: FormularioProdutoProps) {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [subcategories, setSubcategories] = useState<any[]>([]);
   
   const [formData, setFormData] = useState({
     name: "",
@@ -84,6 +85,25 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
     is_sale: false,
     is_active: true
   });
+
+  // Fetch subcategories when category changes
+  useEffect(() => {
+    if (formData.category) {
+      fetchSubcategories(formData.category);
+    } else {
+      setSubcategories([]);
+    }
+  }, [formData.category]);
+
+  const fetchSubcategories = async (categorySlug: string) => {
+    try {
+      const data = await api.get(`/admin/subcategories/${categorySlug}`);
+      setSubcategories(data.subcategories || []);
+    } catch (err: any) {
+      console.error("Error fetching subcategories:", err);
+      setSubcategories([]);
+    }
+  };
 
   useEffect(() => {
     if (product) {
@@ -354,12 +374,25 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
           
           <div className="space-y-2">
             <Label htmlFor="subcategory">Subcategoria</Label>
-            <Input
-              id="subcategory"
-              value={formData.subcategory}
-              onChange={(e) => setFormData({ ...formData, subcategory: e.target.value })}
-              placeholder="Ex: Alça Fina"
-            />
+            {subcategories.length > 0 ? (
+              <Select value={formData.subcategory} onValueChange={(value) => setFormData({ ...formData, subcategory: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione uma subcategoria" />
+                </SelectTrigger>
+                <SelectContent>
+                  {subcategories.map((sub) => (
+                    <SelectItem key={sub.id} value={sub.slug}>{sub.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            ) : (
+              <Input
+                id="subcategory"
+                value={formData.subcategory}
+                onChange={(e) => setFormData({ ...formData, subcategory: e.target.value })}
+                placeholder="Ex: Alça Fina"
+              />
+            )}
           </div>
         </div>
 

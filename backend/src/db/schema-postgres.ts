@@ -204,5 +204,15 @@ export async function createSchema() {
     )
   `);
 
+  await dbRun(`
+    CREATE TABLE IF NOT EXISTS subcategories (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      slug TEXT NOT NULL UNIQUE,
+      category_slug TEXT NOT NULL,
+      created_at BIGINT NOT NULL DEFAULT 0
+    )
+  `);
+
   console.log("✅ PostgreSQL schema created");
 }

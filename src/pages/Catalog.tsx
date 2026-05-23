@@ -1,9 +1,10 @@
 import { useMemo, useState, useEffect } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import ProductCard from "@/components/ProductCard";
 import { fetchAllProducts } from "@/lib/productApi";
+import { api } from "@/api/client";
 import type { Product } from "@/data/products";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
@@ -53,7 +54,8 @@ const categoryImages: Record<string, string> = {
 
 export default function Catalog() {
   const { categoria } = useParams<{ categoria?: string }>();
-  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const subFromUrl = searchParams.get("sub") ?? "";
 
   const [sort, setSort] = useState("recent");
@@ -64,6 +66,36 @@ export default function Catalog() {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [subcategories, setSubcategories] = useState<any[]>([]);
+
+  // Fetch subcategories when category changes
+  useEffect(() => {
+    if (categoria && categoria !== "todos" && categoria !== "lancamentos" && categoria !== "promocao") {
+      fetchSubcategories(categoria);
+    } else {
+      setSubcategories([]);
+    }
+  }, [categoria]);
+
+  const fetchSubcategories = async (categorySlug: string) => {
+    try {
+      const data = await api.get(`/admin/subcategories/${categorySlug}`);
+      setSubcategories(data.subcategories || []);
+    } catch (err: any) {
+      console.error("Error fetching subcategories:", err);
+      setSubcategories([]);
+    }
+  };
+
+  const handleSubcategoryClick = (subSlug: string) => {
+    if (subFromUrl === subSlug) {
+      // Deselect
+      setSearchParams({});
+    } else {
+      setSearchParams({ sub: subSlug });
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -268,6 +300,29 @@ export default function Catalog() {
             <p className="text-sm text-muted-foreground mt-2">
               {`${filtered.length} produto${filtered.length !== 1 ? "s" : ""}`}
             </p>
+          </div>
+        )}
+
+        {/* Subcategory chips */}
+        {subcategories.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-6">
+            <Button
+              variant={!subFromUrl ? "default" : "outline"}
+              size="sm"
+              onClick={() => handleSubcategoryClick("")}
+            >
+              Todos
+            </Button>
+            {subcategories.map((sub) => (
+              <Button
+                key={sub.id}
+                variant={subFromUrl === sub.slug ? "default" : "outline"}
+                size="sm"
+                onClick={() => handleSubcategoryClick(sub.slug)}
+              >
+                {sub.name}
+              </Button>
+            ))}
           </div>
         )}
 

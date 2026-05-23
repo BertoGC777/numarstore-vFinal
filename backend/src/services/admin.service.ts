@@ -1698,3 +1698,53 @@ export async function getLowStockProducts(threshold: number = 5) {
 
   return products;
 }
+
+// Subcategories
+export async function getSubcategories(categorySlug?: string) {
+  await getDatabase();
+  
+  if (categorySlug) {
+    const subcategories = await dbAll(
+      `SELECT * FROM subcategories WHERE category_slug = $1 ORDER BY name`,
+      [categorySlug]
+    );
+    return subcategories;
+  }
+  
+  const subcategories = await dbAll(
+    `SELECT * FROM subcategories ORDER BY category_slug, name`
+  );
+  return subcategories;
+}
+
+export async function createSubcategory(name: string, categorySlug: string) {
+  await getDatabase();
+  
+  // Generate slug from name
+  const slug = name
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '');
+  
+  const id = crypto.randomUUID();
+  const now = Date.now();
+  
+  await dbRun(
+    `INSERT INTO subcategories (id, name, slug, category_slug, created_at)
+     VALUES ($1, $2, $3, $4, $5)`,
+    [id, name, slug, categorySlug, now]
+  );
+  
+  return { id, name, slug, category_slug: categorySlug, created_at: now };
+}
+
+export async function deleteSubcategory(id: string) {
+  await getDatabase();
+  
+  await dbRun(
+    `DELETE FROM subcategories WHERE id = $1`,
+    [id]
+  );
+}

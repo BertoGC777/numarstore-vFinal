@@ -404,4 +404,50 @@ router.get("/low-stock", adminMiddleware, async (req, res) => {
   }
 });
 
+// Subcategories - Get all
+router.get("/subcategories", adminMiddleware, async (req, res) => {
+  try {
+    const subcategories = await adminService.getSubcategories();
+    res.json({ subcategories });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao buscar subcategorias" });
+  }
+});
+
+// Subcategories - Get by category slug
+router.get("/subcategories/:categorySlug", adminMiddleware, async (req, res) => {
+  try {
+    const categorySlug = Array.isArray(req.params.categorySlug) ? req.params.categorySlug[0] : req.params.categorySlug;
+    const subcategories = await adminService.getSubcategories(categorySlug);
+    res.json({ subcategories });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao buscar subcategorias" });
+  }
+});
+
+// Subcategories - Create
+router.post("/subcategories", adminMiddleware, async (req, res) => {
+  try {
+    const { name, category_slug } = req.body;
+    if (!name) return res.status(400).json({ error: "Nome da subcategoria é obrigatório" });
+    if (!category_slug) return res.status(400).json({ error: "Categoria pai é obrigatória" });
+    
+    const subcategory = await adminService.createSubcategory(name, category_slug);
+    res.json({ subcategory });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao criar subcategoria" });
+  }
+});
+
+// Subcategories - Delete
+router.delete("/subcategories/:id", adminMiddleware, async (req, res) => {
+  try {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    await adminService.deleteSubcategory(id);
+    res.json({ message: "Subcategoria excluída com sucesso" });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Erro ao excluir subcategoria" });
+  }
+});
+
 export default router;
