@@ -11,9 +11,18 @@ import { api } from "@/api/client";
 
 const FIXED_MENU = [
   { label: "Todos", href: "/catalogo" },
-  { label: "Vestidos", href: "/catalogo/vestidos", categorySlug: "vestidos" },
-  { label: "Partes de Cima", href: "/catalogo/partes-de-cima", categorySlug: "partes-de-cima" },
-  { label: "Partes de Baixo", href: "/catalogo/partes-de-baixo", categorySlug: "partes-de-baixo" },
+  { 
+    label: "Vestidos", 
+    href: "/catalogo/vestidos", 
+    categorySlug: "vestidos",
+    children: [
+      { label: "Vestidos Longos", href: "/catalogo/vestidos-longos" },
+      { label: "Vestidos Curtos", href: "/catalogo/vestidos-curtos" },
+      { label: "Ver todos os vestidos", href: "/catalogo/vestidos" }
+    ]
+  },
+  { label: "Partes de Cima", href: "/catalogo/partes-de-cima" },
+  { label: "Partes de Baixo", href: "/catalogo/partes-de-baixo" },
   { label: "Biquínis", href: "/catalogo/biquinis", categorySlug: "biquinis" },
   { label: "Conjuntos", href: "/catalogo/conjuntos", categorySlug: "conjuntos" },
   { label: "Lançamentos", href: "/catalogo/lancamentos" },
@@ -69,6 +78,29 @@ export default function Header() {
           const categorySubs = grouped[item.categorySlug] || [];
           if (categorySubs.length === 0) return item;
           
+          // If category already has hardcoded children (Vestidos), merge with dynamic
+          if (item.children && item.children.length > 0) {
+            // Merge hardcoded children with dynamic subcategories
+            const dynamicChildren = categorySubs.map((sub: any) => ({
+              label: sub.name,
+              href: `/catalogo/${item.categorySlug}?sub=${sub.slug}`
+            }));
+            
+            // Keep hardcoded children, add dynamic ones before "Ver todos"
+            const hardcodedChildren = item.children.filter(c => !c.label.includes("Ver todos"));
+            const verTodos = item.children.find(c => c.label.includes("Ver todos"));
+            
+            return {
+              ...item,
+              children: [
+                ...hardcodedChildren,
+                ...dynamicChildren,
+                verTodos || { label: `Ver todos os ${item.label.toLowerCase()}`, href: item.href }
+              ]
+            };
+          }
+          
+          // If no hardcoded children, add dynamic ones
           return {
             ...item,
             children: [

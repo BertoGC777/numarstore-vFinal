@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
-import { useParams, useSearchParams, useNavigate } from "react-router-dom";
+import { useParams, useSearchParams, useNavigate, Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import ProductCard from "@/components/ProductCard";
@@ -277,32 +277,19 @@ export default function Catalog() {
           "description": `Explore ${filtered.length} produtos na Numarstore.`,
         }}
       />
-      <div className="container-numar py-8 md:py-12">
-        {categoria && categoryImages[categoria] && (
-          <div className="relative h-48 md:h-72 mb-8 rounded-lg overflow-hidden">
-            <Image
-              src={categoryImages[categoria]}
-              alt={title}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-6">
-              <h1 className="font-serif text-3xl md:text-5xl text-white">{title}</h1>
-              <p className="text-sm text-white/80 mt-2">
-                {`${filtered.length} produto${filtered.length !== 1 ? "s" : ""}`}
-              </p>
-            </div>
-          </div>
-        )}
-        {!categoria || !categoryImages[categoria] && (
-          <div className="text-center mb-8">
-            <h1 className="font-serif text-4xl md:text-5xl">{title}</h1>
-            <p className="text-sm text-muted-foreground mt-2">
-              {`${filtered.length} produto${filtered.length !== 1 ? "s" : ""}`}
-            </p>
-          </div>
-        )}
+      <div className="container-numar pt-6 pb-2">
+        <nav className="text-xs text-muted-foreground flex items-center gap-1 mb-3">
+          <Link to="/">Início</Link>
+          <span>/</span>
+          <span>{title}</span>
+        </nav>
+        <div className="flex items-center justify-between">
+          <h1 className="font-serif text-3xl md:text-4xl">{title}</h1>
+          <span className="text-sm text-muted-foreground">{filtered.length} produtos</span>
+        </div>
+      </div>
 
+      <div className="container-numar py-8 md:py-12">
         {/* Subcategory chips */}
         {subcategories.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-6">
