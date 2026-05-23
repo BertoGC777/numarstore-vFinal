@@ -259,7 +259,7 @@ export default function Checkout() {
 
   return (
     <Layout>
-      <SEO title="Finalizar Compra" description="Finalize seu pedido com segurança. Pix com 5% de desconto, cartão ou boleto." />
+      <SEO title="Finalizar Compra" description="Finalize seu pedido com segurança. Pagamento via WhatsApp, cartão em breve." />
       <div className="container-numar py-8 max-w-5xl">
         <nav className="text-xs text-muted-foreground flex items-center gap-1 mb-8">
           <Link to="/" className="hover:text-primary">Início</Link>

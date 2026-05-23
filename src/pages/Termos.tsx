@@ -15,7 +15,7 @@ export default function Termos() {
       />
       <div className="container-numar py-12 max-w-3xl mx-auto">
         <h1 className="font-serif text-4xl mb-8">Termos de Uso</h1>
-        <p className="text-muted-foreground mb-6">Última atualização: janeiro de 2025</p>
+        <p className="text-muted-foreground mb-6">Última atualização: maio de 2026</p>
 
         <h2 className="font-serif text-2xl mt-8 mb-3">1. Aceitação dos termos</h2>
         <p className="text-sm leading-relaxed mb-4">Ao acessar e usar o site da Numar Store, você concorda com estes Termos de Uso. Caso não concorde, pedimos que não utilize nossos serviços.</p>
@@ -24,7 +24,7 @@ export default function Termos() {
         <p className="text-sm leading-relaxed mb-4">Todos os preços são em Reais (BRL) e podem ser alterados sem aviso prévio. O preço válido é o exibido no momento da finalização da compra.</p>
 
         <h2 className="font-serif text-2xl mt-8 mb-3">3. Pagamentos</h2>
-        <p className="text-sm leading-relaxed mb-4">Aceitamos Pix (com desconto) e cartão de crédito em até 3x sem juros. O pedido é confirmado após a aprovação do pagamento.</p>
+        <p className="text-sm leading-relaxed mb-4">Aceitamos pagamento via WhatsApp. Cartão de crédito estará disponível em breve. O pedido é confirmado após a aprovação do pagamento.</p>
 
         <h2 className="font-serif text-2xl mt-8 mb-3">4. Entrega</h2>
         <p className="text-sm leading-relaxed mb-4">Enviamos para todo o Brasil. O prazo de entrega varia conforme a região. Frete grátis para compras acima de R$300.</p>

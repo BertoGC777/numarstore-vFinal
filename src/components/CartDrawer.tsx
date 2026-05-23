@@ -142,7 +142,7 @@ export default function CartDrawer() {
                   {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(subtotal)}
                 </span>
               </div>
-              <p className="text-xs text-muted-foreground">ou em até 3x sem juros no cartão</p>
+              <p className="text-xs text-muted-foreground">Pagamento via WhatsApp. Cartão em breve.</p>
               <Button onClick={() => { close(); navigate("/checkout"); }} className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-12 text-sm uppercase tracking-wider">
                 Finalizar Compra
               </Button>

@@ -93,7 +93,7 @@ const ProductCard = React.memo(function ProductCard({ product }: { product: Prod
 
         <div>
           <Price value={product.pricePix} /> <span className="text-xs text-muted-foreground">no Pix</span>
-          <p className="text-xs text-muted-foreground">ou <Price value={product.priceCard} /> em até 3x</p>
+          <p className="text-xs text-muted-foreground">Pagamento via WhatsApp. Cartão em breve.</p>
         </div>
 
         {numColors > 1 && (

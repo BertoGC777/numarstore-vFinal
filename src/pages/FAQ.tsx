@@ -6,7 +6,7 @@ const faqs = [
   { q: "Como faço para rastrear meu pedido?", a: "Após o envio, você receberá o código de rastreio pelo WhatsApp. Acesse o site dos Correios ou da transportadora para acompanhar." },
   { q: "Qual o prazo de entrega?", a: "O prazo varia conforme a região. Em média, de 3 a 10 dias úteis após a confirmação do pagamento." },
   { q: "Vocês têm frete grátis?", a: "Sim! Frete grátis para compras acima de R$300." },
-  { q: "Posso pagar parcelado?", a: "Sim, aceitamos cartão de crédito em até 3x sem juros. No Pix, o pagamento é à vista com preço especial." },
+  { q: "Posso pagar parcelado?", a: "No momento, aceitamos pagamento via WhatsApp. Cartão de crédito com parcelamento estará disponível em breve." },
   { q: "As roupas têm tamanho único?", a: "A maioria das peças é tamanho único, que veste do P ao G. Verifique a descrição de cada produto para mais detalhes." },
   { q: "Como faço uma troca?", a: "Entre em contato pelo WhatsApp em até 30 dias após o recebimento. O produto deve estar sem uso e com etiqueta." },
   { q: "Vocês enviam para todo o Brasil?", a: "Sim! Entregamos em todo o território nacional." },

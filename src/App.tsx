@@ -5,7 +5,6 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CartProvider } from "@/context/CartContext";
 import { WishlistProvider } from "@/context/WishlistContext";
-import { StripeProvider } from "@/context/StripeContext";
 import { CouponProvider } from "@/context/CouponContext";
 import { ToastProvider } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
@@ -31,7 +30,6 @@ const Account = lazy(() => import("./pages/Account"));
 const Search = lazy(() => import("./pages/Search"));
 const Checkout = lazy(() => import("./pages/Checkout"));
 const CheckoutSuccess = lazy(() => import("./pages/CheckoutSuccess"));
-const CheckoutCancel = lazy(() => import("./pages/CheckoutCancel"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const Admin = lazy(() => import("./pages/admin/Admin"));
@@ -68,57 +66,55 @@ const queryClient = new QueryClient({
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <StripeProvider>
-        <WishlistProvider>
-          <CartProvider>
-            <CouponProvider>
-              <ToastProvider>
-                <Sonner />
-                <BrowserRouter>
-                  <ScrollToTop />
-                  <ShippingBar />
-                  <WhatsAppButton />
-                  <CookieBanner />
-                  <ErrorBoundary>
-                    <Suspense
-                      fallback={
-                        <div className="flex items-center justify-center h-screen">
-                          <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full" />
-                        </div>
-                      }
-                    >
-                      <Routes>
-                        <Route path="/" element={<Index />} />
-                        <Route path="/catalogo" element={<Catalog />} />
-                        <Route path="/catalogo/:categoria" element={<Catalog />} />
-                        <Route path="/produto/:slug" element={<ProductPage />} />
-                        <Route path="/conta" element={<Account />} />
-                        <Route path="/busca" element={<Search />} />
-                        <Route path="/checkout" element={<Checkout />} />
-                        <Route path="/checkout/success" element={<CheckoutSuccess />} />
-                        <Route path="/checkout/cancel" element={<CheckoutCancel />} />
-                        <Route path="/forgot-password" element={<ForgotPassword />} />
-                        <Route path="/reset-password" element={<ResetPassword />} />
-                        <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>}>
-                          <Route index element={<Dashboard />} />
-                          <Route path="pedidos" element={<AdminPedidos />} />
-                          <Route path="produtos" element={<AdminProdutos />} />
-                          <Route path="clientes" element={<AdminClientes />} />
-                          <Route path="conjuntos" element={<AdminConjuntos />} />
-                          <Route path="cupons" element={<AdminCupons />} />
-                          <Route path="categorias" element={<AdminCategorias />} />
-                          <Route path="configuracoes" element={<AdminConfiguracoes />} />
-                          <Route path="logs" element={<AdminLogs />} />
-                          <Route path="estoque-baixo" element={<AdminEstoqueBaixo />} />
-                          <Route path="analytics" element={<AdminAnalytics />} />
-                        </Route>
-                        <Route path="/rastreio" element={<Rastreio />} />
-                        <Route path="/quem-somos" element={<QuemSomos />} />
-                        <Route path="/privacidade" element={<Privacidade />} />
-                        <Route path="/termos" element={<Termos />} />
-                        <Route path="/trocas-e-devolucoes" element={<Trocas />} />
-                        <Route path="/faq" element={<FAQ />} />
-                        <Route path="*" element={<NotFound />} />
+      <WishlistProvider>
+        <CartProvider>
+          <CouponProvider>
+            <ToastProvider>
+              <Sonner />
+              <BrowserRouter>
+                <ScrollToTop />
+                <ShippingBar />
+                <WhatsAppButton />
+                <CookieBanner />
+                <ErrorBoundary>
+                  <Suspense
+                    fallback={
+                      <div className="flex items-center justify-center h-screen">
+                        <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full" />
+                      </div>
+                    }
+                  >
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/catalogo" element={<Catalog />} />
+                      <Route path="/catalogo/:categoria" element={<Catalog />} />
+                      <Route path="/produto/:slug" element={<ProductPage />} />
+                      <Route path="/conta" element={<Account />} />
+                      <Route path="/busca" element={<Search />} />
+                      <Route path="/checkout" element={<Checkout />} />
+                      <Route path="/checkout/success" element={<CheckoutSuccess />} />
+                      <Route path="/forgot-password" element={<ForgotPassword />} />
+                      <Route path="/reset-password" element={<ResetPassword />} />
+                      <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>}>
+                        <Route index element={<Dashboard />} />
+                        <Route path="pedidos" element={<AdminPedidos />} />
+                        <Route path="produtos" element={<AdminProdutos />} />
+                        <Route path="clientes" element={<AdminClientes />} />
+                        <Route path="conjuntos" element={<AdminConjuntos />} />
+                        <Route path="cupons" element={<AdminCupons />} />
+                        <Route path="categorias" element={<AdminCategorias />} />
+                        <Route path="configuracoes" element={<AdminConfiguracoes />} />
+                        <Route path="logs" element={<AdminLogs />} />
+                        <Route path="estoque-baixo" element={<AdminEstoqueBaixo />} />
+                        <Route path="analytics" element={<AdminAnalytics />} />
+                      </Route>
+                      <Route path="/rastreio" element={<Rastreio />} />
+                      <Route path="/quem-somos" element={<QuemSomos />} />
+                      <Route path="/privacidade" element={<Privacidade />} />
+                      <Route path="/termos" element={<Termos />} />
+                      <Route path="/trocas-e-devolucoes" element={<Trocas />} />
+                      <Route path="/faq" element={<FAQ />} />
+                      <Route path="*" element={<NotFound />} />
                       </Routes>
                     </Suspense>
                   </ErrorBoundary>
@@ -127,7 +123,6 @@ const App = () => (
             </CouponProvider>
           </CartProvider>
         </WishlistProvider>
-      </StripeProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

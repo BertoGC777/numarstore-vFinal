@@ -15,7 +15,7 @@ export default function Privacidade() {
       />
       <div className="container-numar py-12 max-w-3xl mx-auto prose prose-sm">
         <h1 className="font-serif text-4xl mb-8">Política de Privacidade</h1>
-        <p className="text-muted-foreground mb-6">Última atualização: janeiro de 2025</p>
+        <p className="text-muted-foreground mb-6">Última atualização: maio de 2026</p>
 
         <h2 className="font-serif text-2xl mt-8 mb-3">1. Informações que coletamos</h2>
         <p>Ao utilizar a Numar Store, podemos coletar nome, e-mail, endereço de entrega, telefone e dados de pagamento para processar seus pedidos. Não armazenamos dados de cartão de crédito em nossos servidores.</p>
