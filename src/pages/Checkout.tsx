@@ -181,7 +181,7 @@ export default function Checkout() {
       const fullName = `${nome.trim()} ${sobrenome.trim()}`.trim();
       const addressLine = `${logradouro}, ${numero}${complemento ? ` - ${complemento}` : ""} - ${bairro}, ${localidade}/${uf} - CEP ${cep}`;
 
-      const response = await fetch('https://rwyzentzyhijhkjehcknb.supabase.co/functions/v1/create-preference', {
+      const response = await fetch('https://rwyzentzyhjhkjehcknb.supabase.co/functions/v1/create-preference', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
