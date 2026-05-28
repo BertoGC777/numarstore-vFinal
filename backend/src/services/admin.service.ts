@@ -1520,21 +1520,20 @@ export async function validateCoupon(code: string) {
 // Categories Management
 export async function getCategories() {
   await getDatabase();
-  
-  // Get distinct categories from products
+
   const categories = await dbAll(
-    `SELECT DISTINCT category FROM products ORDER BY category`
+    `SELECT * FROM categories ORDER BY name`
   );
 
-  return categories.map((c: any) => c.category);
+  return categories;
 }
 
 export async function addCategory(name: string) {
   await getDatabase();
-  
+
   // Check if category already exists
   const existing = await dbGet(
-    `SELECT category FROM products WHERE category = $1 LIMIT 1`,
+    `SELECT name FROM categories WHERE name = $1 LIMIT 1`,
     [name]
   );
 
@@ -1542,34 +1541,42 @@ export async function addCategory(name: string) {
     throw new Error("Categoria já existe");
   }
 
-  // Create a placeholder product to establish the category
   const id = crypto.randomUUID();
+  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
   const now = Date.now();
 
   await dbRun(
-    `INSERT INTO products (id, slug, name, description, category, price_pix, price_card, is_active, created_at)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
-    [id, name.toLowerCase().replace(/[^a-z0-9]+/g, "-"), name, "Categoria placeholder", name, 0, 0, 0, now]
+    `INSERT INTO categories (id, name, slug, created_at)
+     VALUES ($1, $2, $3, $4)`,
+    [id, name, slug, now]
   );
 
-  return name;
+  return { id, name, slug };
 }
 
-export async function deleteCategory(name: string) {
+export async function deleteCategory(id: string) {
   await getDatabase();
-  
+
   // Check if category has products
-  const count = await dbGet<{ count: number }>(
-    `SELECT COUNT(*) as count FROM products WHERE category = $1`,
-    [name]
+  const category = await dbGet(
+    `SELECT slug FROM categories WHERE id = $1`,
+    [id]
   );
 
-  if (count?.count && count.count > 1) {
+  if (!category) {
+    throw new Error("Categoria não encontrada");
+  }
+
+  const count = await dbGet<{ count: number }>(
+    `SELECT COUNT(*) as count FROM products WHERE category = $1`,
+    [category.slug]
+  );
+
+  if (count?.count && count.count > 0) {
     throw new Error("Não é possível excluir categoria com produtos. Remova ou reclassifique os produtos primeiro.");
   }
 
-  // Delete the placeholder product if exists
-  await dbRun(`DELETE FROM products WHERE category = $1`, [name]);
+  await dbRun(`DELETE FROM categories WHERE id = $1`, [id]);
 }
 
 // Store Settings Management

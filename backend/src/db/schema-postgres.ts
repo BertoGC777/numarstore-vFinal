@@ -205,6 +205,15 @@ export async function createSchema() {
   `);
 
   await dbRun(`
+    CREATE TABLE IF NOT EXISTS categories (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      slug TEXT NOT NULL UNIQUE,
+      created_at BIGINT NOT NULL DEFAULT 0
+    )
+  `);
+
+  await dbRun(`
     CREATE TABLE IF NOT EXISTS subcategories (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,

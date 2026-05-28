@@ -339,10 +339,10 @@ router.post("/categories", adminMiddleware, async (req, res) => {
 });
 
 // Categories - Delete
-router.delete("/categories/:name", adminMiddleware, async (req, res) => {
+router.delete("/categories/:id", adminMiddleware, async (req, res) => {
   try {
-    const name = Array.isArray(req.params.name) ? req.params.name[0] : req.params.name;
-    await adminService.deleteCategory(name);
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    await adminService.deleteCategory(id);
     res.json({ message: "Categoria excluída com sucesso" });
   } catch (err: any) {
     res.status(500).json({ error: err.message || "Erro ao excluir categoria" });
