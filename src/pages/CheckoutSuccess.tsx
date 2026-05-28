@@ -9,6 +9,54 @@ const WHATSAPP = import.meta.env.VITE_WHATSAPP_NUMBER || "5521979674510";
 export default function CheckoutSuccess() {
   const [params] = useSearchParams();
   const orderId = params.get("order");
+  const { clear } = useCart();
+  const [loading, setLoading] = useState(true);
+  const [order, setOrder] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchOrder = async () => {
+      if (!orderId) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('orders')
+          .select('*, order_items(*)')
+          .eq('id', orderId)
+          .single();
+
+        if (error) throw error;
+        setOrder(data);
+      } catch (error) {
+        console.error('Erro ao buscar pedido:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrder();
+  }, [orderId]);
+
+  useEffect(() => {
+    if (orderId) {
+      clear();
+    }
+  }, [orderId, clear]);
+
+  if (loading) {
+    return (
+      <Layout>
+        <SEO title="Carregando Pedido" description="Carregando informações do pedido..." />
+        <div className="container-numar py-20 text-center">
+          <div className="max-w-md mx-auto">
+            <p className="text-muted-foreground">Carregando informações do pedido...</p>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -30,7 +78,11 @@ export default function CheckoutSuccess() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button asChild>
               <a
-                href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Olá! Acabei de fazer um pedido no site e gostaria de confirmar.")}`}
+                href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(
+                  order 
+                    ? `Olá! Meu pedido #${orderId.substring(0,8).toUpperCase()} foi confirmado. Nome: ${order.customer_name}. Total: R$ ${order.total}.`
+                    : "Olá! Acabei de fazer um pedido no site e gostaria de confirmar."
+                )}`}
                 target="_blank"
                 rel="noreferrer"
               >

@@ -29,6 +29,7 @@ export default function Checkout() {
   const { toast } = useToast();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<'pix' | 'card'>('pix');
 
   const [nome, setNome] = useState("");
   const [sobrenome, setSobrenome] = useState("");
@@ -178,63 +179,60 @@ export default function Checkout() {
     setLoading(true);
     try {
       const fullName = `${nome.trim()} ${sobrenome.trim()}`.trim();
-      const shippingName = selectedShipping?.name || "PAC";
       const addressLine = `${logradouro}, ${numero}${complemento ? ` - ${complemento}` : ""} - ${bairro}, ${localidade}/${uf} - CEP ${cep}`;
 
-      const order = await api.orders.create({
-        paymentMethod: "whatsapp",
-        name: fullName,
-        email,
-        cpf,
-        phone: telefone,
-        cep,
-        logradouro,
-        numero,
-        complemento,
-        bairro,
-        localidade,
-        uf,
-        subtotal,
-        shipping,
-        discount: couponDiscount,
-        total,
-        whatsappMsg: "",
-        items: items.map((i) => ({
-          product_id: i.productId || i.id,
-          name: i.name,
-          image: i.image,
-          color: i.color,
-          size: i.size,
-          quantity: i.quantity,
-          price_pix: i.pricePix,
-        })),
+      const response = await fetch('https://rwyzentzyhijhkjehcknb.supabase.co/functions/v1/create-preference', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + import.meta.env.VITE_SUPABASE_ANON_KEY
+        },
+        body: JSON.stringify({
+          customer: {
+            name: fullName,
+            email,
+            phone: telefone
+          },
+          items: items.map((i) => ({
+            productId: i.productId || i.id,
+            slug: i.slug,
+            name: i.name,
+            image: i.image,
+            pricePix: i.pricePix,
+            priceCard: i.priceCard,
+            color: i.color,
+            size: i.size,
+            quantity: i.quantity
+          })),
+          shipping: shipping,
+          paymentMethod: paymentMethod,
+          address: {
+            cep,
+            logradouro,
+            numero,
+            complemento,
+            bairro,
+            localidade,
+            uf
+          }
+        })
       });
 
-      const orderId = order?.id || "";
-      const wppMsg = [
-        "Olá! Finalizei um pedido no site *Numar Store*",
-        orderId ? `\n📦 Pedido: ${orderId}` : "",
-        `\n👤 ${fullName}`,
-        `📧 ${email}`,
-        `📱 ${telefone}`,
-        `\n📍 ${addressLine}`,
-        `\n🛍️ Itens:`,
-        ...items.map(
-          (i) =>
-            `• ${i.name} | ${i.color} | ${i.size} | Qtd: ${i.quantity} | ${formatBRL(i.pricePix * i.quantity)}`
-        ),
-        `\n🚚 Frete: ${shippingName} (${shipping === 0 ? "Grátis" : formatBRL(shipping)})`,
-        couponDiscount > 0 ? `🏷️ Desconto cupom: -${formatBRL(couponDiscount)}` : "",
-        `\n💰 *Total: ${formatBRL(total)}*`,
-        "\nAguardo confirmação e opções de pagamento. Obrigada!",
-      ]
-        .filter(Boolean)
-        .join("\n");
+      const data = await response.json();
 
-      close();
-      await clear();
-      window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(wppMsg)}`, "_blank");
-      navigate(orderId ? `/checkout/success?order=${orderId}` : "/checkout/success");
+      if (!response.ok) {
+        throw new Error(data.error || 'Erro ao criar preferência de pagamento');
+      }
+
+      // Se tiver init_point (Mercado Pago configurado), redireciona para o checkout do MP
+      if (data.init_point) {
+        window.location.href = data.init_point;
+      } else {
+        // Se não tiver init_point (MP ainda sem chaves reais), redireciona para success
+        close();
+        await clear();
+        navigate(`/checkout/success?order_id=${data.order_id}`);
+      }
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : "Erro ao registrar pedido";
       toast({
@@ -425,7 +423,30 @@ export default function Checkout() {
                   <div className="flex justify-between"><span className="text-muted-foreground">Frete</span><span>{shipping === 0 ? "Grátis" : formatBRL(shipping)}</span></div>
                   {couponDiscount > 0 && <div className="flex justify-between text-green-600"><span>Desconto Cupom</span><span>-{formatBRL(couponDiscount)}</span></div>}
                   <div className="flex justify-between font-serif text-xl pt-2 border-t border-border"><span>Total</span><span className="text-primary">{formatBRL(total)}</span></div>
-                  <p className="text-xs text-muted-foreground text-right">Pagamento combinado no WhatsApp</p>
+                </div>
+              </div>
+
+              <div className="border border-border rounded-lg p-6">
+                <h2 className="font-serif text-xl mb-4">Método de Pagamento</h2>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    onClick={() => setPaymentMethod('pix')}
+                    className={`p-4 border-2 rounded-lg transition-all ${
+                      paymentMethod === 'pix' ? 'border-primary bg-primary/5' : 'border-border hover:border-muted-foreground'
+                    }`}
+                  >
+                    <p className="font-medium">PIX</p>
+                    <p className="text-xs text-muted-foreground">Desconto/Padrão</p>
+                  </button>
+                  <button
+                    onClick={() => setPaymentMethod('card')}
+                    className={`p-4 border-2 rounded-lg transition-all ${
+                      paymentMethod === 'card' ? 'border-primary bg-primary/5' : 'border-border hover:border-muted-foreground'
+                    }`}
+                  >
+                    <p className="font-medium">Cartão de Crédito</p>
+                    <p className="text-xs text-muted-foreground">Até 12x</p>
+                  </button>
                 </div>
               </div>
 
@@ -568,7 +589,30 @@ export default function Checkout() {
                 )}
                 {couponDiscount > 0 && <div className="flex justify-between text-green-600"><span>Desconto Cupom</span><span>-{formatBRL(couponDiscount)}</span></div>}
                 <div className="flex justify-between font-serif text-xl pt-2 border-t border-border"><span>Total</span><span className="text-primary">{formatBRL(total)}</span></div>
-                <p className="text-xs text-muted-foreground text-right">Pagamento combinado no WhatsApp</p>
+              </div>
+
+              <div className="border border-border rounded-lg p-6">
+                <h2 className="font-serif text-xl mb-4">Método de Pagamento</h2>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    onClick={() => setPaymentMethod('pix')}
+                    className={`p-4 border-2 rounded-lg transition-all ${
+                      paymentMethod === 'pix' ? 'border-primary bg-primary/5' : 'border-border hover:border-muted-foreground'
+                    }`}
+                  >
+                    <p className="font-medium">PIX</p>
+                    <p className="text-xs text-muted-foreground">Desconto/Padrão</p>
+                  </button>
+                  <button
+                    onClick={() => setPaymentMethod('card')}
+                    className={`p-4 border-2 rounded-lg transition-all ${
+                      paymentMethod === 'card' ? 'border-primary bg-primary/5' : 'border-border hover:border-muted-foreground'
+                    }`}
+                  >
+                    <p className="font-medium">Cartão de Crédito</p>
+                    <p className="text-xs text-muted-foreground">Até 12x</p>
+                  </button>
+                </div>
               </div>
               <Button onClick={handleCheckout} disabled={loading} className="w-full h-12 uppercase tracking-widest gap-2">
                 <MessageCircle className="h-4 w-4" />{loading ? "Processando..." : "Confirmar e abrir WhatsApp"}

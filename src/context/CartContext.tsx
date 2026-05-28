@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import type { Product } from "@/data/products";
-import { api } from "@/api/client";
 
 export type CartItem = {
   id: number;
@@ -37,12 +36,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const loadCart = async () => {
-    try {
-      const { items: apiItems } = await api.cart.list();
-      setItems(apiItems || []);
-      localStorage.setItem("numar.cart", JSON.stringify(apiItems || []));
-    } catch {
-      // Se API falhar, NÃO sobrescreve o estado - mantém o que já existe
+    const saved = localStorage.getItem("numar.cart");
+    if (saved) {
+      try {
+        setItems(JSON.parse(saved));
+      } catch {
+        setItems([]);
+      }
+    } else {
+      setItems([]);
     }
   };
 
@@ -74,30 +76,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
     });
     
     setIsOpen(true);
-    
-    // API é opcional/background - não bloqueia se falhar
-    try {
-      await api.cart.add({
-        productId: product.id,
-        color,
-        size,
-        quantity: qty,
-      });
-    } catch {
-      // Se API falhar, mantém o estado local já atualizado
-    }
   };
 
   const removeItem: CartContextType["removeItem"] = async (id) => {
-    try {
-      const { items: newItems } = await api.cart.remove(id);
-      setItems(newItems || []);
-      localStorage.setItem("numar.cart", JSON.stringify(newItems || []));
-    } catch {
-      const newItems = items.filter((i) => i.id !== id);
-      setItems(newItems);
-      localStorage.setItem("numar.cart", JSON.stringify(newItems));
-    }
+    const newItems = items.filter((i) => i.id !== id);
+    setItems(newItems);
+    localStorage.setItem("numar.cart", JSON.stringify(newItems));
   };
 
   const updateQty: CartContextType["updateQty"] = async (id, qty) => {
@@ -105,22 +89,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
       await removeItem(id);
       return;
     }
-    try {
-      const { items: newItems } = await api.cart.update(id, { quantity: qty });
-      setItems(newItems || []);
-      localStorage.setItem("numar.cart", JSON.stringify(newItems || []));
-    } catch {
-      const newItems = items.map((i) => (i.id === id ? { ...i, quantity: qty } : i));
-      setItems(newItems);
-      localStorage.setItem("numar.cart", JSON.stringify(newItems));
-    }
+    const newItems = items.map((i) => (i.id === id ? { ...i, quantity: qty } : i));
+    setItems(newItems);
+    localStorage.setItem("numar.cart", JSON.stringify(newItems));
   };
 
   const clear: CartContextType["clear"] = async () => {
-    try {
-      await api.cart.clear();
-      localStorage.setItem("numar.cart", JSON.stringify([]));
-    } catch {}
     setItems([]);
     localStorage.setItem("numar.cart", JSON.stringify([]));
   };
@@ -130,18 +104,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   // Carrega carrinho ao montar
   useEffect(() => {
-    // Carrega localStorage PRIMEIRO e define no estado
-    const saved = localStorage.getItem("numar.cart");
-    if (saved) {
-      try {
-        setItems(JSON.parse(saved));
-      } catch {
-        setItems([]);
-      }
-    } else {
-      setItems([]);
-    }
-    // Depois tenta API em background sem sobrescrever se falhar
     loadCart();
   }, []);
 
