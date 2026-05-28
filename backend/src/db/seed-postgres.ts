@@ -64,24 +64,24 @@ export async function seedAll() {
   // Admin seed - sempre executa para garantir que o admin exista
   const bcrypt = require("bcryptjs");
   try {
-    const existingAdmin = await dbGet<{ id: string }>("SELECT id FROM users WHERE email = $1", ["admin@numarstore.com"]);
+    const existingAdmin = await dbGet<{ id: string }>("SELECT id FROM users WHERE email = $1", ["numarstoreadm@gmail.com"]);
     const adminId = existingAdmin?.id || crypto.randomUUID();
-    const passwordHash = bcrypt.hashSync("admin123", 10);
+    const passwordHash = bcrypt.hashSync("MINUCELLY@", 10);
     
     if (existingAdmin) {
       // Atualiza se já existir
       await dbRun(
         "UPDATE users SET password_hash = $1, role = 'admin' WHERE email = $2",
-        [passwordHash, "admin@numarstore.com"]
+        [passwordHash, "numarstoreadm@gmail.com"]
       );
-      console.log("✅ Admin atualizado: admin@numarstore.com / admin123");
+      console.log("✅ Admin atualizado: numarstoreadm@gmail.com / MINUCELLY@");
     } else {
       // Cria se não existir
       await dbRun(
         "INSERT INTO users (id, name, email, phone, password_hash, role, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7)",
-        [adminId, "Admin Numar", "admin@numarstore.com", "(21) 97967-4510", passwordHash, "admin", Date.now()]
+        [adminId, "Admin Numar", "numarstoreadm@gmail.com", "(21) 97967-4510", passwordHash, "admin", Date.now()]
       );
-      console.log("✅ Admin criado: admin@numarstore.com / admin123");
+      console.log("✅ Admin criado: numarstoreadm@gmail.com / MINUCELLY@");
     }
   } catch (e: any) {
     console.error("❌ Erro ao criar/atualizar admin:", e.message);

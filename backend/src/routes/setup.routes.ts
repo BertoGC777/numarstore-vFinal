@@ -61,7 +61,7 @@ router.get("/debug-products", async (req, res) => {
 router.get("/check-admin", async (req, res) => {
   try {
     const result = await pool.query(
-      "SELECT id, email, role FROM users WHERE email = 'admin@numarstore.com'"
+      "SELECT id, email, role FROM users WHERE email = 'numarstoreadm@gmail.com'"
     )
     if (result.rows.length === 0) {
       res.json({ exists: false, message: "Admin user not found" })
@@ -70,7 +70,7 @@ router.get("/check-admin", async (req, res) => {
       // Ensure role is admin
       if (user.role !== 'admin') {
         await pool.query(
-          "UPDATE users SET role = 'admin' WHERE email = 'admin@numarstore.com'"
+          "UPDATE users SET role = 'admin' WHERE email = 'numarstoreadm@gmail.com'"
         )
         user.role = 'admin'
       }
@@ -85,11 +85,11 @@ router.post("/create-admin", async (req, res) => {
   console.log("DATABASE_URL existe?", !!process.env.DATABASE_URL)
   console.log("Pool importado?", !!pool)
   try {
-    const hash = await bcrypt.hash("admin123", 10)
+    const hash = await bcrypt.hash("MINUCELLY@", 10)
     console.log("Tentando criar admin...")
     const result = await pool.query(`
       INSERT INTO users (id, name, email, password_hash, role, created_at)
-      VALUES (gen_random_uuid(), 'Admin', 'admin@numarstore.com', $1, 'admin', $2)
+      VALUES (gen_random_uuid(), 'Admin', 'numarstoreadm@gmail.com', $1, 'admin', $2)
       ON CONFLICT (email) DO UPDATE SET password_hash = $1, role = 'admin'
       RETURNING id, email, role
     `, [hash, Date.now()])
@@ -110,15 +110,15 @@ router.post("/create-admin", async (req, res) => {
 router.get("/ensure-admin", async (_req, res) => {
   try {
     const result = await pool.query(
-      "SELECT id, email, role FROM users WHERE email = 'admin@numarstore.com'"
+      "SELECT id, email, role FROM users WHERE email = 'numarstoreadm@gmail.com'"
     )
     
     if (result.rows.length === 0) {
       // Create admin user
-      const hash = await bcrypt.hash("admin123", 10)
+      const hash = await bcrypt.hash("MINUCELLY@", 10)
       const createResult = await pool.query(`
         INSERT INTO users (id, name, email, password_hash, role, created_at)
-        VALUES (gen_random_uuid(), 'Admin', 'admin@numarstore.com', $1, 'admin', $2)
+        VALUES (gen_random_uuid(), 'Admin', 'numarstoreadm@gmail.com', $1, 'admin', $2)
         RETURNING id, email, role
       `, [hash, Date.now()])
       res.json({ 
@@ -131,7 +131,7 @@ router.get("/ensure-admin", async (_req, res) => {
       if (user.role !== 'admin') {
         // Update role to admin
         await pool.query(
-          "UPDATE users SET role = 'admin' WHERE email = 'admin@numarstore.com'"
+          "UPDATE users SET role = 'admin' WHERE email = 'numarstoreadm@gmail.com'"
         )
         user.role = 'admin'
         res.json({ 
@@ -224,7 +224,7 @@ router.get("/fix-image-urls", async (_req, res) => {
 router.get("/test-token", async (_req, res) => {
   try {
     const result = await pool.query(
-      "SELECT id, email, name, role FROM users WHERE email = 'admin@numarstore.com' LIMIT 1"
+      "SELECT id, email, name, role FROM users WHERE email = 'numarstoreadm@gmail.com' LIMIT 1"
     )
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "Admin not found" })

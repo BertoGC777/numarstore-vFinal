@@ -219,6 +219,9 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
     setLoading(true);
 
     try {
+      // Reorder images by color before saving
+      const reorderedImages = reorderImagesByColor(formData.images, formData.colors);
+      
       const payload = {
         name: formData.name,
         slug: formData.slug,
@@ -232,7 +235,7 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
         discount: formData.is_sale ? parseFloat(formData.discount) : 0,
         colors: formData.colors,
         sizes: formData.sizes,
-        images: formData.images,
+        images: reorderedImages,
         stock: formData.stock,
         is_new: formData.is_new ? 1 : 0,
         is_sale: formData.is_sale ? 1 : 0,
@@ -301,12 +304,17 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
     const files = e.target.files;
     if (!files) return;
 
+    if (formData.colors.length === 0) {
+      toast({ title: "Aviso", description: "Adicione as cores primeiro, depois faça o upload das imagens e associe cada imagem a uma cor." });
+      return;
+    }
+
     Array.from(files).forEach(file => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setFormData(prev => ({
           ...prev,
-          images: [...prev.images, { url: reader.result as string }]
+          images: [...prev.images, { url: reader.result as string, color: "", colorHex: "" }]
         }));
       };
       reader.readAsDataURL(file);
@@ -318,6 +326,53 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
       ...formData,
       images: formData.images.filter((_, i) => i !== index)
     });
+  };
+
+  const handleImageColorChange = (index: number, colorName: string, colorHex: string) => {
+    const newImages = [...formData.images];
+    newImages[index] = { ...newImages[index], color: colorName, colorHex };
+    setFormData({ ...formData, images: newImages });
+  };
+
+  const reorderImagesByColor = (images: ProductImage[], colors: Color[]): ProductImage[] => {
+    if (colors.length === 0) return images;
+    
+    // Group images by color
+    const imagesByColor: Record<string, ProductImage[]> = {};
+    colors.forEach(c => imagesByColor[c.name] = []);
+    
+    images.forEach(img => {
+      if (img.color && imagesByColor[img.color]) {
+        imagesByColor[img.color].push(img);
+      } else {
+        // Images without color go to a separate group
+        if (!imagesByColor['']) imagesByColor[''] = [];
+        imagesByColor[''].push(img);
+      }
+    });
+    
+    // Find max number of images per color
+    const maxImages = Math.max(...Object.values(imagesByColor).map(arr => arr.length));
+    
+    // Interleave images: first image of each color, then second image of each color, etc.
+    const reordered: ProductImage[] = [];
+    for (let i = 0; i < maxImages; i++) {
+      colors.forEach(c => {
+        if (imagesByColor[c.name][i]) {
+          reordered.push(imagesByColor[c.name][i]);
+        } else {
+          // Add placeholder if color has no image at this position
+          reordered.push({ url: '', color: c.name, colorHex: c.hex });
+        }
+      });
+    }
+    
+    // Add images without color at the end
+    if (imagesByColor['']) {
+      reordered.push(...imagesByColor['']);
+    }
+    
+    return reordered;
   };
 
   return (
@@ -617,6 +672,11 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
       {/* Images */}
       <div className="space-y-4">
         <h3 className="text-lg font-semibold">Imagens</h3>
+        {formData.colors.length === 0 && (
+          <div className="bg-yellow-50 dark:bg-yellow-950/30 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3 text-sm text-yellow-800 dark:text-yellow-200">
+            ⚠️ Adicione as cores primeiro, depois faça o upload das imagens e associe cada imagem a uma cor.
+          </div>
+        )}
         <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
           <input
             type="file"
@@ -634,7 +694,7 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
         </div>
         
         {formData.images.length > 0 && (
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {formData.images.map((img, index) => (
               <div key={index} className="relative group">
                 <Image
@@ -654,6 +714,25 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
                 >
                   <X className="h-4 w-4" />
                 </Button>
+                {formData.colors.length > 0 && (
+                  <div className="absolute bottom-2 left-2 right-2">
+                    <select
+                      value={img.color || ""}
+                      onChange={(e) => {
+                        const selectedColor = formData.colors.find(c => c.name === e.target.value);
+                        if (selectedColor) {
+                          handleImageColorChange(index, selectedColor.name, selectedColor.hex);
+                        }
+                      }}
+                      className="w-full text-xs bg-white/90 dark:bg-black/90 border border-gray-300 dark:border-gray-600 rounded px-2 py-1"
+                    >
+                      <option value="">Selecione cor</option>
+                      {formData.colors.map((c) => (
+                        <option key={c.name} value={c.name}>{c.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
               </div>
             ))}
           </div>

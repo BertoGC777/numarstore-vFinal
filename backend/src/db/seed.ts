@@ -84,9 +84,9 @@ dbRun(
   try {
     dbRun(
       "INSERT INTO users (id, name, email, phone, password_hash, role, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
-      [adminId, "Admin Numar", "admin@numarstore.com", "(21) 97967-4510", bcrypt.hashSync("admin123", 10), "admin", Date.now()]
+      [adminId, "Admin Numar", "numarstoreadm@gmail.com", "(21) 97967-4510", bcrypt.hashSync("MINUCELLY@", 10), "admin", Date.now()]
     );
-    console.log("✅ Admin seedado: admin@numarstore.com / admin123");
+    console.log("✅ Admin seedado: numarstoreadm@gmail.com / MINUCELLY@");
   } catch {}
   console.log(`✅ ${productData.length} produtos seedados no SQLite`);
 }
