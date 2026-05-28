@@ -216,7 +216,7 @@ export function resolveImageUrl(
   slug: string,
   image: { url: string; color?: string | null }
 ): string {
-  // Priorizar URL armazenada no banco se já for absoluta
+  // Se a URL já for absoluta, retornar diretamente (prioridade máxima)
   if (image.url.startsWith("http")) return image.url;
   if (image.url.startsWith("/images/")) return `${BACKEND_URL}${image.url}`;
   

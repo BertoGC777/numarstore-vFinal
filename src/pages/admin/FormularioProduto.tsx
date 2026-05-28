@@ -11,7 +11,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Plus, X, Upload } from "lucide-react";
 import Image from "@/components/Image";
 
-const CATEGORIES = [
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+const CATEGORIES_DEFAULT = [
   { label: "Biquínis", value: "biquinis" },
   { label: "Partes de Cima", value: "partes-de-cima" },
   { label: "Partes de Baixo", value: "partes-de-baixo" },
@@ -65,7 +71,8 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [subcategories, setSubcategories] = useState<any[]>([]);
-  
+  const [categories, setCategories] = useState<{ label: string; value: string }[]>(CATEGORIES_DEFAULT);
+
   const [formData, setFormData] = useState({
     name: "",
     slug: "",
@@ -104,6 +111,25 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
       setSubcategories([]);
     }
   };
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await api.get("/admin/categories");
+        if (data.categories && data.categories.length > 0) {
+          const dynamicCategories = data.categories.map((cat: Category) => ({
+            label: cat.name,
+            value: cat.slug
+          }));
+          setCategories(dynamicCategories);
+        }
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+        // Keep default categories if API fails
+      }
+    };
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     if (product) {
@@ -420,7 +446,7 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
                 <SelectValue placeholder="Selecione uma categoria" />
               </SelectTrigger>
               <SelectContent>
-                {CATEGORIES.map((cat) => (
+                {categories.map((cat) => (
                   <SelectItem key={cat.value} value={cat.value}>{cat.label}</SelectItem>
                 ))}
               </SelectContent>

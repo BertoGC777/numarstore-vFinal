@@ -6,11 +6,11 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
-import { 
-  Package, 
-  Plus, 
-  Edit, 
-  Trash2, 
+import {
+  Package,
+  Plus,
+  Edit,
+  Trash2,
   Search,
   RefreshCw,
   ChevronLeft,
@@ -20,7 +20,8 @@ import {
 import { api } from "@/api/client";
 import { useToast } from "@/components/ui/use-toast";
 import FormularioProduto from "./FormularioProduto";
-const CATEGORIES = [
+
+const CATEGORIES_DEFAULT = [
   "Biquínis",
   "Partes de Cima",
   "Partes de Baixo",
@@ -28,6 +29,12 @@ const CATEGORIES = [
   "Vestidos Longos",
   "Vestidos Curtos"
 ];
+
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+}
 
 interface Product {
   id: string;
@@ -58,12 +65,13 @@ export default function AdminProdutos() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<string[]>(CATEGORIES_DEFAULT);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState<Product | null>(null);
-  
+
   // Filters and pagination
   const [categoryFilter, setCategoryFilter] = useState("todas");
   const [searchQuery, setSearchQuery] = useState("");
@@ -71,6 +79,19 @@ export default function AdminProdutos() {
   const [limit] = useState(12);
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
+
+  const fetchCategories = async () => {
+    try {
+      const data = await api.get("/admin/categories");
+      if (data.categories && data.categories.length > 0) {
+        const categoryNames = data.categories.map((cat: Category) => cat.slug);
+        setCategories(categoryNames);
+      }
+    } catch (err) {
+      console.error("Error fetching categories:", err);
+      // Keep default categories if API fails
+    }
+  };
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -98,6 +119,10 @@ export default function AdminProdutos() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     fetchProducts();
@@ -215,7 +240,7 @@ export default function AdminProdutos() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="todas">Todas as categorias</SelectItem>
-                {CATEGORIES.map((cat) => (
+                {categories.map((cat) => (
                   <SelectItem key={cat} value={cat}>{cat}</SelectItem>
                 ))}
               </SelectContent>

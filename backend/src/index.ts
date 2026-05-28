@@ -55,7 +55,8 @@ app.use(cors({
     "http://localhost:5173", 
     "http://localhost:3000", 
     "https://numarstore-v-final.vercel.app",
-    /https:\/\/numarstore-v-final-.*\.vercel\.app/
+    /https:\/\/numarstore-v-final-.*\.vercel\.app/,
+    "https://numarstore-backend.onrender.com"
   ], 
   credentials: true 
 }));
@@ -68,9 +69,9 @@ app.use(express.json({ limit: "10mb" }));
 
 app.use(express.static(publicDir));
 
-const generalLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 200, standardHeaders: true });
-const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 20, standardHeaders: true });
-const cepLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 50, standardHeaders: true });
+const generalLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 1000, standardHeaders: true });
+const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100, standardHeaders: true });
+const cepLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 200, standardHeaders: true });
 
 app.use("/api/", generalLimiter);
 app.use("/api/auth", authLimiter, authRoutes);

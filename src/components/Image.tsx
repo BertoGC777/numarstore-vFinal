@@ -70,7 +70,7 @@ export default function Image({
         width={width}
         height={height}
         loading={loading}
-        fetchPriority={fetchPriority}
+        fetchpriority={fetchPriority}
         decoding="async"
         className={cn(
           'w-full h-full transition-opacity duration-300',
