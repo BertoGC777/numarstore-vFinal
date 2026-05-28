@@ -1,5 +1,6 @@
 import { dbAll, dbGet, getDatabase } from "../db";
 import { resolveImageUrl } from "../utils/imageResolver";
+import { reorganizeImagesByColor } from "../utils/imageReorganizer";
 
 export interface ProductFilters {
   category?: string;
@@ -30,7 +31,8 @@ async function getProductExtras(productId: string, slug: string) {
     [productId]
   );
 
-  const images = imageRows.map((i) => resolveImageUrl(slug, i));
+  // Reorganizar imagens no formato esperado pelo frontend: [cor0_img1, cor1_img1, cor2_img1, cor0_img2, cor1_img2, ...]
+  const images = reorganizeImagesByColor(imageRows, colors, slug);
   const totalStock = stockRows.reduce((sum, r) => sum + (Number(r.quantity) || 0), 0);
   const hasStockConfig = stockRows.length > 0;
 

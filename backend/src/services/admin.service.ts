@@ -1,5 +1,6 @@
 import { dbAll, dbGet, dbRun, getDatabase } from "../db";
 import { resolveImageRows } from "../utils/imageResolver";
+import { reorganizeImagesByColor } from "../utils/imageReorganizer";
 
 // Dashboard
 export async function getDashboard() {
@@ -323,10 +324,14 @@ export async function getProducts(filters: GetProductsFilters) {
         `SELECT url, color FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
         [product.id]
       );
+      const colors = await dbAll(
+        `SELECT name, hex FROM product_colors WHERE product_id = $1 ORDER BY name`,
+        [product.id]
+      );
       return {
         ...product,
         is_active: product.is_active ?? 1,
-        images: resolveImageRows(product.slug, images),
+        images: reorganizeImagesByColor(images, colors, product.slug),
       };
     })
   );
@@ -358,18 +363,17 @@ export async function getProductById(id: string) {
     throw new Error("Produto não encontrado");
   }
 
-  const images = resolveImageRows(
-    product.slug,
-    await dbAll(
-      `SELECT id, url, color, color_hex as colorHex, sort_order as sortOrder FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
-      [id]
-    )
+  const imageRows = await dbAll(
+    `SELECT id, url, color, color_hex as colorHex, sort_order as sortOrder FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
+    [id]
   );
 
   const colors = await dbAll(
     `SELECT name, hex FROM product_colors WHERE product_id = $1`,
     [id]
   );
+
+  const images = reorganizeImagesByColor(imageRows, colors, product.slug);
 
   const sizes = await dbAll(
     `SELECT size FROM product_sizes WHERE product_id = $1`,
@@ -942,7 +946,11 @@ export async function getBundles(filters: GetBundlesFilters) {
         `SELECT url, color FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
         [bundle.id]
       );
-      return { ...bundle, images: resolveImageRows(bundle.slug, images) };
+      const colors = await dbAll(
+        `SELECT name, hex FROM product_colors WHERE product_id = $1 ORDER BY name`,
+        [bundle.id]
+      );
+      return { ...bundle, images: reorganizeImagesByColor(images, colors, bundle.slug) };
     })
   );
 
@@ -967,18 +975,17 @@ export async function getBundleById(id: string) {
     throw new Error("Conjunto não encontrado");
   }
 
-  const images = resolveImageRows(
-    bundle.slug,
-    await dbAll(
-      `SELECT id, url, color, color_hex as colorHex, sort_order as sortOrder FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
-      [id]
-    )
+  const imageRows = await dbAll(
+    `SELECT id, url, color, color_hex as colorHex, sort_order as sortOrder FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
+    [id]
   );
 
   const colors = await dbAll(
     `SELECT name, hex FROM product_colors WHERE product_id = $1`,
     [id]
   );
+
+  const images = reorganizeImagesByColor(imageRows, colors, bundle.slug);
 
   const sizes = await dbAll(
     `SELECT size FROM product_sizes WHERE product_id = $1`,
