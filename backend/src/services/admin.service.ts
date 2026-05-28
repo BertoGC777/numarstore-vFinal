@@ -1,5 +1,5 @@
 import { dbAll, dbGet, dbRun, getDatabase } from "../db";
-import { reorganizeImagesByColor } from "../utils/imageReorganizer";
+import { resolveImageUrl } from "../utils/imageResolver";
 
 // Dashboard
 export async function getDashboard() {
@@ -323,14 +323,15 @@ export async function getProducts(filters: GetProductsFilters) {
         `SELECT url, color FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
         [product.id]
       );
-      const colors = await dbAll(
-        `SELECT name, hex FROM product_colors WHERE product_id = $1 ORDER BY name`,
-        [product.id]
-      );
+      // Para o admin, manter formato original de objetos com url e color
+      const resolvedImages = images.map((img) => ({
+        url: resolveImageUrl(product.slug, img),
+        color: img.color
+      }));
       return {
         ...product,
         is_active: product.is_active ?? 1,
-        images: reorganizeImagesByColor(images, colors, product.slug),
+        images: resolvedImages,
       };
     })
   );
@@ -366,7 +367,13 @@ export async function getProductById(id: string) {
     [id]
   );
 
-  const images = reorganizeImagesByColor(imageRows, colors, product.slug);
+  // Para o admin, manter formato original de objetos
+  const images = imageRows.map((img) => ({
+    url: resolveImageUrl(product.slug, img),
+    color: img.color,
+    colorHex: img.colorHex,
+    sortOrder: img.sortOrder
+  }));
 
   const sizes = await dbAll(
     `SELECT size FROM product_sizes WHERE product_id = $1`,
@@ -932,11 +939,12 @@ export async function getBundles(filters: GetBundlesFilters) {
         `SELECT url, color FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
         [bundle.id]
       );
-      const colors = await dbAll(
-        `SELECT name, hex FROM product_colors WHERE product_id = $1 ORDER BY name`,
-        [bundle.id]
-      );
-      return { ...bundle, images: reorganizeImagesByColor(images, colors, bundle.slug) };
+      // Para o admin, manter formato original de objetos
+      const resolvedImages = images.map((img) => ({
+        url: resolveImageUrl(bundle.slug, img),
+        color: img.color
+      }));
+      return { ...bundle, images: resolvedImages };
     })
   );
 
@@ -971,7 +979,13 @@ export async function getBundleById(id: string) {
     [id]
   );
 
-  const images = reorganizeImagesByColor(imageRows, colors, bundle.slug);
+  // Para o admin, manter formato original de objetos
+  const images = imageRows.map((img) => ({
+    url: resolveImageUrl(bundle.slug, img),
+    color: img.color,
+    colorHex: img.colorHex,
+    sortOrder: img.sortOrder
+  }));
 
   const sizes = await dbAll(
     `SELECT size FROM product_sizes WHERE product_id = $1`,
