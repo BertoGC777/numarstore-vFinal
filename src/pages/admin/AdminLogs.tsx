@@ -84,7 +84,7 @@ export default function AdminLogs() {
   }, [page, actionFilter, entityFilter]);
 
   const formatDate = (timestamp: number) => {
-    return new Date(timestamp).toLocaleString("pt-BR");
+    return new Date(timestamp ?? 0).toLocaleString("pt-BR");
   };
 
   const getActionLabel = (action: string) => {

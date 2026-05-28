@@ -210,7 +210,7 @@ export default function Admin() {
                         <span className="font-medium">{getStatusLabel(order.status)}</span>
                       </div>
                       <p className="text-sm text-muted-foreground">Pedido #{order.id.slice(0, 8)}</p>
-                      <p className="text-sm text-muted-foreground">{new Date(order.created_at).toLocaleString("pt-BR")}</p>
+                      <p className="text-sm text-muted-foreground">{new Date(order.created_at ?? '').toLocaleString("pt-BR")}</p>
                     </div>
                     <div className="text-right">
                       <p className="font-semibold text-lg">

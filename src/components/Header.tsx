@@ -63,6 +63,7 @@ export default function Header() {
       }
       try {
         const data = await api.get("/admin/subcategories");
+        if (!data) return;
         const subs = data.subcategories || [];
         
         // Group subcategories by category_slug

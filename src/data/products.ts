@@ -318,4 +318,4 @@ export const getFeatured = (n = 8) => [...products].sort(() => Math.random() - 0
 export const getRelated = (id: string, n = 4) =>
   products.filter((p) => p.id !== id).slice(0, n);
 export const formatBRL = (v: number) =>
-  v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  (v ?? 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });

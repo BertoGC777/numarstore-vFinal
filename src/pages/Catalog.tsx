@@ -85,6 +85,7 @@ export default function Catalog() {
     }
     try {
       const data = await api.get(`/admin/subcategories/${categorySlug}`);
+      if (!data) return;
       setSubcategories(data.subcategories || []);
     } catch (err: any) {
       console.error("Error fetching subcategories:", err);
