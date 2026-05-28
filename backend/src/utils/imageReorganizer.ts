@@ -5,7 +5,13 @@ export function reorganizeImagesByColor(
   colors: { name: string; hex: string }[],
   slug: string
 ): string[] {
-  if (colors.length === 0) {
+  // Se não houver imagens, retornar array vazio
+  if (!imageRows || imageRows.length === 0) {
+    return [];
+  }
+
+  // Se não houver cores, retornar imagens na ordem original
+  if (!colors || colors.length === 0) {
     return imageRows.map((i) => resolveImageUrl(slug, i));
   }
 
@@ -39,6 +45,11 @@ export function reorganizeImagesByColor(
   // Adicionar imagens sem cor no final
   if (imagesByColor[""]?.length > 0) {
     reordered.push(...imagesByColor[""]);
+  }
+
+  // Se por algum motivo o array reorganizado estiver vazio, retornar as imagens originais
+  if (reordered.length === 0) {
+    return imageRows.map((i) => resolveImageUrl(slug, i));
   }
 
   return reordered;
