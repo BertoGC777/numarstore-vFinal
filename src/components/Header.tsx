@@ -24,6 +24,7 @@ const FIXED_MENU = [
   { label: "Partes de Cima", href: "/catalogo/partes-de-cima" },
   { label: "Partes de Baixo", href: "/catalogo/partes-de-baixo" },
   { label: "Biquínis", href: "/catalogo/biquinis", categorySlug: "biquinis" },
+  { label: "Conjuntos", href: "/catalogo/conjuntos", categorySlug: "conjuntos" },
   { label: "Lançamentos", href: "/catalogo/lancamentos" },
   { label: "Promoção", href: "/catalogo/promocao", highlight: true },
 ];

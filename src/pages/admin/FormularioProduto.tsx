@@ -22,6 +22,7 @@ const CATEGORIES_DEFAULT = [
   { label: "Biquínis", value: "biquinis" },
   { label: "Partes de Cima", value: "partes-de-cima" },
   { label: "Partes de Baixo", value: "partes-de-baixo" },
+  { label: "Conjuntos", value: "conjuntos" },
   { label: "Vestidos Longos", value: "vestidos-longos" },
   { label: "Vestidos Curtos", value: "vestidos-curtos" }
 ];
