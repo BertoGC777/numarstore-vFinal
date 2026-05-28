@@ -555,9 +555,12 @@ export async function updateProduct(id: string, data: any) {
     // if (!category || category.trim() === "") {
     //   throw new Error("Categoria do produto é obrigatória");
     // }
-    fields.push(`category = $${paramIndex}`);
-    values.push(category ? category.trim() : null);
-    paramIndex++;
+    // Não setar categoria como null se for string vazia - manter valor original
+    if (category && category.trim() !== "") {
+      fields.push(`category = $${paramIndex}`);
+      values.push(category.trim());
+      paramIndex++;
+    }
   }
   if (subcategory !== undefined) {
     fields.push(`subcategory = $${paramIndex}`);

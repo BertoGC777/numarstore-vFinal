@@ -216,14 +216,17 @@ export function resolveImageUrl(
   slug: string,
   image: { url: string; color?: string | null }
 ): string {
+  // Priorizar URL armazenada no banco se já for absoluta
+  if (image.url.startsWith("http")) return image.url;
+  if (image.url.startsWith("/images/")) return `${BACKEND_URL}${image.url}`;
+  
+  // Tentar resolver pelo mapeamento manual
   const filename = resolveImageFilename(slug, image.color, image.url);
   if (filename) return toAbsoluteImageUrl(filename);
 
   const basename = basenameFromUrl(image.url);
   if (basename && fileExists(basename)) return toAbsoluteImageUrl(basename);
 
-  if (image.url.startsWith("http")) return image.url;
-  if (image.url.startsWith("/images/")) return `${BACKEND_URL}${image.url}`;
   return image.url;
 }
 
