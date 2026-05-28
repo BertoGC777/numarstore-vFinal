@@ -36,7 +36,6 @@ const categoryLabels: Record<string, string> = {
   biquinis: "Biquínis",
   "partes-de-cima": "Partes de Cima",
   "partes-de-baixo": "Partes de Baixo",
-  conjuntos: "Conjuntos",
   lancamentos: "Lançamentos",
   promocao: "Promoção",
 };
@@ -45,7 +44,6 @@ const categoryImages: Record<string, string> = {
   biquinis: biquini,
   "partes-de-cima": blusinha,
   "partes-de-baixo": saia,
-  conjuntos: conjunto,
   "vestidos-longos": vestidoLongo,
   "vestidos-curtos": vestidoCurto,
   lancamentos: promo,

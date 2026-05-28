@@ -25,7 +25,6 @@ const CATEGORIES_DEFAULT = [
   "Biquínis",
   "Partes de Cima",
   "Partes de Baixo",
-  "Conjuntos",
   "Vestidos Longos",
   "Vestidos Curtos"
 ];
