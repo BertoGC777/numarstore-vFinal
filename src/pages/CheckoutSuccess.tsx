@@ -3,6 +3,7 @@ import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Home, MessageCircle } from "lucide-react";
+import { useCart } from '@/context/CartContext';
 
 const WHATSAPP = import.meta.env.VITE_WHATSAPP_NUMBER || "5521979674510";
 
