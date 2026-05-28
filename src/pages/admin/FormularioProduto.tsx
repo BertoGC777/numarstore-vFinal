@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { api } from "@/api/client";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/lib/supabaseClient";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,7 +22,6 @@ const CATEGORIES_DEFAULT = [
   { label: "Biquínis", value: "biquinis" },
   { label: "Partes de Cima", value: "partes-de-cima" },
   { label: "Partes de Baixo", value: "partes-de-baixo" },
-  { label: "Conjuntos", value: "conjuntos" },
   { label: "Vestidos Longos", value: "vestidos-longos" },
   { label: "Vestidos Curtos", value: "vestidos-curtos" }
 ];
@@ -70,6 +70,7 @@ interface FormularioProdutoProps {
 export default function FormularioProduto({ product, onSave, onCancel }: FormularioProdutoProps) {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [subcategories, setSubcategories] = useState<any[]>([]);
   const [categories, setCategories] = useState<{ label: string; value: string }[]>(CATEGORIES_DEFAULT);
 
@@ -241,7 +242,22 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
       return;
     }
     console.log("=== Validation passed ===");
-    
+
+    // Slug uniqueness validation
+    try {
+      const existingProducts = await api.get(`/admin/products?slug=${formData.slug}`);
+      if (existingProducts.products && existingProducts.products.length > 0) {
+        const existingProduct = existingProducts.products[0];
+        if (existingProduct.id !== product?.id) {
+          toast({ title: "Erro", description: "Este slug já está em uso. Escolha outro nome." });
+          return;
+        }
+      }
+    } catch (err: any) {
+      console.error("Error checking slug uniqueness:", err);
+      // Continue with save if check fails (might be API issue)
+    }
+
     setLoading(true);
 
     try {
@@ -326,7 +342,7 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
     });
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
 
@@ -335,16 +351,44 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
       return;
     }
 
-    Array.from(files).forEach(file => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData(prev => ({
-          ...prev,
-          images: [...prev.images, { url: reader.result as string, color: "", colorHex: "" }]
-        }));
-      };
-      reader.readAsDataURL(file);
-    });
+    setUploadingImage(true);
+
+    try {
+      const uploadPromises = Array.from(files).map(async (file) => {
+        const fileName = `${Date.now()}-${file.name}`;
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('product-images')
+          .upload(fileName, file);
+
+        if (uploadError) {
+          console.error('Upload error:', uploadError);
+          throw new Error(`Erro ao fazer upload de ${file.name}: ${uploadError.message}`);
+        }
+
+        const { data: publicUrlData } = supabase.storage
+          .from('product-images')
+          .getPublicUrl(fileName);
+
+        return {
+          url: publicUrlData.publicUrl,
+          color: "",
+          colorHex: ""
+        };
+      });
+
+      const uploadedImages = await Promise.all(uploadPromises);
+      setFormData(prev => ({
+        ...prev,
+        images: [...prev.images, ...uploadedImages]
+      }));
+
+      toast({ title: "Sucesso", description: "Imagens enviadas com sucesso" });
+    } catch (error: any) {
+      console.error('Image upload error:', error);
+      toast({ title: "Erro", description: error.message || "Erro ao enviar imagens" });
+    } finally {
+      setUploadingImage(false);
+    }
   };
 
   const handleRemoveImage = (index: number) => {
