@@ -243,26 +243,7 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
     }
     console.log("=== Validation passed ===");
 
-    // Slug uniqueness validation
-    try {
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('timeout')), 3000)
-      );
-      const existingProducts = await Promise.race([
-        api.get(`/admin/products?slug=${formData.slug}`),
-        timeoutPromise
-      ]) as any;
-      if (existingProducts?.products?.length > 0) {
-        const existingProduct = existingProducts.products[0];
-        if (existingProduct.id !== product?.id) {
-          toast({ title: "Erro", description: "Este slug já está em uso. Escolha outro nome." });
-          return;
-        }
-      }
-    } catch (err: any) {
-      console.warn("Slug check skipped:", err.message);
-      // Continua salvando mesmo se a verificação falhar
-    }
+    // Slug validation removida - backend valida unicidade
 
     setLoading(true);
 
