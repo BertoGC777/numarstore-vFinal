@@ -6,10 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
-  Folder, 
-  Plus, 
-  Trash2, 
+import {
+  Folder,
+  Plus,
+  Trash2,
   RefreshCw,
   X,
   Package
@@ -17,16 +17,12 @@ import {
 import { api } from "@/api/client";
 import { useToast } from "@/components/ui/use-toast";
 
-const FIXED_CATEGORIES = [
-  { slug: "biquinis", label: "Biquínis" },
-  { slug: "partes-de-cima", label: "Partes de Cima" },
-  { slug: "partes-de-baixo", label: "Partes de Baixo" },
-  { slug: "conjuntos", label: "Conjuntos" },
-  { slug: "vestidos-longos", label: "Vestidos Longos" },
-  { slug: "vestidos-curtos", label: "Vestidos Curtos" },
-  { slug: "lancamentos", label: "Lançamentos" },
-  { slug: "promocao", label: "Promoção" },
-];
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  created_at: number;
+}
 
 interface Subcategory {
   id: string;
@@ -39,26 +35,44 @@ interface Subcategory {
 export default function AdminCategorias() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [categories, setCategories] = useState<Category[]>([]);
   const [categoryProductCounts, setCategoryProductCounts] = useState<Record<string, number>>({});
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null);
   const [subcategoryToDelete, setSubcategoryToDelete] = useState<Subcategory | null>(null);
+  const [showNewCategoryForm, setShowNewCategoryForm] = useState(false);
   const [showNewSubcategoryForm, setShowNewSubcategoryForm] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState("");
   const [newSubcategoryName, setNewSubcategoryName] = useState("");
   const [newSubcategorySlug, setNewSubcategorySlug] = useState("");
   const [newSubcategoryCategory, setNewSubcategoryCategory] = useState("");
+
+  const fetchCategories = async () => {
+    try {
+      const data = await api.get("/admin/categories");
+      setCategories(data.categories || []);
+    } catch (err: any) {
+      console.error("Error fetching categories:", err);
+      const errorMsg = err.response?.data?.error || err.message || "Erro ao carregar categorias";
+      toast({ title: "Erro", description: errorMsg });
+      if (err.response?.status === 403) {
+        navigate("/conta");
+      }
+    }
+  };
 
   const fetchCategoryCounts = async () => {
     try {
       const data = await api.get("/admin/products?limit=1000");
       const products = data.products || [];
       const counts: Record<string, number> = {};
-      
-      FIXED_CATEGORIES.forEach(cat => {
+
+      categories.forEach(cat => {
         counts[cat.slug] = products.filter((p: any) => p.category === cat.slug).length;
       });
-      
+
       setCategoryProductCounts(counts);
     } catch (err: any) {
       console.error("Error fetching product counts:", err);
@@ -81,6 +95,7 @@ export default function AdminCategorias() {
 
   const fetchData = async () => {
     setLoading(true);
+    await fetchCategories();
     await Promise.all([fetchCategoryCounts(), fetchSubcategories()]);
     setLoading(false);
   };
@@ -103,6 +118,46 @@ export default function AdminCategorias() {
       setNewSubcategorySlug("");
     }
   }, [newSubcategoryName]);
+
+  const handleAddCategory = async () => {
+    if (!newCategoryName.trim()) {
+      toast({ title: "Erro", description: "Nome da categoria é obrigatório" });
+      return;
+    }
+
+    try {
+      await api.post("/admin/categories", { name: newCategoryName.trim() });
+      toast({ title: "Sucesso", description: "Categoria adicionada com sucesso" });
+      setNewCategoryName("");
+      setShowNewCategoryForm(false);
+      fetchCategories();
+      fetchCategoryCounts();
+    } catch (err: any) {
+      const errorMsg = err.response?.data?.error || err.message || "Erro ao adicionar categoria";
+      toast({ title: "Erro", description: errorMsg });
+    }
+  };
+
+  const handleDeleteCategoryClick = (category: Category) => {
+    setCategoryToDelete(category);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteCategoryConfirm = async () => {
+    if (!categoryToDelete) return;
+    try {
+      await api.delete(`/admin/categories/${categoryToDelete.id}`);
+      toast({ title: "Sucesso", description: "Categoria excluída com sucesso" });
+      setDeleteDialogOpen(false);
+      fetchCategories();
+      fetchCategoryCounts();
+    } catch (err: any) {
+      const errorMsg = err.response?.data?.error || err.message || "Erro ao excluir categoria";
+      toast({ title: "Erro", description: errorMsg });
+    } finally {
+      setCategoryToDelete(null);
+    }
+  };
 
   const handleAddSubcategory = async () => {
     if (!newSubcategoryName.trim()) {
@@ -161,20 +216,54 @@ export default function AdminCategorias() {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold">Categorias</h2>
-          <Button
-            onClick={fetchData}
-            variant="outline"
-            size="sm"
-            className="gap-2"
-          >
-            <RefreshCw className="h-4 w-4" />
-            Atualizar
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              onClick={fetchData}
+              variant="outline"
+              size="sm"
+              className="gap-2"
+            >
+              <RefreshCw className="h-4 w-4" />
+              Atualizar
+            </Button>
+            <Button onClick={() => setShowNewCategoryForm(!showNewCategoryForm)} className="gap-2">
+              <Plus className="h-4 w-4" /> Nova Categoria
+            </Button>
+          </div>
         </div>
+
+        {/* Nova Categoria Form */}
+        {showNewCategoryForm && (
+          <Card className="mb-6 border-primary">
+            <CardHeader>
+              <CardTitle>Nova Categoria</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="category-name">Nome *</Label>
+                  <Input
+                    id="category-name"
+                    value={newCategoryName}
+                    onChange={(e) => setNewCategoryName(e.target.value)}
+                    placeholder="Ex: Acessórios"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <Button onClick={handleAddCategory}>Salvar</Button>
+                  <Button variant="outline" onClick={() => {
+                    setShowNewCategoryForm(false);
+                    setNewCategoryName("");
+                  }}>Cancelar</Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         <Card>
           <CardHeader>
-            <CardTitle>Categorias Fixas (Somente Leitura)</CardTitle>
+            <CardTitle>Categorias</CardTitle>
           </CardHeader>
           <CardContent>
             {loading ? (
@@ -183,14 +272,23 @@ export default function AdminCategorias() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {FIXED_CATEGORIES.map((cat) => (
+                {categories.map((cat) => (
                   <div
-                    key={cat.slug}
-                    className="p-4 bg-gray-50 rounded-lg border border-gray-200"
+                    key={cat.id}
+                    className="p-4 bg-gray-50 rounded-lg border border-gray-200 relative group"
                   >
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                      onClick={() => handleDeleteCategoryClick(cat)}
+                      title="Excluir categoria"
+                    >
+                      <Trash2 className="h-4 w-4 text-red-500" />
+                    </Button>
                     <div className="flex items-center gap-3 mb-2">
                       <Folder className="h-5 w-5 text-muted-foreground" />
-                      <span className="font-medium">{cat.label}</span>
+                      <span className="font-medium">{cat.name}</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Package className="h-4 w-4" />
@@ -198,6 +296,11 @@ export default function AdminCategorias() {
                     </div>
                   </div>
                 ))}
+                {categories.length === 0 && (
+                  <div className="col-span-full text-center py-8 text-muted-foreground">
+                    Nenhuma categoria encontrada. Clique em "Nova Categoria" para criar.
+                  </div>
+                )}
               </div>
             )}
           </CardContent>
@@ -237,8 +340,8 @@ export default function AdminCategorias() {
                       <SelectValue placeholder="Selecione a categoria" />
                     </SelectTrigger>
                     <SelectContent>
-                      {FIXED_CATEGORIES.map((cat) => (
-                        <SelectItem key={cat.slug} value={cat.slug}>{cat.label}</SelectItem>
+                      {categories.map((cat) => (
+                        <SelectItem key={cat.id} value={cat.slug}>{cat.name}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -267,14 +370,14 @@ export default function AdminCategorias() {
         )}
 
         {/* Lista de Subcategorias por Categoria */}
-        {FIXED_CATEGORIES.map((cat) => {
+        {categories.map((cat) => {
           const catSubcategories = getSubcategoriesByCategory(cat.slug);
           if (catSubcategories.length === 0) return null;
-          
+
           return (
-            <Card key={cat.slug} className="mb-4">
+            <Card key={cat.id} className="mb-4">
               <CardHeader>
-                <CardTitle className="text-lg">{cat.label}</CardTitle>
+                <CardTitle className="text-lg">{cat.name}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
@@ -319,17 +422,33 @@ export default function AdminCategorias() {
           <DialogHeader>
             <DialogTitle>Confirmar Exclusão</DialogTitle>
           </DialogHeader>
-          <p className="text-sm text-muted-foreground">
-            Tem certeza que deseja excluir a subcategoria "{subcategoryToDelete?.name}"?
-          </p>
-          <p className="text-xs text-orange-600 mt-2">
-            ⚠️ Aviso: Excluir subcategoria não remove os produtos associados.
-          </p>
+          {categoryToDelete ? (
+            <>
+              <p className="text-sm text-muted-foreground">
+                Tem certeza que deseja excluir a categoria "{categoryToDelete.name}"?
+              </p>
+              <p className="text-xs text-orange-600 mt-2">
+                ⚠️ Aviso: Excluir categoria não remove os produtos associados.
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="text-sm text-muted-foreground">
+                Tem certeza que deseja excluir a subcategoria "{subcategoryToDelete?.name}"?
+              </p>
+              <p className="text-xs text-orange-600 mt-2">
+                ⚠️ Aviso: Excluir subcategoria não remove os produtos associados.
+              </p>
+            </>
+          )}
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
               Cancelar
             </Button>
-            <Button variant="destructive" onClick={handleDeleteConfirm}>
+            <Button
+              variant="destructive"
+              onClick={categoryToDelete ? handleDeleteCategoryConfirm : handleDeleteConfirm}
+            >
               Excluir
             </Button>
           </DialogFooter>
