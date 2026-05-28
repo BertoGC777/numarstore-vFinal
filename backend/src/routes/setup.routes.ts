@@ -220,36 +220,6 @@ router.get("/fix-image-urls", async (_req, res) => {
   }
 })
 
-// Reset admin password (GET para facilitar uso no navegador)
-router.get("/reset-admin-password", async (req, res) => {
-  try {
-    const { newPassword } = req.query
-    
-    if (!newPassword || typeof newPassword !== 'string') {
-      return res.status(400).json({ error: "Nova senha é obrigatória (use ?newPassword=SUA_SENHA)" })
-    }
-    
-    const result = await pool.query(
-      "SELECT id, email FROM users WHERE email = 'numarstoreadm@gmail.com'"
-    )
-    
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: "Admin não encontrado" })
-    }
-    
-    const hash = await bcrypt.hash(newPassword, 10)
-    await pool.query(
-      "UPDATE users SET password_hash = $1 WHERE email = 'numarstoreadm@gmail.com'",
-      [hash]
-    )
-    
-    res.json({ success: true, message: "Senha atualizada com sucesso" })
-  } catch (error: any) {
-    console.error("Reset password error:", error)
-    res.status(500).json({ error: error.message })
-  }
-})
-
 // Test token generation
 router.get("/test-token", async (_req, res) => {
   try {
