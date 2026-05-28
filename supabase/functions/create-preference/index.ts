@@ -81,71 +81,16 @@ Deno.serve(async (req) => {
       throw new Error(`Erro ao inserir itens: ${itemsError.message}`);
     }
 
-    // Montar payload da preferência do Mercado Pago
-    const mpItems = items.map((item: any) => ({
-      title: item.name,
-      quantity: item.quantity,
-      unit_price: Math.round((paymentMethod === 'pix' ? item.pricePix : item.priceCard) * 100)
-    }));
-
-    const siteUrl = Deno.env.get('SITE_URL') || 'https://numarstore-v-final.vercel.app';
-    const mpAccessToken = Deno.env.get('MP_ACCESS_TOKEN')!;
-
-    const mpPayload = {
-      items: mpItems,
-      payer: {
-        name: customer.name,
-        email: customer.email,
-        phone: {
-          number: customer.phone.replace(/\D/g, '')
-        }
-      },
-      back_urls: {
-        success: `${siteUrl}/sucesso`,
-        failure: `${siteUrl}/falha`,
-        pending: `${siteUrl}/pendente`
-      },
-      auto_approve: true,
-      notification_url: `${supabaseUrl}/functions/v1/mp-webhook`,
-      external_reference: orderId
-    };
-
-    // Criar preferência no Mercado Pago
-    const mpResponse = await fetch('https://api.mercadopago.com/checkout/preferences', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${mpAccessToken}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(mpPayload)
-    });
-
-    if (!mpResponse.ok) {
-      const errorText = await mpResponse.text();
-      throw new Error(`Erro Mercado Pago: ${errorText}`);
-    }
-
-    const mpData = await mpResponse.json();
-
-    // Atualizar orders com mp_preference_id
-    const { error: updateError } = await supabase
-      .from('orders')
-      .update({ mp_preference_id: mpData.id })
-      .eq('id', orderId);
-
-    if (updateError) {
-      throw new Error(`Erro ao atualizar pedido: ${updateError.message}`);
-    }
-
-    // Retornar dados para o frontend
-    return new Response(JSON.stringify({
-      preference_id: mpData.id,
-      init_point: mpData.init_point,
-      order_id: orderId
-    }), {
-      status: 200,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    });
+    // Retornar dados para o frontend (modo WhatsApp sem Mercado Pago)
+    return new Response(
+      JSON.stringify({
+        order_id: orderId,
+        init_point: null,
+        preference_id: null,
+        whatsapp_redirect: true
+      }),
+      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
 
   } catch (error) {
     console.error('Erro em create-preference:', error);

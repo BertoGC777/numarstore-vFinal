@@ -228,6 +228,28 @@ export default function Checkout() {
       // Se tiver init_point (Mercado Pago configurado), redireciona para o checkout do MP
       if (data.init_point) {
         window.location.href = data.init_point;
+      } else if (data.whatsapp_redirect && data.order_id) {
+        // Limpar carrinho
+        close();
+        await clear();
+        // Montar mensagem do WhatsApp com resumo do pedido
+        const orderNum = data.order_id.substring(0, 8).toUpperCase();
+        const itemsList = items.map((i: any) =>
+          `• ${i.name} (${i.color}, ${i.size}) x${i.quantity}`
+        ).join('\n');
+        const total = items.reduce((acc: number, i: any) =>
+          acc + (i.pricePix * i.quantity), 0
+        ).toFixed(2);
+        const msg = encodeURIComponent(
+          `Olá! Acabei de fazer um pedido no site.\n\n` +
+          `*Pedido #${orderNum}*\n` +
+          `${itemsList}\n\n` +
+          `*Total: R$ ${total}*\n\n` +
+          `Nome: ${nome} ${sobrenome}\n` +
+          `Email: ${email}`
+        );
+        window.open(`https://wa.me/5521979674510?text=${msg}`, '_blank');
+        navigate(`/checkout/success?order_id=${data.order_id}`);
       } else {
         // Se não tiver init_point (MP ainda sem chaves reais), redireciona para success
         close();
