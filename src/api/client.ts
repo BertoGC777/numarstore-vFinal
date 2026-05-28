@@ -14,6 +14,10 @@ async function request(endpoint: string, options: RequestInit = {}): Promise<any
   }
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
+  if (endpoint.includes('/admin/') && !token) {
+    return null;
+  }
+
   let res = await fetch(url, { ...options, headers });
 
   // Auto-refresh on 401

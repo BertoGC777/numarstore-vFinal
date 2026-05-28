@@ -30,12 +30,23 @@ export default function ProductPage() {
     setLoading(true);
     fetchProductBySlug(slug).then((p) => {
       setProduct(p);
-      setSize(p?.sizes[0] || "");
+      setSize(p?.sizes?.[0] || "");
       setColorIdx(0);
       setLoading(false);
       if (p) fetchRelatedProducts(slug).then(setRelated);
     });
   }, [slug]);
+
+  const numColors = product?.colors?.length || 0;
+  const currentMainImg = product?.images?.[colorIdx] ?? product?.images?.[0];
+  const galleryImages = product?.images ?? [];
+  const wpp = useMemo(() => {
+    if (!product) return "";
+    const colorName = product.colors?.[colorIdx]?.name || "";
+    const url = typeof window !== "undefined" ? window.location.href : "";
+    const msg = `Olá! Tenho interesse no produto: *${product.name}*${colorName ? ` - Cor: ${colorName}` : ""}\n${url}`;
+    return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
+  }, [product, colorIdx]);
 
   if (loading) {
     return (
@@ -60,15 +71,6 @@ export default function ProductPage() {
     );
   }
 
-  const numColors = product.colors?.length || 0;
-  const currentMainImg = product.images[colorIdx] ?? product.images[0];
-  const galleryImages = product.images;
-  const wpp = useMemo(() => {
-    const colorName = product.colors?.[colorIdx]?.name || "";
-    const msg = `Olá! Tenho interesse no produto: *${product.name}*${colorName ? ` - Cor: ${colorName}` : ""}\n${window.location.href}`;
-    return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
-  }, [product, colorIdx]);
-
   const handleColorChange = (i: number) => setColorIdx(i);
 
   const jsonLd = {
@@ -76,7 +78,7 @@ export default function ProductPage() {
     "@type": "Product",
     name: product.name,
     description: product.description,
-    image: product.images[0],
+    image: product.images?.[0] || "",
     offers: {
       "@type": "Offer",
       priceCurrency: "BRL",
@@ -135,9 +137,9 @@ export default function ProductPage() {
 
             {numColors > 0 && (
               <div className="mb-4">
-                <p className="text-sm mb-2">Cor: <strong>{product.colors[colorIdx]?.name}</strong></p>
+                <p className="text-sm mb-2">Cor: <strong>{product.colors?.[colorIdx]?.name}</strong></p>
                 <div className="flex gap-2 flex-wrap">
-                  {product.colors.map((c, i) => (
+                  {(product.colors || []).map((c, i) => (
                     <button
                       key={c.name}
                       onClick={() => handleColorChange(i)}
@@ -153,7 +155,7 @@ export default function ProductPage() {
             <div className="mb-6">
               <p className="text-sm mb-2">Tamanho</p>
               <div className="flex gap-2 flex-wrap">
-                {product.sizes.map((s) => (
+                {(product.sizes || []).map((s) => (
                   <button
                     key={s}
                     onClick={() => setSize(s)}
@@ -181,7 +183,7 @@ export default function ProductPage() {
             <div className="flex flex-col sm:flex-row gap-3 mb-8">
               <Button
                 className="flex-1 h-12 uppercase tracking-widest"
-                onClick={() => addItem(product, product.colors[colorIdx]?.name || "Único", size, qty)}
+                onClick={() => addItem(product, product.colors?.[colorIdx]?.name || "Único", size, qty)}
               >
                 Adicionar à Sacola
               </Button>

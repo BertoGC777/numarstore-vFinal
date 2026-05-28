@@ -78,6 +78,11 @@ export default function Catalog() {
   }, [categoria]);
 
   const fetchSubcategories = async (categorySlug: string) => {
+    const token = localStorage.getItem("numar.token");
+    if (!token) {
+      setSubcategories([]);
+      return;
+    }
     try {
       const data = await api.get(`/admin/subcategories/${categorySlug}`);
       setSubcategories(data.subcategories || []);

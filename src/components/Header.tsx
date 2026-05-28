@@ -56,6 +56,11 @@ export default function Header() {
   // Fetch subcategories on mount
   useEffect(() => {
     const fetchSubcategories = async () => {
+      const token = localStorage.getItem("numar.token");
+      if (!token) {
+        setMenu(FIXED_MENU);
+        return;
+      }
       try {
         const data = await api.get("/admin/subcategories");
         const subs = data.subcategories || [];
