@@ -22,7 +22,6 @@ async function request(endpoint: string, options: RequestInit = {}): Promise<any
 
   // Auto-refresh on 401
   if (res.status === 401) {
-    console.log("Request failed with 401, attempting token refresh");
     const refreshToken = localStorage.getItem("numar.refreshToken");
     if (refreshToken) {
       try {
@@ -31,12 +30,10 @@ async function request(endpoint: string, options: RequestInit = {}): Promise<any
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ refreshToken }),
         });
-        console.log("Refresh response status:", refreshRes.status);
         if (refreshRes.ok) {
           const { token: newToken, refreshToken: newRefresh } = await refreshRes.json();
           localStorage.setItem("numar.token", newToken);
           if (newRefresh) localStorage.setItem("numar.refreshToken", newRefresh);
-          console.log("Token refreshed in API client, retrying request");
           // Retry original request
           const retryHeaders: Record<string, string> = { "Content-Type": "application/json" };
           if (options.headers) {
@@ -45,7 +42,6 @@ async function request(endpoint: string, options: RequestInit = {}): Promise<any
           retryHeaders["Authorization"] = `Bearer ${newToken}`;
           res = await fetch(url, { ...options, headers: retryHeaders });
         } else {
-          console.log("Refresh failed, clearing session");
           // Refresh failed — clear session
           localStorage.removeItem("numar.token");
           localStorage.removeItem("numar.refreshToken");
@@ -59,7 +55,6 @@ async function request(endpoint: string, options: RequestInit = {}): Promise<any
         return null;
       }
     } else {
-      console.log("No refresh token available, clearing session");
       localStorage.removeItem("numar.token");
       localStorage.removeItem("numar.refreshToken");
       localStorage.removeItem("numar.user");

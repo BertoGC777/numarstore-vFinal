@@ -41,9 +41,7 @@ export default function Dashboard() {
   const fetchDashboard = async () => {
     setLoading(true);
     try {
-      console.log("Fetching dashboard data...");
       const data = await api.get("/admin/dashboard");
-      console.log("Dashboard data fetched:", data);
       setStats(data);
     } catch (err: any) {
       console.error("Error fetching dashboard:", err);

@@ -135,7 +135,6 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
 
   useEffect(() => {
     if (product) {
-      console.log("Loading product data:", product);
       setFormData({
         name: product.name,
         slug: product.slug || "",
@@ -185,21 +184,6 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    console.log("=== FormularioProduto: handleSubmit ===");
-    console.log("Product ID:", product?.id);
-    console.log("Form data:", formData);
-    
-    // Validação no frontend
-    console.log("=== Validation ===");
-    console.log("Name:", formData.name, "Valid:", !!formData.name.trim());
-    console.log("Category:", formData.category, "Valid:", !!formData.category);
-    console.log("Description:", formData.description, "Valid:", !!formData.description.trim());
-    console.log("Price PIX:", formData.price_pix, "Valid:", !!(formData.price_pix && parseFloat(formData.price_pix) > 0));
-    console.log("Price Card:", formData.price_card, "Valid:", !!(formData.price_card && parseFloat(formData.price_card) > 0));
-    console.log("Sizes:", formData.sizes, "Valid:", formData.sizes.length > 0);
-    console.log("Colors:", formData.colors, "Valid:", formData.colors.length > 0);
-    console.log("Images:", formData.images, "Valid:", formData.images.length > 0);
 
     if (!formData.name.trim()) {
       console.error("Validation failed: Name is empty");
@@ -242,7 +226,6 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
       toast({ title: "Erro", description: "Adicione pelo menos uma imagem" });
       return;
     }
-    console.log("=== Validation passed ===");
 
     // Slug validation removida - backend valida unicidade
 
@@ -272,19 +255,11 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
         is_active: formData.is_active ? 1 : 0
       };
 
-      console.log("Sending payload:", JSON.stringify(payload, null, 2));
-      console.log("API URL:", import.meta.env.VITE_API_URL || "http://localhost:3001/api");
-      console.log("Endpoint:", `/admin/products/${product?.id}`);
-
       if (product?.id) {
-        console.log("Calling PUT /admin/products/" + product.id);
         await api.put(`/admin/products/${product.id}`, payload);
-        console.log("Product updated successfully");
         toast({ title: "Sucesso", description: "Produto atualizado com sucesso" });
       } else {
-        console.log("Calling POST /admin/products");
         await api.post("/admin/products", payload);
-        console.log("Product created successfully");
         toast({ title: "Sucesso", description: "Produto criado com sucesso" });
       }
 
@@ -435,12 +410,7 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
 
   return (
     <form 
-      onSubmit={(e) => {
-        console.log("Form onSubmit event triggered");
-        console.log("Event target:", e.target);
-        console.log("Event type:", e.type);
-        handleSubmit(e);
-      }} 
+      onSubmit={handleSubmit}
       className="space-y-6"
     >
       {/* Basic Information */}
@@ -829,10 +799,6 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
           type="submit" 
           disabled={loading} 
           className="min-w-[140px]"
-          onClick={(e) => {
-            console.log("Submit button clicked");
-            console.log("Form data before submit:", formData);
-          }}
         >
           {loading ? (
             <span className="flex items-center gap-2">

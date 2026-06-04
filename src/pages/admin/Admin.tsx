@@ -48,9 +48,7 @@ export default function Admin() {
     const checkAdminRole = async () => {
       const token = localStorage.getItem("numar.token");
       const userStr = localStorage.getItem("numar.user");
-      console.log("Admin check - Token exists:", !!token);
-      console.log("Admin check - User in localStorage:", !!userStr);
-      
+
       if (!token) {
         navigate("/conta");
         setCheckingAuth(false);

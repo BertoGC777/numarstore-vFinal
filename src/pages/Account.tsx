@@ -60,10 +60,8 @@ export default function Account() {
 
     setLoading(true);
     try {
-      console.log("Attempting login with email:", form.email);
       const result = await api.auth.login({ email: form.email, password: form.password });
-      console.log("Login result:", result);
-      
+
       if (!result || !result.token) {
         setError("Email ou senha incorretos");
         return;
@@ -73,12 +71,9 @@ export default function Account() {
       localStorage.setItem("numar.refreshToken", refreshToken);
       localStorage.setItem("numar.user", JSON.stringify(user));
       setUser(user);
-      console.log("User stored in localStorage:", user);
-      console.log("User role:", user?.role);
-      
+
       toast({ title: "✅ Login realizado", description: "Bem-vindo de volta!" });
       const role = user?.role || "";
-      console.log("Redirecting based on role:", role);
       if (role === "admin") {
         navigate("/admin");
       } else {

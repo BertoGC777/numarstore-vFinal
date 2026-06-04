@@ -101,9 +101,7 @@ export default function AdminProdutos() {
       params.append("page", page.toString());
       params.append("limit", limit.toString());
 
-      console.log("Fetching products with params:", params.toString());
       const data: ProductsResponse = await api.get(`/admin/products?${params.toString()}`);
-      console.log("Products fetched:", data.products.length, "total:", data.total);
       setProducts(data.products);
       setTotal(data.total);
       setTotalPages(data.totalPages);
@@ -134,14 +132,10 @@ export default function AdminProdutos() {
   };
 
   const handleOpenDialog = async (product?: Product) => {
-    console.log("Opening dialog for product:", product?.id, product?.name);
-    
     if (product?.id) {
       // Carregar o produto completo do backend
       try {
-        console.log("Fetching complete product data from backend:", product.id);
         const completeProduct = await api.get(`/admin/products/${product.id}`);
-        console.log("Complete product data:", completeProduct);
         setEditingProduct(completeProduct);
         setDialogOpen(true);
       } catch (err: any) {
@@ -167,9 +161,7 @@ export default function AdminProdutos() {
   const handleDeleteConfirm = async () => {
     if (!productToDelete) return;
     try {
-      console.log("Deleting product:", productToDelete.id, productToDelete.name);
       await api.delete(`/admin/products/${productToDelete.id}`);
-      console.log("Product deleted successfully");
       toast({ title: "Sucesso", description: "Produto excluído com sucesso" });
       fetchProducts();
     } catch (err: any) {
@@ -184,7 +176,6 @@ export default function AdminProdutos() {
 
   const handleToggleActive = async (product: Product) => {
     try {
-      console.log("Toggling product active status:", product.id, product.name, !product.is_active);
       const newActive = product.is_active === 0 ? 1 : 0;
       await api.put(`/admin/products/${product.id}`, { is_active: newActive });
       toast({ title: "Sucesso", description: `Produto ${newActive ? "ativado" : "desativado"} com sucesso` });

@@ -15,9 +15,9 @@ import {
 
 interface Order {
   id: string;
-  name: string;
-  email: string;
-  phone: string;
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string;
   total: number;
   shipping: number;
   payment_method: string;
@@ -52,7 +52,7 @@ export default function AdminPedidos() {
     try {
       let query = supabase
         .from('orders')
-        .select('*, order_items(*)')
+        .select('*, order_items(*)', { count: 'exact' })
         .order('created_at', { ascending: false });
 
       if (statusFilter !== "todos") {
@@ -60,17 +60,21 @@ export default function AdminPedidos() {
       }
 
       if (searchQuery) {
-        query = query.ilike('name', `%${searchQuery}%`);
+        query = query.ilike('customer_name', `%${searchQuery}%`);
       }
 
-      const { data, error } = await query;
+      const from = (page - 1) * limit;
+      const to = from + limit - 1;
+      query = query.range(from, to);
+
+      const { data, error, count } = await query;
 
       if (error) throw error;
 
       const ordersData = data || [];
       setOrders(ordersData);
-      setTotal(ordersData.length);
-      setTotalPages(Math.ceil(ordersData.length / limit));
+      setTotal(count || 0);
+      setTotalPages(Math.ceil((count || 0) / limit));
     } catch (err: any) {
       toast({ 
         title: "Erro", 
@@ -227,8 +231,8 @@ export default function AdminPedidos() {
                       </td>
                       <td className="p-3">
                         <div>
-                          <p className="font-medium text-sm">{order.name}</p>
-                          <p className="text-xs text-muted-foreground">{order.email}</p>
+                          <p className="font-medium text-sm">{order.customer_name}</p>
+                          <p className="text-xs text-muted-foreground">{order.customer_email}</p>
                         </div>
                       </td>
                       <td className="p-3 text-sm">{order.item_count}</td>
