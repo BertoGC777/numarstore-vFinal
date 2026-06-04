@@ -154,6 +154,27 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
         is_sale: product.is_sale === 1,
         is_active: product.is_active === 1
       });
+    } else {
+      // Resetar formData para estado inicial quando product é null (criação de novo produto)
+      setFormData({
+        name: "",
+        slug: "",
+        category: "",
+        subcategory: "",
+        description: "",
+        shortDescription: "",
+        price_pix: "",
+        price_card: "",
+        originalPrice: "",
+        discount: "",
+        colors: [],
+        sizes: [],
+        images: [],
+        stock: {},
+        is_new: false,
+        is_sale: false,
+        is_active: true
+      });
     }
   }, [product]);
 
