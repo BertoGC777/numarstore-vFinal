@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const phone = "5521979674510";
+const phone = import.meta.env.VITE_WHATSAPP_NUMBER || "5521979674510";
 const message = "Olá! Vim pelo site e tenho uma dúvida 😊";
 const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 

@@ -298,7 +298,7 @@ export default function AdminConfiguracoes() {
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                 <div>
                   <p className="font-medium">Cartão de Crédito</p>
-                  <p className="text-sm text-muted-foreground">Stripe</p>
+                  <p className="text-sm text-muted-foreground">Stripe (desativado temporariamente)</p>
                 </div>
                 <Switch
                   checked={settings.payment_methods.includes("card")}

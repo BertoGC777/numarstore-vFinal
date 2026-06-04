@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { api } from "@/api/client";
+import { supabase } from "@/lib/supabaseClient";
 import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -49,20 +50,31 @@ export default function AdminPedidos() {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams();
-      if (statusFilter !== "todos") params.append("status", statusFilter);
-      if (searchQuery) params.append("search", searchQuery);
-      params.append("page", page.toString());
-      params.append("limit", limit.toString());
+      let query = supabase
+        .from('orders')
+        .select('*, order_items(*)')
+        .order('created_at', { ascending: false });
 
-      const data: OrdersResponse = await api.get(`/admin/orders?${params.toString()}`);
-      setOrders(data.orders);
-      setTotal(data.total);
-      setTotalPages(data.totalPages);
+      if (statusFilter !== "todos") {
+        query = query.eq('status', statusFilter);
+      }
+
+      if (searchQuery) {
+        query = query.ilike('name', `%${searchQuery}%`);
+      }
+
+      const { data, error } = await query;
+
+      if (error) throw error;
+
+      const ordersData = data || [];
+      setOrders(ordersData);
+      setTotal(ordersData.length);
+      setTotalPages(Math.ceil(ordersData.length / limit));
     } catch (err: any) {
       toast({ 
         title: "Erro", 
-        description: err.response?.data?.error || "Erro ao carregar pedidos" 
+        description: err.message || "Erro ao carregar pedidos" 
       });
     } finally {
       setLoading(false);
@@ -81,11 +93,17 @@ export default function AdminPedidos() {
 
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     try {
-      await api.put(`/admin/orders/${orderId}/status`, { status: newStatus });
+      const { error } = await supabase
+        .from('orders')
+        .update({ status: newStatus })
+        .eq('id', orderId);
+
+      if (error) throw error;
+
       toast({ title: "Sucesso", description: "Status atualizado" });
       fetchOrders();
     } catch (err: any) {
-      toast({ title: "Erro", description: err.response?.data?.error || "Erro ao atualizar status" });
+      toast({ title: "Erro", description: err.message || "Erro ao atualizar status" });
     }
   };
 
