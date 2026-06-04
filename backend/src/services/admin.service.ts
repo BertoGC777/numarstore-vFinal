@@ -1,5 +1,4 @@
 import { dbAll, dbGet, dbRun, getDatabase } from "../db";
-import { resolveImageUrl } from "../utils/imageResolver";
 
 // Dashboard
 export async function getDashboard() {
@@ -323,9 +322,10 @@ export async function getProducts(filters: GetProductsFilters) {
         `SELECT url, color FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
         [product.id]
       );
-      // Para o admin, manter formato original de objetos com url e color
+      // Para o admin, manter formato original de objetos sem usar imageResolver
+      // As imagens do Supabase já têm URLs absolutas, não precisam de resolução
       const resolvedImages = images.map((img) => ({
-        url: resolveImageUrl(product.slug, img),
+        url: img.url,
         color: img.color
       }));
       return {
@@ -367,9 +367,10 @@ export async function getProductById(id: string) {
     [id]
   );
 
-  // Para o admin, manter formato original de objetos
+  // Para o admin, manter formato original de objetos sem usar imageResolver
+  // As imagens do Supabase já têm URLs absolutas, não precisam de resolução
   const images = imageRows.map((img) => ({
-    url: resolveImageUrl(product.slug, img),
+    url: img.url,
     color: img.color,
     colorHex: img.colorHex,
     sortOrder: img.sortOrder
@@ -970,9 +971,10 @@ export async function getBundles(filters: GetBundlesFilters) {
         `SELECT url, color FROM product_images WHERE product_id = $1 ORDER BY sort_order`,
         [bundle.id]
       );
-      // Para o admin, manter formato original de objetos
+      // Para o admin, manter formato original de objetos sem usar imageResolver
+      // As imagens do Supabase já têm URLs absolutas, não precisam de resolução
       const resolvedImages = images.map((img) => ({
-        url: resolveImageUrl(bundle.slug, img),
+        url: img.url,
         color: img.color
       }));
       return { ...bundle, images: resolvedImages };
@@ -1010,9 +1012,10 @@ export async function getBundleById(id: string) {
     [id]
   );
 
-  // Para o admin, manter formato original de objetos
+  // Para o admin, manter formato original de objetos sem usar imageResolver
+  // As imagens do Supabase já têm URLs absolutas, não precisam de resolução
   const images = imageRows.map((img) => ({
-    url: resolveImageUrl(bundle.slug, img),
+    url: img.url,
     color: img.color,
     colorHex: img.colorHex,
     sortOrder: img.sortOrder
