@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { adminMiddleware, AuthRequest } from "../middleware/auth";
 import * as adminService from "../services/admin.service";
+import { dbGet } from "../db";
 
 const router = Router();
 
@@ -94,6 +95,16 @@ router.get("/products/:id", adminMiddleware, async (req, res) => {
 // Products - Create
 router.post("/products", adminMiddleware, async (req, res) => {
   try {
+    // Se vier slug no body, verificar unicidade
+    if (req.body.slug) {
+      const existing = await dbGet(
+        `SELECT id FROM products WHERE slug = $1`,
+        [req.body.slug]
+      );
+      if (existing) {
+        return res.status(409).json({ error: 'Slug já em uso. Escolha outro nome para o produto.' });
+      }
+    }
     const product = await adminService.createProduct(req.body);
     res.json(product);
   } catch (err: any) {

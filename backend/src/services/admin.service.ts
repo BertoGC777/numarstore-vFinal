@@ -433,7 +433,23 @@ export async function createProduct(data: any) {
   const now = Date.now();
 
   // Generate slug if not provided
-  const finalSlug = slug || name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  let finalSlug = slug || name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+  // Verificar se slug já existe
+  const existingProduct = await dbGet(
+    `SELECT id FROM products WHERE slug = $1`,
+    [finalSlug]
+  );
+  if (existingProduct) {
+    // Adicionar sufixo numérico até encontrar slug único
+    let counter = 2;
+    let uniqueSlug = `${finalSlug}-${counter}`;
+    while (await dbGet(`SELECT id FROM products WHERE slug = $1`, [uniqueSlug])) {
+      counter++;
+      uniqueSlug = `${finalSlug}-${counter}`;
+    }
+    finalSlug = uniqueSlug;
+  }
 
   // Insert product
   await dbRun(
@@ -536,9 +552,24 @@ export async function updateProduct(id: string, data: any) {
   }
   
   if (slug !== undefined) {
-    const finalSlug = slug || name?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    let finalSlug = slug || name?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
     if (!finalSlug || finalSlug.trim() === "") {
       throw new Error("Slug do produto é obrigatório");
+    }
+    // Verificar se slug já existe em outro produto
+    const existingSlug = await dbGet(
+      `SELECT id FROM products WHERE slug = $1 AND id != $2`,
+      [finalSlug, id]
+    );
+    if (existingSlug) {
+      // Adicionar sufixo numérico até encontrar slug único
+      let counter = 2;
+      let uniqueSlug = `${finalSlug}-${counter}`;
+      while (await dbGet(`SELECT id FROM products WHERE slug = $1 AND id != $2`, [uniqueSlug, id])) {
+        counter++;
+        uniqueSlug = `${finalSlug}-${counter}`;
+      }
+      finalSlug = uniqueSlug;
     }
     fields.push(`slug = $${paramIndex}`);
     values.push(finalSlug.trim());
