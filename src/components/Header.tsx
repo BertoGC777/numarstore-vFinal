@@ -14,12 +14,7 @@ const FIXED_MENU = [
   { 
     label: "Vestidos", 
     href: "/catalogo/vestidos", 
-    categorySlug: "vestidos",
-    children: [
-      { label: "Vestidos Longos", href: "/catalogo/vestidos?sub=vestidos-longos" },
-      { label: "Vestidos Curtos", href: "/catalogo/vestidos?sub=vestidos-curtos" },
-      { label: "Ver todos os vestidos", href: "/catalogo/vestidos" }
-    ]
+    categorySlug: "vestidos"
   },
   { label: "Partes de Cima", href: "/catalogo/partes-de-cima", categorySlug: "partes-de-cima" },
   { label: "Partes de Baixo", href: "/catalogo/partes-de-baixo", categorySlug: "partes-de-baixo" },
@@ -56,16 +51,11 @@ export default function Header() {
   // Fetch subcategories on mount
   useEffect(() => {
     const fetchSubcategories = async () => {
-      const token = localStorage.getItem("numar.token");
-      if (!token) {
-        setMenu(FIXED_MENU);
-        return;
-      }
       try {
         const data = await api.get("/admin/subcategories");
         if (!data) return;
         const subs = data.subcategories || [];
-        
+
         // Group subcategories by category_slug
         const grouped: Record<string, any[]> = {};
         subs.forEach((sub: any) => {
@@ -74,43 +64,17 @@ export default function Header() {
           }
           grouped[sub.category_slug].push(sub);
         });
-        
+
         setSubcategories(grouped);
-        
+
         // Update menu with dynamic subcategories
         const updatedMenu = FIXED_MENU.map((item) => {
           if (!item.categorySlug) return item;
-          
+
           const categorySubs = grouped[item.categorySlug] || [];
           if (categorySubs.length === 0) return item;
-          
-          // If category already has hardcoded children (Vestidos), merge with dynamic
-          if (item.children && item.children.length > 0) {
-            // Merge hardcoded children with dynamic subcategories
-            const dynamicChildren = categorySubs.map((sub: any) => ({
-              label: sub.name,
-              href: `/catalogo/${item.categorySlug}?sub=${sub.slug}`
-            }));
-            
-            // Keep hardcoded children, add dynamic ones before "Ver todos"
-            const hardcodedChildren = item.children.filter(c => !c.label.includes("Ver todos"));
-            const verTodos = item.children.find(c => c.label.includes("Ver todos"));
-            
-            // Filter dynamicChildren to remove duplicates based on label
-            const hardcodedLabels = new Set(hardcodedChildren.map(c => c.label));
-            const dynamicChildrenFiltered = dynamicChildren.filter(dc => !hardcodedLabels.has(dc.label));
-            
-            return {
-              ...item,
-              children: [
-                ...hardcodedChildren,
-                ...dynamicChildrenFiltered,
-                verTodos || { label: `Ver todos os ${item.label.toLowerCase()}`, href: item.href }
-              ]
-            };
-          }
-          
-          // If no hardcoded children, add dynamic ones
+
+          // Add dynamic subcategories
           return {
             ...item,
             children: [
@@ -122,7 +86,7 @@ export default function Header() {
             ]
           };
         });
-        
+
         setMenu(updatedMenu);
       } catch (err) {
         console.error("Error fetching subcategories, using fallback:", err);
@@ -130,7 +94,7 @@ export default function Header() {
         setMenu(FIXED_MENU);
       }
     };
-    
+
     fetchSubcategories();
   }, []);
 

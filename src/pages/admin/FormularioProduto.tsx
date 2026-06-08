@@ -23,8 +23,7 @@ const CATEGORIES_DEFAULT = [
   { label: "Partes de Cima", value: "partes-de-cima" },
   { label: "Partes de Baixo", value: "partes-de-baixo" },
   { label: "Conjuntos", value: "conjuntos" },
-  { label: "Vestidos Longos", value: "vestidos-longos" },
-  { label: "Vestidos Curtos", value: "vestidos-curtos" }
+  { label: "Vestidos", value: "vestidos" }
 ];
 
 const SIZES = ["PP", "P", "M", "G", "GG", "Único"];
@@ -212,12 +211,11 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
       toast({ title: "Erro", description: "Nome do produto é obrigatório" });
       return;
     }
-    // Categoria opcional - permitir edição de produtos sem categoria
-    // if (!formData.category) {
-    //   console.error("Validation failed: Category is empty");
-    //   toast({ title: "Erro", description: "Categoria do produto é obrigatória" });
-    //   return;
-    // }
+    if (!formData.category) {
+      console.error("Validation failed: Category is empty");
+      toast({ title: "Erro", description: "Categoria do produto é obrigatória" });
+      return;
+    }
     if (!formData.description.trim()) {
       console.error("Validation failed: Description is empty");
       toast({ title: "Erro", description: "Descrição do produto é obrigatória" });
@@ -415,10 +413,8 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
       colors.forEach(c => {
         if (imagesByColor[c.name][i]) {
           reordered.push(imagesByColor[c.name][i]);
-        } else {
-          // Add placeholder if color has no image at this position
-          reordered.push({ url: '', color: c.name, colorHex: c.hex });
         }
+        // Skip adding placeholder if color has no image at this position
       });
     }
     
@@ -580,21 +576,20 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
             />
             <Label htmlFor="is_sale">Em promoção</Label>
           </div>
-          
-          {formData.is_sale && (
-            <div className="flex items-center gap-2">
-              <Label htmlFor="discount">Desconto (%)</Label>
-              <Input
-                id="discount"
-                type="number"
-                min="0"
-                max="100"
-                value={formData.discount}
-                onChange={(e) => setFormData({ ...formData, discount: e.target.value })}
-                className="w-24"
-              />
-            </div>
-          )}
+
+          <div className="flex items-center gap-2">
+            <Label htmlFor="discount">Desconto (%)</Label>
+            <Input
+              id="discount"
+              type="number"
+              min="0"
+              max="100"
+              value={formData.discount}
+              onChange={(e) => setFormData({ ...formData, discount: e.target.value })}
+              className="w-24"
+              disabled={!formData.is_sale}
+            />
+          </div>
         </div>
       </div>
 

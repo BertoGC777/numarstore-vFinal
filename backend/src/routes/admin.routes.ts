@@ -407,8 +407,8 @@ router.get("/low-stock", adminMiddleware, async (req, res) => {
   }
 });
 
-// Subcategories - Get all
-router.get("/subcategories", adminMiddleware, async (req, res) => {
+// Subcategories - Get all (public endpoint for frontend menu)
+router.get("/subcategories", async (req, res) => {
   try {
     const subcategories = await adminService.getSubcategories();
     res.json({ subcategories });
@@ -417,8 +417,8 @@ router.get("/subcategories", adminMiddleware, async (req, res) => {
   }
 });
 
-// Subcategories - Get by category slug
-router.get("/subcategories/:categorySlug", adminMiddleware, async (req, res) => {
+// Subcategories - Get by category slug (public endpoint for frontend menu)
+router.get("/subcategories/:categorySlug", async (req, res) => {
   try {
     const categorySlug = Array.isArray(req.params.categorySlug) ? req.params.categorySlug[0] : req.params.categorySlug;
     const subcategories = await adminService.getSubcategories(categorySlug);
