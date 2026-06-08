@@ -2,8 +2,15 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { dbGet, getDatabase } from "../db";
 
-const JWT_SECRET = process.env.JWT_SECRET || "sua-secret-aqui-troque-isso";
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || "sua-refresh-secret";
+const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
+
+if (!JWT_SECRET) {
+  throw new Error("JWT_SECRET não configurada no ambiente");
+}
+if (!JWT_REFRESH_SECRET) {
+  throw new Error("JWT_REFRESH_SECRET não configurada no ambiente");
+}
 // Hardcoded values to avoid environment variable issues
 // 7 days = 604800 seconds, 30 days = 2592000 seconds
 const TOKEN_EXPIRATION = "604800"; // 7 days in seconds - DO NOT use env var

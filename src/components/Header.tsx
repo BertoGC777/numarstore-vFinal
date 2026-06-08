@@ -21,8 +21,8 @@ const FIXED_MENU = [
       { label: "Ver todos os vestidos", href: "/catalogo/vestidos" }
     ]
   },
-  { label: "Partes de Cima", href: "/catalogo/partes-de-cima" },
-  { label: "Partes de Baixo", href: "/catalogo/partes-de-baixo" },
+  { label: "Partes de Cima", href: "/catalogo/partes-de-cima", categorySlug: "partes-de-cima" },
+  { label: "Partes de Baixo", href: "/catalogo/partes-de-baixo", categorySlug: "partes-de-baixo" },
   { label: "Biquínis", href: "/catalogo/biquinis", categorySlug: "biquinis" },
   { label: "Conjuntos", href: "/catalogo/conjuntos", categorySlug: "conjuntos" },
   { label: "Lançamentos", href: "/catalogo/lancamentos" },
@@ -96,11 +96,15 @@ export default function Header() {
             const hardcodedChildren = item.children.filter(c => !c.label.includes("Ver todos"));
             const verTodos = item.children.find(c => c.label.includes("Ver todos"));
             
+            // Filter dynamicChildren to remove duplicates based on label
+            const hardcodedLabels = new Set(hardcodedChildren.map(c => c.label));
+            const dynamicChildrenFiltered = dynamicChildren.filter(dc => !hardcodedLabels.has(dc.label));
+            
             return {
               ...item,
               children: [
                 ...hardcodedChildren,
-                ...dynamicChildren,
+                ...dynamicChildrenFiltered,
                 verTodos || { label: `Ver todos os ${item.label.toLowerCase()}`, href: item.href }
               ]
             };

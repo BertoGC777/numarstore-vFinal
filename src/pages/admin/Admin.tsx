@@ -18,6 +18,7 @@ import {
   Users,
   Ticket,
   Folder,
+  Layers,
   Settings,
   FileText,
   AlertTriangle
@@ -30,6 +31,7 @@ const sidebarItems = [
   { path: "/admin/clientes", icon: Users, label: "Clientes" },
   { path: "/admin/cupons", icon: Ticket, label: "Cupons" },
   { path: "/admin/categorias", icon: Folder, label: "Categorias" },
+  { path: "/admin/conjuntos", icon: Layers, label: "Conjuntos" },
   { path: "/admin/configuracoes", icon: Settings, label: "Configurações" },
   { path: "/admin/logs", icon: FileText, label: "Logs" },
   { path: "/admin/estoque-baixo", icon: AlertTriangle, label: "Estoque Baixo" },

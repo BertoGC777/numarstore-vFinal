@@ -274,7 +274,7 @@ export default function AdminProdutos() {
                 <div className="aspect-square bg-gray-100 relative">
                   {product.images && product.images.length > 0 ? (
                     <img
-                      src={product.images[0].url}
+                      src={product.images[0]?.url}
                       alt={product.name}
                       loading="lazy"
                       decoding="async"
