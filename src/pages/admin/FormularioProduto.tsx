@@ -36,6 +36,7 @@ interface Color {
 
 interface ProductImage {
   url: string; // Isso agora pode ser uma URL ou uma Data URL temporária para preview
+  preview?: string; // Data URL temporária para preview de imagens novas
   color?: string;
   colorHex?: string;
   file?: File; // Adicionar uma propriedade para o arquivo original
@@ -747,7 +748,7 @@ export default function FormularioProduto({ product, onSave, onCancel }: Formula
             {formData.images.map((img, index) => (
               <div key={index} className="relative group">
                 <Image
-                  src={img.url}
+                  src={img.url || img.preview || ""}
                   alt={`Imagem ${index + 1}`}
                   aspectRatio="square"
                   objectFit="contain"

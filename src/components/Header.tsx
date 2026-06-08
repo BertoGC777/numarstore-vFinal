@@ -16,8 +16,8 @@ const FIXED_MENU = [
     href: "/catalogo/vestidos", 
     categorySlug: "vestidos",
     children: [
-      { label: "Vestidos Longos", href: "/catalogo/vestidos-longos" },
-      { label: "Vestidos Curtos", href: "/catalogo/vestidos-curtos" },
+      { label: "Vestidos Longos", href: "/catalogo/vestidos?sub=vestidos-longos" },
+      { label: "Vestidos Curtos", href: "/catalogo/vestidos?sub=vestidos-curtos" },
       { label: "Ver todos os vestidos", href: "/catalogo/vestidos" }
     ]
   },
