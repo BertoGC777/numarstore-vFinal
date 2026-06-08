@@ -9,7 +9,8 @@
     "create-admin": "npx tsx src/scripts/create-admin.ts",
     "check-admin": "npx tsx src/scripts/check-admin.ts",
     "verify-admin": "npx tsx src/scripts/verify-admin.ts",
-    "reset-admin-password": "npx tsx src/scripts/reset-admin-password.ts"
+    "reset-admin-password": "npx tsx src/scripts/reset-admin-password.ts",
+    "update-subcategories": "npx tsx src/scripts/update-subcategories.ts"
   },
   "dependencies": {
     "@sendgrid/mail": "^8.1.4",
