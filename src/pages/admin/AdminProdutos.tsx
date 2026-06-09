@@ -25,8 +25,8 @@ const CATEGORIES_DEFAULT = [
   "Biquínis",
   "Partes de Cima",
   "Partes de Baixo",
-  "Vestidos Longos",
-  "Vestidos Curtos"
+  "Conjuntos",
+  "Vestidos"
 ];
 
 interface Category {

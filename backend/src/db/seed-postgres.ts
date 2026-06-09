@@ -87,6 +87,53 @@ export async function seedAll() {
     console.error("❌ Erro ao criar/atualizar admin:", e.message);
   }
 
+  // Categories seed - só executa se não houver categorias
+  const categoryCount = await dbGet<{ cnt: number }>("SELECT COUNT(*) as cnt FROM categories");
+  if (!categoryCount || categoryCount.cnt === 0) {
+    const categories = [
+      { name: "Biquínis", slug: "biquinis" },
+      { name: "Partes de Cima", slug: "partes-de-cima" },
+      { name: "Partes de Baixo", slug: "partes-de-baixo" },
+      { name: "Conjuntos", slug: "conjuntos" },
+      { name: "Vestidos", slug: "vestidos" }
+    ];
+    
+    for (const cat of categories) {
+      const id = crypto.randomUUID();
+      await dbRun(
+        "INSERT INTO categories (id, name, slug, created_at) VALUES ($1, $2, $3, $4)",
+        [id, cat.name, cat.slug, Date.now()]
+      );
+    }
+    console.log(`✅ ${categories.length} categorias seedadas no PostgreSQL`);
+  } else {
+    console.log("✅ Categorias já existem, pulando seed de categorias");
+  }
+
+  // Subcategories seed - só executa se não houver subcategorias
+  const subcategoryCount = await dbGet<{ cnt: number }>("SELECT COUNT(*) as cnt FROM subcategories");
+  if (!subcategoryCount || subcategoryCount.cnt === 0) {
+    const subcategories = [
+      { name: "Blusas", slug: "blusas", category_slug: "partes-de-cima" },
+      { name: "Croppeds", slug: "croppeds", category_slug: "partes-de-cima" },
+      { name: "Saias", slug: "saias", category_slug: "partes-de-baixo" },
+      { name: "Shorts", slug: "shorts", category_slug: "partes-de-baixo" },
+      { name: "Vestidos Longos", slug: "vestidos-longos", category_slug: "vestidos" },
+      { name: "Vestidos Curtos", slug: "vestidos-curtos", category_slug: "vestidos" }
+    ];
+    
+    for (const sub of subcategories) {
+      const id = crypto.randomUUID();
+      await dbRun(
+        "INSERT INTO subcategories (id, name, slug, category_slug, created_at) VALUES ($1, $2, $3, $4, $5)",
+        [id, sub.name, sub.slug, sub.category_slug, Date.now()]
+      );
+    }
+    console.log(`✅ ${subcategories.length} subcategorias seedadas no PostgreSQL`);
+  } else {
+    console.log("✅ Subcategorias já existem, pulando seed de subcategorias");
+  }
+
   // Products seed - só executa se não houver produtos
   const count = await dbGet<{ cnt: number }>("SELECT COUNT(*) as cnt FROM products");
   if (count && count.cnt > 0) {

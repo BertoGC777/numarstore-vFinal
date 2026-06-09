@@ -31,8 +31,6 @@ const normalizeString = (str: string): string => {
 
 const categoryLabels: Record<string, string> = {
   vestidos: "Vestidos",
-  "vestidos-longos": "Vestidos Longos",
-  "vestidos-curtos": "Vestidos Curtos",
   biquinis: "Biquínis",
   "partes-de-cima": "Partes de Cima",
   "partes-de-baixo": "Partes de Baixo",
@@ -46,8 +44,7 @@ const categoryImages: Record<string, string> = {
   "partes-de-cima": blusinha,
   "partes-de-baixo": saia,
   conjuntos: conjunto,
-  "vestidos-longos": vestidoLongo,
-  "vestidos-curtos": vestidoCurto,
+  vestidos: vestidoLongo,
   lancamentos: promo,
   promocao: promo,
 };
@@ -78,11 +75,6 @@ export default function Catalog() {
   }, [categoria]);
 
   const fetchSubcategories = async (categorySlug: string) => {
-    const token = localStorage.getItem("numar.token");
-    if (!token) {
-      setSubcategories([]);
-      return;
-    }
     try {
       const data = await api.get(`/admin/subcategories/${categorySlug}`);
       if (!data) return;
