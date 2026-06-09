@@ -133,7 +133,7 @@ export default function ProductPage() {
 
           <div>
             <h1 className="font-serif text-3xl md:text-4xl mb-2">{product.name}</h1>
-            <Price pricePix={product.pricePix} priceCard={product.priceCard} className="mb-6" />
+            <Price value={product.pricePix} className="mb-6" />
 
             {numColors > 0 && (
               <div className="mb-4">
