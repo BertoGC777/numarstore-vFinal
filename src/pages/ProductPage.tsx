@@ -10,7 +10,7 @@ import Price from "@/components/Price";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useCart } from "@/context/CartContext";
-import { Minus, Plus, MessageCircle, ChevronRight, Shield, Truck, RotateCcw } from "lucide-react";
+import { Minus, Plus, MessageCircle, ChevronRight, Shield, Truck, RotateCcw, ChevronLeft, ChevronRight as ChevronRightIcon } from "lucide-react";
 import ProductReviews from "@/components/ProductReviews";
 
 const WHATSAPP = import.meta.env.VITE_WHATSAPP_NUMBER || "5521979674510";
@@ -22,8 +22,11 @@ export default function ProductPage() {
   const [related, setRelated] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [colorIdx, setColorIdx] = useState(0);
+  const [imageIndex, setImageIndex] = useState(0);
   const [qty, setQty] = useState(1);
   const [size, setSize] = useState("");
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   useEffect(() => {
     if (!slug) return;
@@ -38,8 +41,63 @@ export default function ProductPage() {
   }, [slug]);
 
   const numColors = product?.colors?.length || 0;
-  const currentMainImg = product?.images?.[colorIdx] ?? product?.images?.[0];
   const galleryImages = product?.images ?? [];
+
+  // Filter images for the selected color
+  const getImagesForColor = (colorIndex: number) => {
+    if (numColors === 0) return galleryImages;
+    return galleryImages.filter((_, i) => i % numColors === colorIndex);
+  };
+
+  const currentColorImages = getImagesForColor(colorIdx);
+  const currentMainImg = currentColorImages[imageIndex] ?? currentColorImages[0];
+
+  // Navigation handlers
+  const handlePrevImage = () => {
+    const totalImages = currentColorImages.length;
+    setImageIndex((prev) => (prev === 0 ? totalImages - 1 : prev - 1));
+  };
+
+  const handleNextImage = () => {
+    const totalImages = currentColorImages.length;
+    setImageIndex((prev) => (prev === totalImages - 1 ? 0 : prev + 1));
+  };
+
+  const handleImageClick = (idx: number) => {
+    setImageIndex(idx);
+  };
+
+  // Reset image index when color changes
+  const handleColorChange = (i: number) => {
+    setColorIdx(i);
+    setImageIndex(0);
+  };
+
+  // Touch handlers for swipe
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      handleNextImage();
+    }
+    if (isRightSwipe) {
+      handlePrevImage();
+    }
+  };
   const wpp = useMemo(() => {
     if (!product) return "";
     const colorName = product.colors?.[colorIdx]?.name || "";
@@ -70,8 +128,6 @@ export default function ProductPage() {
       </Layout>
     );
   }
-
-  const handleColorChange = (i: number) => setColorIdx(i);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -109,10 +165,10 @@ export default function ProductPage() {
         <div className="grid md:grid-cols-2 gap-8 lg:gap-14">
           <div className="flex gap-3">
             <div className="hidden md:flex flex-col gap-2 w-20 shrink-0 max-h-[600px] overflow-y-auto">
-              {galleryImages.map((img, i) => (
+              {currentColorImages.map((img, i) => (
                 <button
                   key={i}
-                  onClick={() => { if (i < numColors) handleColorChange(i); }}
+                  onClick={() => handleImageClick(i)}
                   className={`shrink-0 border-2 transition ${
                     currentMainImg === img ? "border-primary" : "border-transparent hover:border-muted-foreground"
                   }`}
@@ -121,13 +177,58 @@ export default function ProductPage() {
                 </button>
               ))}
             </div>
-            <div className="flex-1 relative bg-muted aspect-[3/4]">
-              {product.outOfStock && (
-                <span className="absolute top-3 left-3 z-10 bg-muted-foreground text-white text-xs px-2 py-1 rounded">
-                  Esgotado
-                </span>
+            <div className="flex-1 relative group">
+              <div 
+                className="relative bg-muted aspect-[3/4]"
+                onTouchStart={onTouchStart}
+                onTouchMove={onTouchMove}
+                onTouchEnd={onTouchEnd}
+              >
+                {product.outOfStock && (
+                  <span className="absolute top-3 left-3 z-10 bg-muted-foreground text-white text-xs px-2 py-1 rounded">
+                    Esgotado
+                  </span>
+                )}
+                <Image src={currentMainImg} alt={product.name} aspectRatio="portrait" objectFit="contain" className="w-full h-full" loading="eager" />
+                
+                {/* Navigation arrows - desktop only, appear on hover */}
+                {currentColorImages.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={handlePrevImage}
+                      className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 items-center justify-center bg-black/20 hover:bg-black/40 text-white rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200"
+                      aria-label="Imagem anterior"
+                    >
+                      <ChevronLeft className="h-5 w-5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleNextImage}
+                      className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 items-center justify-center bg-black/20 hover:bg-black/40 text-white rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200"
+                      aria-label="Próxima imagem"
+                    >
+                      <ChevronRightIcon className="h-5 w-5" />
+                    </button>
+                  </>
+                )}
+              </div>
+              
+              {/* Dots indicator - mobile only */}
+              {currentColorImages.length > 1 && (
+                <div className="md:hidden flex justify-center gap-2 mt-3">
+                  {currentColorImages.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => handleImageClick(i)}
+                      className={`w-2 h-2 rounded-full transition ${
+                        i === imageIndex ? "bg-primary" : "bg-muted-foreground"
+                      }`}
+                      aria-label={`Imagem ${i + 1}`}
+                    />
+                  ))}
+                </div>
               )}
-              <Image src={currentMainImg} alt={product.name} aspectRatio="portrait" objectFit="contain" className="w-full h-full" loading="eager" />
             </div>
           </div>
 
